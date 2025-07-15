@@ -2,36 +2,36 @@
 pageType: home
 
 hero:
-  name: My Site
-  text: A cool website!
-  tagline: This is the tagline
+  name: Dora中文社区
+  text: 机器人开发的未来范式
+  tagline: 安全 · 高效 · 极简如诗
   actions:
     - theme: brand
-      text: Quick Start
-      link: /guide/
+      text: 探索教程 →
+      link: /guide/start/introduction
     - theme: alt
-      text: GitHub
-      link: https://github.com/web-infra-dev/rspress
+      text: GitHub仓库
+      link: https://github.com/dora-rs/dora
   image:
-    src: /rspress-icon.png
+    src: /logo.svg
     alt: Logo
 features:
-  - title: Blazing fast build speed
-    details: The core compilation module is based on the Rust front-end toolchain, providing a more ultimate development experience.
+  - title: 零成本抽象
+    details: Rust原生性能优势，每秒处理百万级消息。CPU占用降低70%，响应延迟低。
     icon: 🏃🏻‍♀️
-  - title: Support for MDX content writing
-    details: MDX is a powerful way to write content, allowing you to use React components in Markdown.
-    icon: 📦
-  - title: Built-in full-text search
-    details: Automatically generates a full-text search index for you during construction, providing out-of-the-box full-text search capabilities.
+  - title: 无畏并发
+    details: 编译期内存安全保证。告别数据竞争，守护机器人核心逻辑
     icon: 🎨
-  - title: Simpler I18n solution
-    details: With the built-in I18n solution, you can easily provide multi-language support for documents or components.
+  - title: 开箱即用
+    details: 模块化组件库覆盖SLAM/控制/通信。30秒完成新机器人原型部署
+    icon: 📦
+  - title: 零拷贝
+    details: 通过共享内存实现零拷贝的消息传输！我们使用Arrow和我们自己的共享内存守护进程，在单台机器上实现极速通信！
     icon: 🌍
-  - title: Static site generation
-    details: In production, it automatically builds into static HTML files, which can be easily deployed anywhere.
+  - title: 高性能
+    details: 利用Rust的内存安全和高效并发机制，确保实时处理能力满足机器人应用需求。
     icon: 🌈
-  - title: Providing multiple custom capabilities
-    details: Through its extension mechanism, you can easily extend theme UI and build process.
+  - title: 模块化
+    details: 组件间低耦合设计，支持按需组合和扩展功能模块，提升开发灵活性。
     icon: 🔥
 ---

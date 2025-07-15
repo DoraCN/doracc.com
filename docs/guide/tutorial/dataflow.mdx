@@ -1,0 +1,130 @@
+# 数据流
+
+欢迎来到 `dora` 教程！ `dora` 是一个强大的框架，旨在帮助您构建复杂的应用程序，尤其是那些需要处理实时数据的应用程序，例如机器人技术或 `AI` 引用。但是，如何设计和管理这些需要不同组件协同工作并共享信息的应用程序呢？这就是 `Dataflow` 的概念！
+
+## 您应用程序的“蓝图”
+
+想象一下，您正在构建一个智能系统，它通过摄像头来检测物体，然后将看到的内容可视化地展示出来。这个系统需要几个不同的模块：
+
+    1. 一个模块负责从摄像头获取图像。
+
+    2. 一个模块负责接收这些图像，并在其中找出物体（比如使用YOLO模型）。
+
+    3. 一个模块负责接收原始图像和检测结果，并将它们展示给您。
+
+这些模块之间需要相互“对话”。摄像头需要将图像发送给物体检测模块；同时，摄像头（为了显示原始图像）和物体检测模块（为了显示检测结果）都需要将信息发送给可视化模块。
+
+那么，我们该如何描述这些模块之间“如何连接”以及它们之间流动的是“哪种信息”呢？这种描述，就是数据流 (`Dataflow`)。
+
+您可以将数据流看作是您应用程序“设计蓝图”或“管线连接图”。它本身并不包含每个模块具体“做什么”的代码（那是下一步要实现的！），但它清晰地展示了“有哪些模块”以及数据应该“如何在它们之间流动”。
+
+## 定义数据流
+
+在 `dora` 中，您可以使用 `YAML` 格式编写的简单文本文件来定义此数据流。`YAML` 是一种人类可读的数据格式，常用于配置文件。
+
+让我们看一个基于相机、物体检测和可视化用例的简化示例。
+
+```yaml title="dataflow.yml"
+nodes:
+  # 定义相机节点
+  - id: camera
+    outputs:
+      - image
+
+  # 定义目标识别节点
+  - id: object_detection
+    inputs:
+      image: camera/image
+    outputs:
+      - bbox
+
+  # 定义可视化节点
+  - id: plot
+    inputs:
+      image: camera/image
+      bbox: object_detection/bbox
+```
+
+让我们来分析一下
+
+* `nodes`：此部分列出了应用程序中所有的不同的处理单位（我们称之为`节点`）。
+* `- id: camera`：定义一个节点并赋予其唯一的名称（`camera`）。
+* `outputs`：在节点下，列出了该节点生成的数据流。`camera`节点生成的名为`image`流。
+* `- id: object_detection`：定义另一个节点并赋予其唯一的名称（`object_detection`）。
+* `inputs`：在节点下，列出了该节点消耗的数据流。
+* `image: camera/image`：这部分至关重要！它表示`object_detection`节点的`image`输入应该从`camera`节点的`image`输出接收数据。
+* `outputs`：`object_detection` 节点生成一个 `bbox` 流（用于边界框）。
+* `- id: plot`：定义可视化节点（`plot`）。
+* `inputs`：`plot`节点接收两个输入：`image`和`bbox`
+* `image: camera/image`：从`camera`节点获取`image`数据。
+* `bbox: object_detection/bbox`：从`object_detection`节点获取`bbox`数据。
+
+:::tip 提示
+注意`inputs`部分如何使用`source_node_id/source_output_id`格式来指定特定输入的数据来源。这样就创建了连接！
+:::
+
+这个`YAML`文件就是一个数据流文件。它是一个现实数据流的`有向图`。
+
+![](/dataflow-graph.png)
+
+### 完整的数据流文件
+
+在完整示例`YAML`包含了有关如何为每个节点构建和运行实际代码的更多详细信息，当我们展示的是用于连接的核心数据流结构。
+
+```yaml title="完整的数据流文件.yml"
+nodes:
+  - id: camera
+    build: pip install opencv-video-capture
+    path: opencv-video-capture
+    inputs: # This node also has a 'tick' input we didn't show in the simplified example
+      tick: dora/timer/millis/20
+    outputs:
+      - image
+    env:
+      CAPTURE_PATH: 0
+      IMAGE_WIDTH: 640
+      IMAGE_HEIGHT: 480
+
+  - id: object_detection
+    build: pip install dora-yolo
+    path: dora-yolo
+    inputs:
+      image: camera/image
+    outputs:
+      - bbox
+
+  - id: plot
+    build: pip install dora-rerun
+    path: dora-rerun
+    inputs:
+      image: camera/image
+      bbox: object_detection/bbox
+```
+
+即使在这个完整的示例中，`inputs` 和 `outputs` 部分也清晰的定义了数据流连接图。其它部分（`build`、`path`、`env`等）这告诉 `dora` 如何设置和运行各个节点进程。
+
+## 运行数据流
+
+在 `YAML` 文件（假设为 `dataflow.yml` ）中定义数据流后，您可以使用 `dora` 命令行界面 (`CLI`) 来运行它。
+
+```bash
+dora run dataflow.yml
+```
+
+## `dora`如何使用数据流
+
+当你运行 `dora run dataflow.yml` 时：
+
+1. `dora`（具体来说涉及到 `Dora daemon` 和 `Dora coordinator` 等组件）读取 `dataflow.yml` 文件。
+2. 它识别你定义的所有的节点（`camera` `object_detection` `plot`）。
+3. 它将每个节点作为系统上的单独进程启动。
+4. 至关重要的是，根据 `YAML` 中定义的 `inputs` 和 `outputs` 以及它们的连接方式，`dora` 在这些正在运行的节点进程之间建立了通信通道。
+5. 当 `camera` 节点生成 `image` 输出时，`dora` 会自动将该数据发送到 `object_detection` 节点的 `image` 输入和 `plot` 节点的 `images` 输入。同样 `object_detection` 的 `bbox` 数据也会发送到 `plot` 节点。
+
+数据流 `YAML` 告诉 `dora` 运行什么以及如何连接它们之间的数据流，而无需您编写代码来在节点内明确管理这些连接。
+
+## 总结
+
+在本节中，我们了解到数据流是 `dora` 应用程序的蓝图，它定义了节点以及数据在节点之间的流动方式。它由 `YAML` 文件描述，类似于管道图，显示了一个节点的输出与另一个节点的输入之间的连接。当您使用 `dora CLI` 运行数据流时， `dora` 会读取此蓝图并设置必要的通信通道。
+
+现在您已经了解了整体数据流蓝图，下一节让我们深入了解构成该蓝图的各个构建块： 节点 。

@@ -1,16 +1,25 @@
 [
   {
-    "text": "Guide",
-    "link": "/guide/",
+    "text": "教程",
+    "link": "/guide/start/introduction",
     "activeMatch": "/guide/"
   },
   {
-    "text": "Hello world",
-    "link": "/hello/",
-    "activeMatch": "/hello/"
+    "text": "示例",
+    "link": "/example/",
+    "activeMatch": "/example/"
   },
   {
-    "text": "API",
-    "link": "https://rspress.dev/api/index.html"
+    "text": "中文社区介绍",
+    "link": "/doracc/",
+    "activeMatch": "/doracc/"
+  },
+  {
+    "text": "Dora-rs官网",
+    "link": "https://dora-rs.ai/"
+  },
+  {
+    "text": "Discord",
+    "link": "https://discord.gg/gGChDNmQ"
   }
 ]

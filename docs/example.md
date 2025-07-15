@@ -1,0 +1,426 @@
+# Dora + YOLOV8 快速目标检测
+
+## 安装`dora`
+
+* 一键安装
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/dora-rs/dora/main/install.sh | bash
+```
+
+* `cargo安装`
+```bash
+cargo install dora-cli
+```
+
+* `手动安装`
+
+```
+https://github.com/dora-rs/dora/releases
+```
+
+## 验证
+
+终端输入命令`dora --version`，现实版本号即成功安装
+```bash
+# dora --version
+dora-cli 0.3.7
+```
+
+## 实时摄像头检测
+
+1、创建数据流文件
+
+```yaml title="dataflow.yml"
+nodes:
+  - id: webcam
+    operator:
+      python: webcam.py
+      inputs:
+        tick: dora/timer/millis/50
+      outputs:
+        - image
+
+  - id: object_detection
+    operator:
+      send_stdout_as: stdout
+      python: object_detection.py
+      inputs:
+        image: webcam/image
+      outputs:
+        - bbox
+        - stdout
+
+  - id: plot
+    operator:
+      python: plot.py
+      inputs:
+        image: webcam/image
+        bbox: object_detection/bbox
+        assistant_message: object_detection/stdout
+```
+
+2、编写业务代码
+
+* 摄像头采集
+
+```py title="webcam.py"
+import os
+import time
+
+import cv2
+import numpy as np
+import pyarrow as pa
+
+from dora import DoraStatus
+
+CAMERA_WIDTH = 640
+CAMERA_HEIGHT = 480
+CAMERA_INDEX = int(os.getenv("CAMERA_INDEX", 0))
+CI = os.environ.get("CI")
+
+font = cv2.FONT_HERSHEY_SIMPLEX
+
+
+class Operator:
+    """
+    Sending image from webcam to the dataflow
+    """
+
+    def __init__(self):
+        self.video_capture = cv2.VideoCapture(CAMERA_INDEX)
+        self.start_time = time.time()
+        self.video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, CAMERA_WIDTH)
+        self.video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, CAMERA_HEIGHT)
+        self.failure_count = 0
+
+    def on_event(
+        self,
+        dora_event: str,
+        send_output,
+    ) -> DoraStatus:
+        event_type = dora_event["type"]
+        if event_type == "INPUT":
+            ret, frame = self.video_capture.read()
+            if ret:
+                frame = cv2.resize(frame, (CAMERA_WIDTH, CAMERA_HEIGHT))
+                self.failure_count = 0
+            ## Push an error image in case the camera is not available.
+            else:
+                if self.failure_count > 10:
+                    frame = np.zeros((CAMERA_HEIGHT, CAMERA_WIDTH, 3), dtype=np.uint8)
+                    cv2.putText(
+                        frame,
+                        "No Webcam was found at index %d" % (CAMERA_INDEX),
+                        (int(30), int(30)),
+                        font,
+                        0.75,
+                        (255, 255, 255),
+                        2,
+                        1,
+                    )
+                else:
+                    self.failure_count += 1
+                    return DoraStatus.CONTINUE
+
+            send_output(
+                "image",
+                pa.array(frame.ravel()),
+                dora_event["metadata"],
+            )
+        elif event_type == "STOP":
+            print("received stop")
+        else:
+            print("received unexpected event:", event_type)
+
+        if time.time() - self.start_time < 20 or CI != "true":
+            return DoraStatus.CONTINUE
+        else:
+            return DoraStatus.STOP
+
+    def __del__(self):
+        self.video_capture.release()
+```
+
+* 目标检测
+
+```py title="object_detection.py"
+import numpy as np
+import pyarrow as pa
+
+from dora import DoraStatus
+from ultralytics import YOLO
+
+
+CAMERA_WIDTH = 640
+CAMERA_HEIGHT = 480
+
+
+model = YOLO("yolov8n.pt")
+
+
+class Operator:
+    """
+    Inferring object from images
+    """
+
+    def on_event(
+        self,
+        dora_event,
+        send_output,
+    ) -> DoraStatus:
+        if dora_event["type"] == "INPUT":
+            frame = (
+                dora_event["value"].to_numpy().reshape((CAMERA_HEIGHT, CAMERA_WIDTH, 3))
+            )
+            frame = frame[:, :, ::-1]  # OpenCV image (BGR to RGB)
+            results = model(frame, verbose=False)  # includes NMS
+            # Process results
+            boxes = np.array(results[0].boxes.xyxy.cpu())
+            conf = np.array(results[0].boxes.conf.cpu())
+            label = np.array(results[0].boxes.cls.cpu())
+            # concatenate them together
+            arrays = np.concatenate((boxes, conf[:, None], label[:, None]), axis=1)
+
+            send_output("bbox", pa.array(arrays.ravel()), dora_event["metadata"])
+
+        return DoraStatus.CONTINUE
+
+```
+
+* 查看
+
+```py title="plot.py"
+import os
+import cv2
+
+from dora import DoraStatus
+from utils import LABELS
+
+
+CI = os.environ.get("CI")
+
+CAMERA_WIDTH = 640
+CAMERA_HEIGHT = 480
+
+FONT = cv2.FONT_HERSHEY_SIMPLEX
+
+
+class Operator:
+    """
+    Plot image and bounding box
+    """
+
+    def __init__(self):
+        self.bboxs = []
+        self.buffer = ""
+        self.submitted = []
+        self.lines = []
+
+    def on_event(
+        self,
+        dora_event,
+        send_output,
+    ):
+        if dora_event["type"] == "INPUT":
+            id = dora_event["id"]
+            value = dora_event["value"]
+            if id == "image":
+
+                image = (
+                    value.to_numpy().reshape((CAMERA_HEIGHT, CAMERA_WIDTH, 3)).copy()
+                )
+
+                for bbox in self.bboxs:
+                    [
+                        min_x,
+                        min_y,
+                        max_x,
+                        max_y,
+                        confidence,
+                        label,
+                    ] = bbox
+                    cv2.rectangle(
+                        image,
+                        (int(min_x), int(min_y)),
+                        (int(max_x), int(max_y)),
+                        (0, 255, 0),
+                    )
+                    cv2.putText(
+                        image,
+                        f"{LABELS[int(label)]}, {confidence:0.2f}",
+                        (int(max_x), int(max_y)),
+                        FONT,
+                        0.5,
+                        (0, 255, 0),
+                    )
+
+                cv2.putText(
+                    image, self.buffer, (20, 14 + 21 * 14), FONT, 0.5, (190, 250, 0), 1
+                )
+
+                i = 0
+                for text in self.submitted[::-1]:
+                    color = (
+                        (0, 255, 190)
+                        if text["role"] == "user_message"
+                        else (0, 190, 255)
+                    )
+                    cv2.putText(
+                        image,
+                        text["content"],
+                        (
+                            20,
+                            14 + (19 - i) * 14,
+                        ),
+                        FONT,
+                        0.5,
+                        color,
+                        1,
+                    )
+                    i += 1
+
+                for line in self.lines:
+                    cv2.line(
+                        image,
+                        (int(line[0]), int(line[1])),
+                        (int(line[2]), int(line[3])),
+                        (0, 0, 255),
+                        2,
+                    )
+
+                if CI != "true":
+                    cv2.imshow("frame", image)
+                    if cv2.waitKey(1) & 0xFF == ord("q"):
+                        return DoraStatus.STOP
+            elif id == "bbox":
+                self.bboxs = value.to_numpy().reshape((-1, 6))
+            elif id == "keyboard_buffer":
+                self.buffer = value[0].as_py()
+            elif id == "line":
+                self.lines += [value.to_pylist()]
+            elif "message" in id:
+                self.submitted += [
+                    {
+                        "role": id,
+                        "content": value[0].as_py(),
+                    }
+                ]
+
+        return DoraStatus.CONTINUE
+```
+
+* 依赖的`utils`
+
+```py title="utils.py"
+LABELS = [
+    "person",
+    "bicycle",
+    "car",
+    "motorcycle",
+    "airplane",
+    "bus",
+    "train",
+    "truck",
+    "boat",
+    "traffic light",
+    "fire hydrant",
+    "stop sign",
+    "parking meter",
+    "bench",
+    "bird",
+    "cat",
+    "dog",
+    "horse",
+    "sheep",
+    "cow",
+    "elephant",
+    "bear",
+    "zebra",
+    "giraffe",
+    "backpack",
+    "umbrella",
+    "handbag",
+    "tie",
+    "suitcase",
+    "frisbee",
+    "skis",
+    "snowboard",
+    "sports ball",
+    "kite",
+    "baseball bat",
+    "baseball glove",
+    "skateboard",
+    "surfboard",
+    "tennis racket",
+    "bottle",
+    "wine glass",
+    "cup",
+    "fork",
+    "knife",
+    "spoon",
+    "bowl",
+    "banana",
+    "apple",
+    "sandwich",
+    "orange",
+    "broccoli",
+    "carrot",
+    "hot dog",
+    "pizza",
+    "donut",
+    "cake",
+    "chair",
+    "couch",
+    "potted plant",
+    "bed",
+    "dining table",
+    "toilet",
+    "tv",
+    "laptop",
+    "mouse",
+    "remote",
+    "keyboard",
+    "cell phone",
+    "microwave",
+    "oven",
+    "toaster",
+    "sink",
+    "refrigerator",
+    "book",
+    "clock",
+    "vase",
+    "scissors",
+    "teddy bear",
+    "hair drier",
+    "toothbrush",
+]
+```
+
+* `YOLOV8.pt`模型文件，通过下面的源码链接可下载到
+
+## 运行！
+
+```bash
+dora up # 启动dora服务
+dora start dataflow.yml --attach --hot-reload # 热重载模式运行
+```
+
+## 源码下载
+
+Dora yolov8 目标检测示例代码：https://pan.baidu.com/s/1uXXjFkpgeT_iHdNJzrCsqg?pwd=oibc
+
+## 问题汇总
+
+1. 摄像头打不开
+
+    - 检查权限（Linux/macOS需要sudo），或者检查摄像头是否正常
+
+2. YAML报错
+
+    - 注意缩进必须使用空格，不能用tab
+
+3. python包缺失
+
+```bash
+pip install numpy opencv-python pyarrow ultralytics
+```
