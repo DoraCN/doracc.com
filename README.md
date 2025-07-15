@@ -1,28 +1,30 @@
-# Rspress website
+# Dora中文社区官网网站
 
-## Setup
+使用的 `Rspress` 静态站点生成器 
 
-Install the dependencies:
+## 步骤
+
+安装依赖:
 
 ```bash
 npm install
 ```
 
-## Get started
+## 开始
 
-Start the dev server:
+启动本地开发服务器:
 
 ```bash
 npm run dev
 ```
 
-Build the website for production:
+打包生产版本站点:
 
 ```bash
 npm run build
 ```
 
-Preview the production build locally:
+在本地预览生产版本:
 
 ```bash
 npm run preview
