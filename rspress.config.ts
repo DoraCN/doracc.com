@@ -30,7 +30,7 @@ export default defineConfig({
     enableScrollToTop: true,
     enableContentAnimation: true,
     searchPlaceholderText: '搜索文档',
-    lastUpdated: true,
+    lastUpdated: false,
     lastUpdatedText: '上次更新',
     footer: {
       message: '<img src="/logo.svg" style="width:30px;display:inline;"><br>Dora中文社区 © 2025 <a href="/">doracc.com</a><br><a href="https://beian.miit.gov.cn/" rel="noreferrer"> 苏ICP备14007268号-19 </a> | <img src="/beian.png" style="width:12px;display:inline;"><a href="https://beian.mps.gov.cn/#/query/webSearch?code=32050602013520" rel="noreferrer"> 苏公网安备32050602013520号 </a> <script>var _hmt=_hmt || [];(function() {var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?bad2b636058313c698986f4096bb5742";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script>',
