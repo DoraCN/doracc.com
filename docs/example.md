@@ -4,12 +4,12 @@
 
 * 一键安装
 ```bash
-curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/dora-rs/dora/main/install.sh | bash
+$ curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/dora-rs/dora/main/install.sh | bash
 ```
 
 * `cargo安装`
 ```bash
-cargo install dora-cli
+$ cargo install dora-cli
 ```
 
 * `手动安装`
@@ -22,7 +22,7 @@ https://github.com/dora-rs/dora/releases
 
 终端输入命令`dora --version`，现实版本号即成功安装
 ```bash
-# dora --version
+$ dora --version
 dora-cli 0.3.7
 ```
 
@@ -401,8 +401,8 @@ LABELS = [
 ## 运行！
 
 ```bash
-dora up # 启动dora服务
-dora start dataflow.yml --attach --hot-reload # 热重载模式运行
+$ dora up # 启动dora服务
+$ dora start dataflow.yml --attach --hot-reload # 热重载模式运行
 ```
 
 ## 源码下载
@@ -422,5 +422,5 @@ Dora yolov8 目标检测示例代码：https://pan.baidu.com/s/1uXXjFkpgeT_iHdNJ
 3. python包缺失
 
 ```bash
-pip install numpy opencv-python pyarrow ultralytics
+$ pip install numpy opencv-python pyarrow ultralytics
 ```

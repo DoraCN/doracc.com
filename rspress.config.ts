@@ -20,7 +20,10 @@ export default defineConfig({
         content: 'https://github.com/DoraCN/doracc.com',
       },
     ],
-    
+    editLink: {
+      docRepoBaseUrl: 'https://github.com/DoraCN/doracc.com/tree/main/docs',
+      text: '📝 在 GitHub 上编辑此页',
+    },
     enableScrollToTop: true,
     enableContentAnimation: true,
     searchPlaceholderText: '搜索文档',
