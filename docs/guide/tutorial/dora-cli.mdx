@@ -1,1 +1,172 @@
-# 命令行
+# 第七章：命令行
+
+**Author** : **`Leon 李扬`**
+
+欢迎回到 `dora` 教程！在上一章， [第六章：API 绑定](./api-binding.mdx)中，我们了解了如何使用特定语言的库为自定义节点和操作符编写实际代码，以便与 `dora` 运行时进行通信。
+
+但是，如何才能将完成的 `Dataflow 蓝图`（`YAML` 文件）和 `Node/Operator` 代码真正地运行在 `dora` 上呢？如何让 `dora` 启动、停止所有操作，或者查看哪些程序正在运行？
+
+这就是 `Dora CLI` 的作用所在！
+
+## 您的 `Dora` 指挥中心
+
+`Dora CLI` （命令行界面）是你与 `dora` 系统交互的主要工具。它是一个在终端中运行的命令行程序（类似于 `ls` 、 `cd` 、 `git` 或 `pip` ）。
+
+可以将 `Dora CLI` 视为您的命令中心。它允许您向 `dora` 发出指令，以管理您的数据流以及使 `dora` 工作的后台进程（例如 `Dora Daemon` 或 `Dora Coordinator` ）。
+
+您可以使用 `CLI` 执行以下基本任务：
+
+- 根据 YAML 蓝图启动数据流。
+- 停止正在运行的数据流。
+- 为您的节点准备必要的代码和依赖项。
+- 列出当前正在运行的数据流。
+- 检查 `dora` 系统的状态。
+
+它是您定义的数据流和正在运行的应用程序之间的桥梁。
+
+## 运行数据流： `dora run` 命令
+
+使用 `Dora CLI` 最常见的操作是运行在 `YAML` 文件中定义的数据流。我们在第一章“数据流” 中对此进行了简要介绍。
+
+让我们重新审视一下 `yolo.yml` 中的简单相机、物体检测和绘图数据流：
+
+```yaml
+nodes:
+  - id: camera
+    build: pip install opencv-video-capture
+    path: opencv-video-capture
+    inputs:
+      tick: dora/timer/millis/20
+    outputs:
+      - image
+    env:
+      CAPTURE_PATH: 0
+      IMAGE_WIDTH: 640
+      IMAGE_HEIGHT: 480
+
+  - id: object-detection
+    build: pip install dora-yolo
+    path: dora-yolo
+    inputs:
+      image: camera/image
+    outputs:
+      - bbox
+
+  - id: plot
+    build: pip install dora-rerun
+    path: dora-rerun
+    inputs:
+      image: camera/image
+      boxes2d: object-detection/bbox
+```
+
+要使用 `CLI` 运行此数据流，请使用 `dora run` 命令，后跟 `YAML` 文件的路径：
+
+```bash
+dora run yolo.yml
+```
+
+运行此命令时，`Dora CLI` 会执行以下几项操作：
+
+1. 它读取并解析 `yolo.yml` 文件。
+2. 它与 `dora` 运行时进行通信（很快会详细介绍此连接！）以告知它有关 `YAML` 中描述的数据流。
+3. 然后，运行时根据 `YAML` 中的 `path` 、 `build` 等字段将所有定义的节点 （ `camera` 、 `object-detection` 、 `plot` ）作为单独的进程启动。
+4. 运行时根据 `inputs` 和 `outputs` 的定义在节点之间建立通信通道（ 事件流 ）。
+
+您的数据流应用程序现已运行！终端中的输出将显示来自不同 Node 进程的日志。
+
+要停止数据流，通常在执行 `dora run` 终端中按下 `Ctrl + C` 会向运行时发送信号，运行时会向所有节点发送 `STOP` 事件（ 参见[第四章：事件流](./event-stream.mdx) ），使它们能够正常关闭。
+
+## 准备依赖项： `dora build` 命令
+
+回顾 `yolo.yml` 示例。每个节点定义都有一个 `build` 字段，例如 `pip install opencv-video-capture` 。这告诉 `dora` 如何获取该特定节点所需的代码或依赖项。
+
+例如：
+
+- `camera` 节点需要 `opencv-video-capture` `Python` 包。
+- `object-detection` 节点需要 `dora-yolo` `Python` 包。
+- `plot` 节点需要 `dora-rerun` `Python` 包。
+
+虽然 `dora run` 可以隐式执行尚未完成的构建步骤，但最佳做法通常是事先显式运行构建过程，尤其是对于更复杂的设置或远程数据流。这可以通过 `dora build` 命令完成：
+
+```bash
+dora build yolo.yml
+```
+
+此命令指示 `dora` 浏览 `yolo.yml` 文件，查看每个节点的所有 `build` 指令，并执行它们。对于 `Python` 节点，这通常意味着运行 `pip install` （如果添加了 `--uv` 则运行 `uv install` ）命令，以确保节点运行所需的正确环境中已包含必要的库。对于 `Rust` 或 `C++` 节点，这可能涉及编译代码。
+
+将 `build` 与 `run` 分开允许您准备一次环境和节点代码，然后多次运行数据流。
+
+## 管理正在运行的数据流： `dora stop` 和 `dora list`
+
+如果你在后台运行数据流或者将其与终端分离，会怎么样？如何停止它？如何查看当前正在运行的内容？
+
+`CLI` 提供用于管理正在运行的数据流的命令：
+
+- `dora stop` ：此命令用于停止先前由 `dora run` 启动的数据流（尤其是在分离模式下运行时），或由我们稍后会介绍的低级命令启动的数据流。如果您未指定要停止的数据流，则可能会停止最后一个数据流或需要 ID。
+
+```bash
+# Example (may need specific ID or context depending on how it was run)
+dora stop my_running_dataflow_id 
+```
+
+- `dora list` ：此命令显示系统上当前由 `dora` 运行时管理的数据流和组件。
+
+```bash
+dora list
+```
+
+输出可能看起来像这样（简化）：
+
+```bash
+DATAFLOW ID     STATUS    YAML FILE
+-----------------------------------
+abcd123         Running   yolo.yml
+efgh456         Running   another.yml
+```
+
+这可以帮助您跟踪 `dora` 正在做的事情。
+
+## 超越运行： `dora start `和`系统管理`
+
+`CLI` 还包括与核心 `dora` 后台服务更直接交互的命令：
+
+- `dora up` ：一个便捷的命令，用于确保主要的 `dora` 后台进程（例如 `Dora Coordinator` 和 `Dora Daemon` ）正在运行。您可以在启动计算机时或运行数据流之前运行此命令。
+
+```bash
+dora up
+```
+
+- `dora destroy` ：停止并清理所有正在运行的 `dora` 组件和数据流。使用此命令可以彻底关闭你机器上的 `dora` 系统。
+
+```bash
+dora destroy
+```
+
+- 还有一些低级命令，例如 `dora daemon` 和 `dora coordinator` ，但通常不需要手动运行它们，因为 `dora up` 会负责启动它们，而 `dora run` 甚至可以在它们尚未启动的情况下启动它们。这些命令在下一章讨论 `Dora Daemon` 和 `Dora Coordinator` 的具体角色时更为相关。
+
+## CLI 的工作原理
+
+需要注意的是， `dora CLI` 工具（ `dora` 可执行文件） 并非 `dora 运行时`本身。 `dora 运行时`由一个或多个后台进程组成，通常包括 `Dora Daemon` 和 `Dora Coordinator` （我们将在下一章中详细解释这些进程）。
+
+当你输入像 `dora run yolo.yml` 这样的命令时：
+
+1. `dora CLI` 程序启动。
+2. 它读取 `yolo.yml` 文件。
+3. 然后它连接到正在运行的 `dora` 运行时（具体来说，它与 `Dora Coordinator` 对话）。
+4. CLI 向协调器发送一条消息或请求，说“请运行此 `YAML` 描述的数据流”。
+5. 协调器接收请求，然后协调数据流的实际运行（启动节点进程、建立通信等）。
+
+`CLI` 本质上是一个向 `dora 运行时`服务器进程发送命令的客户端应用程序。
+
+以下是 `dora run` 交互的简化视图：
+
+![](/cli01.png)
+
+这表明 `CLI` 本身并不运行你的 `Nodes` ；它将这项任务委托给 `Coordinator` 和其他运行时组件。这种架构允许运行时在后台管理数据流，即使 `CLI` 处于关闭状态。
+
+## 总结
+
+`Dora CLI` 是您与 `dora` 系统交互的主要工具。您可以使用简单的命令，例如 `dora run` 根据 `Dataflow YAML` 蓝图启动数据流，使用 `dora build` 准备依赖项，以及使用 `dora stop` 和 `dora list` 管理正在运行的应用程序。`CLI` 充当命令接口，与 `dora 运行时`进程（例如 `Dora Coordinator` ）通信，告诉它们执行操作，而不是直接运行数据流。
+
+现在您已经了解了如何使用 `CLI` 命令 `dora` ，让我们深入了解接收这些命令并管理运行节点的关键组件之一： `Dora Daemon` 。
