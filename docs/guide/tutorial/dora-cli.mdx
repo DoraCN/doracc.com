@@ -30,7 +30,7 @@
 
 让我们重新审视一下 `yolo.yml` 中的简单相机、物体检测和绘图数据流：
 
-```yaml
+```yaml title="yolo.yml"
 nodes:
   - id: camera
     build: pip install opencv-video-capture
@@ -161,7 +161,7 @@ dora destroy
 
 以下是 `dora run` 交互的简化视图：
 
-![](/cli01.png)
+![cli](/cli01.png)
 
 这表明 `CLI` 本身并不运行你的 `Nodes` ；它将这项任务委托给 `Coordinator` 和其他运行时组件。这种架构允许运行时在后台管理数据流，即使 `CLI` 处于关闭状态。
 

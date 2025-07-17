@@ -40,32 +40,32 @@
 
 ```yaml
 nodes:
-  # Node for Camera on Machine A (e.g., a robot)
+  # 机器 A 上的摄像头节点（例如，机器人）
   - id: camera-robot
-    path: camera-node-code # Code runs on the robot
+    path: camera-node-code # 代码在机器人上运行
     outputs:
       - image
-    _unstable_deploy: # Tell Dora where to deploy this node
-      machine: robot-machine-A # Needs a Daemon running on machine "robot-machine-A"
+    _unstable_deploy: # 告诉 Dora 将此节点部署到哪里
+      machine: robot-machine-A # 需要在机器“robot-machine-A”上运行守护进程
 
-  # Node for Object Detection on Machine B (e.g., a powerful PC)
+  # 机器 B 上的对象检测节点（例如，一台功能强大的 PC）
   - id: object-detector-pc
-    path: yolo-node-code # Code runs on the PC
+    path: yolo-node-code # 代码在PC上运行
     inputs:
-      image: camera-robot/image # Receives image from robot-machine-A
+      image: camera-robot/image # 接收来自机器人A的图像
     outputs:
       - bbox
     _unstable_deploy:
-      machine: desktop-machine-B # Needs a Daemon running on machine "desktop-machine-B"
+      machine: desktop-machine-B # 需要在机器“desktop-machine-B”上运行守护进程
 
-  # Node for Plotting on Machine C (e.g., a laptop)
+  # 在机器 C 上绘图的节点（例如笔记本电脑）
   - id: plot-laptop
-    path: plot-node-code # Code runs on the laptop
+    path: plot-node-code # 代码在笔记本电脑上运行
     inputs:
-      image: camera-robot/image # Receives image from robot-machine-A
-      boxes2d: object-detector-pc/bbox # Receives bounding boxes from desktop-machine-B
+      image: camera-robot/image # 接收来自机器人A的 image
+      boxes2d: object-detector-pc/bbox # 从桌面计算机 B 接收 bbox
     _unstable_deploy:
-      machine: laptop-machine-C # Needs a Daemon running on machine "laptop-machine-C"
+      machine: laptop-machine-C # 需要在机器“laptop-machine-C”上运行守护进程
 ```
 
 在此设置中，您将拥有：
@@ -78,7 +78,7 @@ nodes:
 要运行这个分布式数据流，您可以使用 `Dora CLI` 并告诉它协调器的位置，通常使用 `--coordinator-addr` 标志：
 
 ```bash
-# Assuming the Coordinator is running at the IP address 192.168.1.100
+# 假设协调器在 IP 地址 192.168.1.100 上运行
 dora run distributed_dataflow.yml --coordinator-addr 192.168.1.100 
 ```
 
@@ -124,7 +124,7 @@ dora stop my_dataflow_id --coordinator-addr 192.168.1.100
 
 下面是一个简化的序列图，说明如何启动分布式数据流：
 
-![](/coordinator01.png)
+![coordinator](/coordinator01.png)
 
 这表明协调器充当着协调分布式守护进程动作的中心点。
 

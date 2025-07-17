@@ -102,7 +102,7 @@ print("Node stopping gracefully.")
 
 以下是此交互的简化视图：
 
-![](/event-stream01.png)
+![event-stream](/event-stream01.png)
 
 该图显示，`事件流`充当中介，由 `dora 运行时`管理，将各种类型的事件传递给正在主动监听它们的 `Node` 或 `Operator` 进程。`dora` 优化该流的内部机制（通常使用共享内存来存储数据，我们将会看到），以提高性能。
 
