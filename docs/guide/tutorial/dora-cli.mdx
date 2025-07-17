@@ -2,9 +2,9 @@
 
 **Author** : **`Leon 李扬`**
 
-欢迎回到 `dora` 教程！在上一章， [第六章：API 绑定](./api-binding.mdx)中，我们了解了如何使用特定语言的库为自定义节点和操作符编写实际代码，以便与 `dora` 运行时进行通信。
+欢迎回到 `dora` 教程！在上一章， [第六章：API 绑定](./api-binding) 中，我们了解了如何使用特定语言的库为自定义节点和操作符编写实际代码，以便与 `dora` 运行时进行通信。
 
-但是，如何才能将完成的 `Dataflow 蓝图`（`YAML` 文件）和 `Node/Operator` 代码真正地运行在 `dora` 上呢？如何让 `dora` 启动、停止所有操作，或者查看哪些程序正在运行？
+但是，如何才能将完成的 `Dataflow` 和 `Node/Operator` 代码真正地运行在 `dora` 上呢？如何让 `dora` 启动、停止所有操作，或者查看哪些程序正在运行？
 
 这就是 `Dora CLI` 的作用所在！
 
@@ -16,7 +16,7 @@
 
 您可以使用 `CLI` 执行以下基本任务：
 
-- 根据 YAML 蓝图启动数据流。
+- 根据 `YAML` 蓝图启动数据流。
 - 停止正在运行的数据流。
 - 为您的节点准备必要的代码和依赖项。
 - 列出当前正在运行的数据流。
@@ -75,7 +75,7 @@ dora run yolo.yml
 
 您的数据流应用程序现已运行！终端中的输出将显示来自不同 Node 进程的日志。
 
-要停止数据流，通常在执行 `dora run` 终端中按下 `Ctrl + C` 会向运行时发送信号，运行时会向所有节点发送 `STOP` 事件（ 参见[第四章：事件流](./event-stream.mdx) ），使它们能够正常关闭。
+要停止数据流，通常在执行 `dora run` 终端中按下 `Ctrl + C` 会向运行时发送信号，运行时会向所有节点发送 `STOP` 事件，使它们能够正常关闭。
 
 ## 准备依赖项： `dora build` 命令
 
@@ -147,7 +147,7 @@ dora destroy
 
 ## CLI 的工作原理
 
-需要注意的是， `dora CLI` 工具（ `dora` 可执行文件） 并非 `dora 运行时`本身。 `dora 运行时`由一个或多个后台进程组成，通常包括 `Dora Daemon` 和 `Dora Coordinator` （我们将在下一章中详细解释这些进程）。
+需要注意的是， `dora CLI` 工具（ `dora` 可执行文件） 并非 `dora 运行时`本身。 `dora 运行时`由一个或多个后台进程组成，通常包括 `Dora Daemon` 和 `Dora Coordinator`。
 
 当你输入像 `dora run yolo.yml` 这样的命令时：
 
@@ -169,4 +169,4 @@ dora destroy
 
 `Dora CLI` 是您与 `dora` 系统交互的主要工具。您可以使用简单的命令，例如 `dora run` 根据 `Dataflow YAML` 蓝图启动数据流，使用 `dora build` 准备依赖项，以及使用 `dora stop` 和 `dora list` 管理正在运行的应用程序。`CLI` 充当命令接口，与 `dora 运行时`进程（例如 `Dora Coordinator` ）通信，告诉它们执行操作，而不是直接运行数据流。
 
-现在您已经了解了如何使用 `CLI` 命令 `dora` ，让我们深入了解接收这些命令并管理运行节点的关键组件之一： `Dora Daemon` 。
+现在您已经了解了如何使用 `CLI` 命令 `dora` ，让我们深入了解接收这些命令并管理运行节点的关键组件之一： **`Dora Daemon 守候进程`** 。
