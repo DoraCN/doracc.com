@@ -90,7 +90,9 @@ for event in node:
 6. `节点 B` 收到 `INPUT` 事件，从 `Metadata` 中读取共享内存标识符和 `ArrowTypeInfo` 。
 7. `节点 B` 使用其 `dora API` 访问数据。该 `API` 知道如何将共享内存块映射（使其可访问）到`节点 B` 的进程中，并使用 Arrow 格式信息直接从那里读取数据。
 
-![](/data-message01.png)
+这是一个简化的序列图：
+
+![data-message](/data-message01.png)
 
 这种从共享内存直接读取（“零拷贝”）的方式使得 `dora` 能够快速传输大量数据消息，因为数据本身不需要序列化、通过管道发送，也不需要由接收进程反序列化。
 
