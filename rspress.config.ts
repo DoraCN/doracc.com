@@ -12,9 +12,9 @@ export default defineConfig({
     dark: '/logo-dark.svg',
   },
   logoText: 'Dora中文社区',
-  route: {
-    cleanUrls: true,
-  },
+  // route: {
+  //   cleanUrls: true,
+  // },
   themeConfig: {
     socialLinks: [
       {

@@ -1,3 +1,7 @@
+---
+sidebar: false
+---
+
 # Dora + YOLOV8 快速目标检测
 
 ## 安装`dora`
