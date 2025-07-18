@@ -16,7 +16,7 @@ export default defineConfig({
   //   cleanUrls: true,
   // },
   head: [
-    '<meta name="author" content="Leon 李扬">',
+    '<meta name="内容编写" content="Leon 李扬">',
   ],
   themeConfig: {
     socialLinks: [
