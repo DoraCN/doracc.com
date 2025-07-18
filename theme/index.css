@@ -7,6 +7,11 @@
     padding-top: 20px;
 }
 
+.giscus {
+    /* 顶部边距50px */
+    padding-top: 50px;
+}
+
 .rspress-home-hero-image {
     max-width: 300px;
     margin-bottom: 20px;
