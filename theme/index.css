@@ -1,0 +1,20 @@
+.doracc-footer {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    padding-bottom: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.rspress-home-hero-image {
+    max-width: 300px;
+    margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  .md\:text-6xl {
+    font-size: 3.60rem;
+    line-height: 1;
+  }
+}
