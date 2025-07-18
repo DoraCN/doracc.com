@@ -1,16 +1,16 @@
-# 第六章：API 绑定
+# API 绑定
 
-**Author** : **`Leon 李扬`**
+**Author** : **`李扬`**
 
 欢迎回到 `dora` 教程！到目前为止，我们已经学习了
 
-[第一章：数据流](./dataflow) 作为应用程序蓝图
+[数据流](./dataflow) 作为应用程序蓝图
 
-[第二章：节点](./node) 和 [第三章：操作符](./operator) 作为构建块
+[节点](./node) 和 [操作符](./operator) 作为构建块
 
-[第四章：事件流](./event-stream) 作为其通信通道
+[事件流](./event-stream) 作为其通信通道
 
-[第五章：数据消息/Arrow Data](./data-message) 作为高效数据传输的格式。
+[数据消息/Arrow Data](./data-message) 作为高效数据传输的格式。
 
 现在，我们来谈谈如何实际编写这些节点和操作符的代码 ，让它们完成各自的工作。你用 `Python` 或 `Rust` 编写的自定义逻辑如何连接到 `dora 运行时`来接收输入并发送输出？这时， **`API 绑定`** 就派上用场了。
 
@@ -51,7 +51,7 @@
 
 ### 示例 1：使用 `API` 的简单 `Python` 节点
 
-这与我们在第二章：`Node` 中看到的结构类似，但现在重点关注 `API` 调用本身：
+这与我们在`Node` 中看到的结构类似，但现在重点关注 `API` 调用本身：
 
 ```py title="API Binding 示例 Python 节点"
 from dora import Node # 从 API 绑定导入 Node 类
