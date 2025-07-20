@@ -429,4 +429,4 @@ Dora yolov8 目标检测示例代码：https://pan.baidu.com/s/1uXXjFkpgeT_iHdNJ
 $ pip install numpy opencv-python pyarrow ultralytics
 ```
 
-**内容编写** : **`李扬`**
+内容编写 : **`李扬`**

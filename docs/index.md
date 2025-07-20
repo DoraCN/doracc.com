@@ -3,8 +3,8 @@ pageType: home
 
 hero:
   name: Dora中文社区
-  text: 机器人开发的未来范式
-  tagline: 安全 · 高效 · 极简如诗
+  text: 为AI时代打造的现代机器人框架
+  tagline: 极简 · 安全 · 高效
   actions:
     - theme: brand
       text: 探索教程 →
