@@ -14,7 +14,7 @@
 
 .rspress-home-hero-image {
     max-width: 260px;
-    margin-bottom: 80px;
+    /* margin-bottom: 80px; */
 }
 
 @media (min-width: 768px) {
