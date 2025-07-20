@@ -2,9 +2,22 @@ import Theme from '@rspress/core/theme';
 
 import { useEffect } from 'react';
 import './index.css';
+import CC from './cc';
+
+import { useLocation } from 'rspress/runtime';
+
+function MyComponent() {
+  const location = useLocation();
+  console.log('Current location:', location);
+  
+  return <div>{location.pathname}</div>;
+}
 
 const Layout = () => {
     useEffect(() => {
+      // const data = usePageData();
+      // console.log('Page Data:', data);
+      
         // Baidu Analytics script injection
         let hm = document.createElement("script");
         hm.src = "https://hm.baidu.com/hm.js?bad2b636058313c698986f4096bb5742";
@@ -47,7 +60,8 @@ const Layout = () => {
             <p><a href="https://beian.miit.gov.cn/" rel="noreferrer"> 苏ICP备14007268号-19 </a> | <img src="/beian.png" style={{ width: '12px', display: 'inline' }} /><a href="https://beian.mps.gov.cn/#/query/webSearch?code=32050602013520" rel="noreferrer"> 苏公网安备32050602013520号 </a></p>
           </div>
         }
-        // afterDocFooter={<div className='giscus giscus-frame'></div>}
+        beforeDocFooter={<CC/>}
+        // afterDocFooter={<div className='giscus giscus-frame'>qqqqq <MyComponent /> <CC/></div>}
       />
     );
 };
