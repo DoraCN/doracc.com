@@ -17,6 +17,7 @@ export default defineConfig({
   // },
   head: [
     '<meta name="Author" content="李扬">',
+    // '<script>var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src="https://hm.baidu.com/hm.js?bad2b636058313c698986f4096bb5742";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm, s);})();</script>'
   ],
   themeConfig: {
     socialLinks: [
@@ -46,4 +47,16 @@ export default defineConfig({
   mediumZoom: {
     selector: '.rspress-doc img',
   },
+  builderConfig: {
+    html: {
+      tags: [
+        {
+          tag: 'script',
+          attrs: {
+            src: 'https://hm.baidu.com/hm.js?bad2b636058313c698986f4096bb5742'
+          }
+        }
+      ]
+    }
+  }
 });

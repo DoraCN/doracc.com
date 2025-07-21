@@ -1,74 +1,33 @@
-import Theme from '@rspress/core/theme';
+// import Theme from 'rspress/theme';
 
-import { useEffect } from 'react';
-import './index.css';
-import CC from './cc';
+// // import './index.css';
 
-import { useLocation } from 'rspress/runtime';
+// const Layout = () => <Theme.Layout
+//   // bottom={
+//   //   <div className='doracc-footer'>
+//   //     <p><img src="/logo.svg" style={{ width: '30px', display: 'inline' }} /></p>
+//   //     <p>Dora中文社区 © 2025 <a href="/">doracc.com</a></p>
+//   //     <p><a href="https://beian.miit.gov.cn/" rel="noreferrer"> 苏ICP备14007268号-19 </a> | <img src="/beian.png" style={{ width: '12px', display: 'inline' }} /><a href="https://beian.mps.gov.cn/#/query/webSearch?code=32050602013520" rel="noreferrer"> 苏公网安备32050602013520号 </a></p>
+//   //   </div>
+//   // }
+//   // beforeDocFooter={
+//   //     <div style={{ textAlign: "center", marginTop: "40px", paddingTop: "20px", borderTop: "1px solid #ccc" }}>
+//   //     <p>
+//   //       <a rel="license" target="_blank" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh">
+//   //         <img alt="知识共享许可协议" style={{ borderWidth: 0, margin: "0 auto" }} src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png"/>
+//   //       </a>
+//   //     </p>
+//   //     <p>
+//   //       本作品采用<a rel="license" target="_blank" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可
+//   //     </p>
+//   //   </div>
+//   // }
+//   afterDocFooter={<div className='giscus giscus-frame'>qqqqq</div>}
+// />
 
-function MyComponent() {
-  const location = useLocation();
-  console.log('Current location:', location);
-  
-  return <div>{location.pathname}</div>;
-}
+// export default {
+//     ...Theme,
+//     Layout,
+// };
 
-const Layout = () => {
-    useEffect(() => {
-      // const data = usePageData();
-      // console.log('Page Data:', data);
-      
-        // Baidu Analytics script injection
-        let hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?bad2b636058313c698986f4096bb5742";
-        hm.type = "text/javascript";
-
-        // let gitcus = document.createElement("script");
-        // gitcus.src = "https://giscus.app/client.js";
-        // gitcus.setAttribute("data-repo", "DoraCN/doracc.com");
-        // gitcus.setAttribute("data-repo-id", "R_kgDOPMxSoA");
-        // gitcus.setAttribute("data-category", "Announcements");
-        // gitcus.setAttribute("data-category-id", "DIC_kwDOPMxSoM4CtH7d");
-        // gitcus.setAttribute("data-mapping", "pathname");
-        // gitcus.setAttribute("data-strict", "0");
-        // gitcus.setAttribute("data-reactions-enabled", "1");
-        // gitcus.setAttribute("data-emit-metadata", "0");
-        // gitcus.setAttribute("data-input-position", "bottom");
-        // gitcus.setAttribute("data-theme", "preferred_color_scheme");
-        // gitcus.setAttribute("data-lang", "zh-CN");
-        // gitcus.setAttribute("data-loading", "lazy");
-        // gitcus.crossOrigin = "anonymous";
-        // gitcus.async = true;
-
-        setTimeout(() => {
-          const root = document.getElementById('root');
-          if (root) {
-              root.appendChild(hm);
-              // root.appendChild(gitcus);
-          }
-        }, 0);
-
-
-    }, []);
-
-    return (
-      <Theme.Layout bottom=
-        {
-          <div className='doracc-footer'>
-            <p><img src="/logo.svg" style={{ width: '30px', display: 'inline' }} /></p>
-            <p>Dora中文社区 © 2025 <a href="/">doracc.com</a></p>
-            <p><a href="https://beian.miit.gov.cn/" rel="noreferrer"> 苏ICP备14007268号-19 </a> | <img src="/beian.png" style={{ width: '12px', display: 'inline' }} /><a href="https://beian.mps.gov.cn/#/query/webSearch?code=32050602013520" rel="noreferrer"> 苏公网安备32050602013520号 </a></p>
-          </div>
-        }
-        beforeDocFooter={<CC/>}
-        // afterDocFooter={<div className='giscus giscus-frame'>qqqqq <MyComponent /> <CC/></div>}
-      />
-    );
-};
-
-export default {
-    ...Theme,
-    Layout,
-};
-
-export * from '@rspress/core/theme';
+// export * from 'rspress/theme';
