@@ -9,54 +9,54 @@ import { Tab, Tabs } from 'rspress/theme';
 在命令行中运行以下命令 (不要带上 `$` 符号)：
 
 <Tabs>
-<Tab label="pip">
-```py
-$ pip install dora-rs-cli
-```
-</Tab>
-<Tab label="Linux">
-```bash
-$ curl --proto '=https' --tlsv1.2 -LsSf https://github.com/dora-rs/dora/releases/latest/download/dora-cli-installer.sh | sh
-```
-</Tab>
-<Tab label="macOS">
-```bash
-$ curl --proto '=https' --tlsv1.2 -LsSf https://github.com/dora-rs/dora/releases/latest/download/dora-cli-installer.sh | sh
-```
-</Tab>
-<Tab label="Windows">
-```bash
-PS C:\> powershell -ExecutionPolicy ByPass -c "irm https://github.com/dora-rs/dorareleases/latest/download/dora-cli-installer.ps1 | iex"
-```
-</Tab>
-<Tab label="Cargo">
-```bash
-$ cargo install dora-cli # In case of issues, try: `--locked`
-```
-</Tab>
-<Tab label="Docker">
-* pull
-```bash
-$ docker pull ghcr.io/dora-rs/dora-slim
-```
-* run
-```bash
-$ docker run ghcr.io/dora-rs/dora-slim dora --help
-```
-</Tab>
-<Tab label="Source">
-1. 安装`Rust`，详细参考：[https://echoli.cn/getting-started/install.html](https://echoli.cn/getting-started/install.html)
-2. 克隆源码和编译
-```bash
-$ git clone https://github.com/dora-rs/dora
-$ cd dora
-$ cargo build --release -p dora-cli
-# 在 `target\release` 目录下找到 `dora` 可执行文件，放在系统环境目录中
-```
-</Tab>
-<Tab label="Download">
-[下载地址](https://github.com/dora-rs/dora/releases/latest) 直接下载当前系统的版本即可
-</Tab>
+  <Tab label="pip">
+    ```py
+    $ pip install dora-rs-cli
+    ```
+  </Tab>
+  <Tab label="Linux">
+    ```bash
+    $ curl --proto '=https' --tlsv1.2 -LsSf https://github.com/dora-rs/dora/releases/latest/download/dora-cli-installer.sh | sh
+    ```
+  </Tab>
+  <Tab label="macOS">
+    ```bash
+    $ curl --proto '=https' --tlsv1.2 -LsSf https://github.com/dora-rs/dora/releases/latest/download/dora-cli-installer.sh | sh
+    ```
+  </Tab>
+  <Tab label="Windows">
+    ```bash
+    PS C:\> powershell -ExecutionPolicy ByPass -c "irm https://github.com/dora-rs/dorareleases/latest/download/dora-cli-installer.ps1 | iex"
+    ```
+  </Tab>
+  <Tab label="Cargo">
+    ```bash
+    $ cargo install dora-cli # In case of issues, try: `--locked`
+    ```
+  </Tab>
+  <Tab label="Docker">
+    * pull
+    ```bash
+    $ docker pull ghcr.io/dora-rs/dora-slim
+    ```
+    * run
+    ```bash
+    $ docker run ghcr.io/dora-rs/dora-slim dora --help
+    ```
+  </Tab>
+  <Tab label="Source">
+    1. 安装`Rust`，详细参考：[https://echoli.cn/getting-started/install.html](https://echoli.cn/getting-started/install.html)
+    2. 克隆源码和编译
+    ```bash
+    $ git clone https://github.com/dora-rs/dora
+    $ cd dora
+    $ cargo build --release -p dora-cli
+    # 在 `target\release` 目录下找到 `dora` 可执行文件，放在系统环境目录中
+    ```
+  </Tab>
+  <Tab label="Download">
+    [下载地址](https://github.com/dora-rs/dora/releases/latest) 直接下载当前系统的版本即可
+  </Tab>
 </Tabs>
 
 ## 运行`dora`

@@ -8,9 +8,9 @@
   integrity sha512-vbavdySgbTTrmFE+EsiqUTzlOr5bzlnJtUv9PynGCAKvfQqjIXbvFdumPM/GxMDfyuGMJaJAU6TO4zc1Jf1i8Q==
 
 "@bufbuild/protobuf@^2.5.0":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@bufbuild/protobuf/-/protobuf-2.6.0.tgz#82f10cbd2eff47b1e9196967749b26f916b808e8"
-  integrity sha512-6cuonJVNOIL7lTj5zgo/Rc2bKAo4/GvN+rKCrUj7GdEHRzCk8zKOfFwUsL9nAVk5rSIsRmlgcpLzTRysopEeeg==
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/@bufbuild/protobuf/-/protobuf-2.6.1.tgz#6d80aa2c0bf6a493d66609ff1ad84d1a0c15acf5"
+  integrity sha512-DaG6XlyKpz08bmHY5SGX2gfIllaqtDJ/KwVoxsmP22COOLYwDBe7yD3DZGwXem/Xq7QOc9cuR7R3MpAv5CFfDw==
 
 "@jsonjoy.com/base64@^1.1.1":
   version "1.1.2"
@@ -240,10 +240,10 @@
     error-stack-parser "^2.1.4"
     html-entities "^2.6.0"
 
-"@rspress/core@1.44.0":
-  version "1.44.0"
-  resolved "https://registry.yarnpkg.com/@rspress/core/-/core-1.44.0.tgz#26ae8968ba093ecdbf7f3bbbdbf069f67bf986a4"
-  integrity sha512-xlHeE71Ch4AWRKxQkFFOttBIl8vPJskQOEsEo0DQChz90nvio5ijh1G6cdVHseBumJeX2ZaHjYCbw5OeouKGSA==
+"@rspress/core@1.45.0":
+  version "1.45.0"
+  resolved "https://registry.yarnpkg.com/@rspress/core/-/core-1.45.0.tgz#44deb327745917282c46c769a65942e99a7a73ac"
+  integrity sha512-82S5AdAHT3g+xJhgdK0f1Jg/azWauhOInDDxyuhodX3/f251odahCFE2qz/FWxCmjK+jGI7h6hq0eUtl58u/uQ==
   dependencies:
     "@mdx-js/loader" "^2.3.0"
     "@mdx-js/mdx" "^2.3.0"
@@ -253,13 +253,13 @@
     "@rsbuild/plugin-react" "~1.3.1"
     "@rsbuild/plugin-sass" "~1.3.0"
     "@rspress/mdx-rs" "0.6.6"
-    "@rspress/plugin-auto-nav-sidebar" "1.44.0"
-    "@rspress/plugin-container-syntax" "1.44.0"
-    "@rspress/plugin-last-updated" "1.44.0"
-    "@rspress/plugin-medium-zoom" "1.44.0"
-    "@rspress/runtime" "1.44.0"
-    "@rspress/shared" "1.44.0"
-    "@rspress/theme-default" "1.44.0"
+    "@rspress/plugin-auto-nav-sidebar" "1.45.0"
+    "@rspress/plugin-container-syntax" "1.45.0"
+    "@rspress/plugin-last-updated" "1.45.0"
+    "@rspress/plugin-medium-zoom" "1.45.0"
+    "@rspress/runtime" "1.45.0"
+    "@rspress/shared" "1.45.0"
+    "@rspress/theme-default" "1.45.0"
     enhanced-resolve "5.18.0"
     github-slugger "^2.0.0"
     hast-util-from-html "^2.0.3"
@@ -338,63 +338,63 @@
     "@rspress/mdx-rs-win32-arm64-msvc" "0.6.6"
     "@rspress/mdx-rs-win32-x64-msvc" "0.6.6"
 
-"@rspress/plugin-auto-nav-sidebar@1.44.0":
-  version "1.44.0"
-  resolved "https://registry.yarnpkg.com/@rspress/plugin-auto-nav-sidebar/-/plugin-auto-nav-sidebar-1.44.0.tgz#dd1f91b97f522c14ee0d456d3051ae84343dd082"
-  integrity sha512-KnbV2z2qVxA8ZLgFMqdWmfh3l/xgV2p57w/QOixVdN93KfI9lwKGn3ReodOcf15fAImZjMFAJ602FPLFKG9qTQ==
+"@rspress/plugin-auto-nav-sidebar@1.45.0":
+  version "1.45.0"
+  resolved "https://registry.yarnpkg.com/@rspress/plugin-auto-nav-sidebar/-/plugin-auto-nav-sidebar-1.45.0.tgz#8c7f12051571946c1776edf1249777ee69fa68f2"
+  integrity sha512-/zrIZ3dznyC8CZUftk2N9U31Ov3zRURnv9pi3+RJdx0znZla1ju1RGDGNj7bD/RKIGmRElxfa+7L+NJGpMrfjA==
   dependencies:
-    "@rspress/shared" "1.44.0"
+    "@rspress/shared" "1.45.0"
 
-"@rspress/plugin-container-syntax@1.44.0":
-  version "1.44.0"
-  resolved "https://registry.yarnpkg.com/@rspress/plugin-container-syntax/-/plugin-container-syntax-1.44.0.tgz#05b8189928c0f4ad77f12ff089fde4b8cdab62f6"
-  integrity sha512-KvnFGUVNyroHNzZaln6TIv4Ucz+OCzuwNpNRlMQRHJPLQiJQf28KCSbkpJsLHZpS4SemX5u2OQkMCLF+KyqgYQ==
+"@rspress/plugin-container-syntax@1.45.0":
+  version "1.45.0"
+  resolved "https://registry.yarnpkg.com/@rspress/plugin-container-syntax/-/plugin-container-syntax-1.45.0.tgz#e08c6531000235a15fa5abe6da15723b60bb1327"
+  integrity sha512-vlGKAquuBYoFU49D2ZiFD6EJzWwoh2SZs/8SHk1z6edF0FPRER229zoaOHIu67XZchTUJ3Hp2BxPqo8LYqRsdQ==
   dependencies:
-    "@rspress/shared" "1.44.0"
+    "@rspress/shared" "1.45.0"
 
-"@rspress/plugin-last-updated@1.44.0":
-  version "1.44.0"
-  resolved "https://registry.yarnpkg.com/@rspress/plugin-last-updated/-/plugin-last-updated-1.44.0.tgz#c9e2ead21f8971d6a6be5d1ca427650263e9e382"
-  integrity sha512-/OSVzNHNLgBKuHaUvtwiAA10kLeiywzIV6nrFb9MVoZicJedxtwaL6DRgjyG/QQbfTUGle7u1G7RjbumVmfjMw==
+"@rspress/plugin-last-updated@1.45.0":
+  version "1.45.0"
+  resolved "https://registry.yarnpkg.com/@rspress/plugin-last-updated/-/plugin-last-updated-1.45.0.tgz#43458c97a519133a0f561c3ccf729c588d988d00"
+  integrity sha512-AANrFKmBWLZ9GWvHtT5ShRrqoqcHh8O+DO4f5+Xw104bVDRNH8yluxIzzeEJhX59u47N5v0oQ+EGkofr5JFkEA==
   dependencies:
-    "@rspress/shared" "1.44.0"
+    "@rspress/shared" "1.45.0"
 
-"@rspress/plugin-medium-zoom@1.44.0":
-  version "1.44.0"
-  resolved "https://registry.yarnpkg.com/@rspress/plugin-medium-zoom/-/plugin-medium-zoom-1.44.0.tgz#87898b1c2c130b65abec1e42a9a5c9a391cd85b0"
-  integrity sha512-IFUviQ5hhc/1XNcVb7pX5gJ30X9+ZIasDUS+BM7Mh9Z0mvl6roCWbqLD5PIaLnOIyhJv44X2zxKUKj15DKx2Fw==
+"@rspress/plugin-medium-zoom@1.45.0":
+  version "1.45.0"
+  resolved "https://registry.yarnpkg.com/@rspress/plugin-medium-zoom/-/plugin-medium-zoom-1.45.0.tgz#292018dbe7b54339748286d147c26b744328c2e0"
+  integrity sha512-mdXNlSVZHioztxlmzlh8RLRqlVxTIUytEGKVeqZHzhXT/iC9RAPewNbMmPmHVTG1uTcW2i64OCuxWNLdelc3nA==
   dependencies:
     medium-zoom "1.1.0"
 
-"@rspress/runtime@1.44.0":
-  version "1.44.0"
-  resolved "https://registry.yarnpkg.com/@rspress/runtime/-/runtime-1.44.0.tgz#fc095bacb6fadaed9c9e33d809295dc813ebda83"
-  integrity sha512-Bu/rzl+uJpVVmzmtmX7kKj3kAF/K8r+yaXAc7+2quUZ662OWVYIRTsP5PCG306QjLMZzqQwVjqyj5frdqbtxxw==
+"@rspress/runtime@1.45.0":
+  version "1.45.0"
+  resolved "https://registry.yarnpkg.com/@rspress/runtime/-/runtime-1.45.0.tgz#05d93209e9f7dacf60f61735c35dcd8d74b05e15"
+  integrity sha512-hYBxeFqtfEBbYARN4LERod7aePbe4SoDxZMFFmbFAmVECjf4UK57y6Blq5a4u8kSttGcUMryc9BCwXPw+7MHXg==
   dependencies:
-    "@rspress/shared" "1.44.0"
+    "@rspress/shared" "1.45.0"
     react "^18.3.1"
     react-dom "^18.3.1"
     react-helmet-async "^1.3.0"
     react-router-dom "^6.29.0"
 
-"@rspress/shared@1.44.0":
-  version "1.44.0"
-  resolved "https://registry.yarnpkg.com/@rspress/shared/-/shared-1.44.0.tgz#03df792b2481c0f5bdd38df75e00b198ae91e6f8"
-  integrity sha512-a+yf9/UZRJHEaIA7ktAahaQC/iby/UBpNz+gWyQRYkQgkJdIhaVITWT51lCjYXKjv09yT68RmCVG3Yvs1kC0JQ==
+"@rspress/shared@1.45.0":
+  version "1.45.0"
+  resolved "https://registry.yarnpkg.com/@rspress/shared/-/shared-1.45.0.tgz#c2fbfe5218d82729d51603703328eb9dd1673376"
+  integrity sha512-/M3AKChGVyKcX0MzPWpFIT2tFFsDLluHXCwww54LbMJBUKJm53FfKna0IUKMUesP9/A98RIb4Gsmx3tI18jCRw==
   dependencies:
     "@rsbuild/core" "~1.3.18"
     gray-matter "4.0.3"
     lodash-es "^4.17.21"
     unified "^10.1.2"
 
-"@rspress/theme-default@1.44.0":
-  version "1.44.0"
-  resolved "https://registry.yarnpkg.com/@rspress/theme-default/-/theme-default-1.44.0.tgz#856f338c21854b2991fd1146db46e27e38716f6b"
-  integrity sha512-bk7IT9QPyveSnwJ3+3wCpA6F2f4oOS4GxlBKQRbOSK4CcTt0O2CmH3QgfaRIOS5j5U9+qck0UmTKljQOUyG8/A==
+"@rspress/theme-default@1.45.0":
+  version "1.45.0"
+  resolved "https://registry.yarnpkg.com/@rspress/theme-default/-/theme-default-1.45.0.tgz#0ba792a709d26adab5fdc75f573da435273ca41d"
+  integrity sha512-54BbZ81owAt1jxpZFIpjgnqR/9wZR5QbF15OHxCvm240Uq3w0amB4kavL7RWiqwHLQZOkmXvvIQXysh6aDkj3Q==
   dependencies:
     "@mdx-js/react" "2.3.0"
-    "@rspress/runtime" "1.44.0"
-    "@rspress/shared" "1.44.0"
+    "@rspress/runtime" "1.45.0"
+    "@rspress/shared" "1.45.0"
     body-scroll-lock "4.0.0-beta.0"
     copy-to-clipboard "^3.3.3"
     flexsearch "0.7.43"
@@ -480,9 +480,9 @@
   integrity sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==
 
 "@types/node@^18.11.17":
-  version "18.19.119"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.19.119.tgz#e7c2098b8c0243af0005503a6d5da92e0d989c84"
-  integrity sha512-d0F6m9itIPaKnrvEMlzE48UjwZaAnFW7Jwibacw9MNdqadjKNpUm9tfJYDwmShJmgqcoqYUX3EMKO1+RWiuuNg==
+  version "18.19.120"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.19.120.tgz#07b3bd73875956d5281fa27e6d77a66415f7d455"
+  integrity sha512-WtCGHFXnVI8WHLxDAt5TbnCM4eSE+nI0QN2NJtwzcgMhht2eNz6V9evJrk+lwC8bCY8OWV5Ym8Jz7ZEyGnKnMA==
   dependencies:
     undici-types "~5.26.4"
 
@@ -1965,9 +1965,9 @@ picomatch@^2.0.4, picomatch@^2.2.1:
   integrity sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==
 
 picomatch@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-4.0.2.tgz#77c742931e8f3b8820946c76cd0c1f13730d1dab"
-  integrity sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-4.0.3.tgz#796c76136d1eead715db1e7bad785dedd695a042"
+  integrity sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==
 
 postcss@^8.5.6:
   version "8.5.6"
@@ -2183,14 +2183,14 @@ rspack-plugin-virtual-module@0.1.13:
   dependencies:
     fs-extra "^11.1.1"
 
-rspress@^1.40.2:
-  version "1.44.0"
-  resolved "https://registry.yarnpkg.com/rspress/-/rspress-1.44.0.tgz#a7e4932a65bb5b06e38a47c8bddc4ea06eafe30b"
-  integrity sha512-ZEZblWRiXHFsD+sdOsGtHok8fZ1YT9wc9aE20WT1+1HGAjybYSppcVYs+eJsLwhlemWn6JS++FwrP4hUfUaprA==
+rspress@^1.45.0:
+  version "1.45.0"
+  resolved "https://registry.yarnpkg.com/rspress/-/rspress-1.45.0.tgz#bcc2f7e539fb01d31858128e153be7b04227823f"
+  integrity sha512-sQb3u+E3D/5mrquKj9AKz1gVIK+Nk6NqrNuS7ZixzxZY+1u7uVES1WW8hhEbHXq/eDN+vRVhj0kEs5b66ed4ow==
   dependencies:
     "@rsbuild/core" "~1.3.18"
-    "@rspress/core" "1.44.0"
-    "@rspress/shared" "1.44.0"
+    "@rspress/core" "1.45.0"
+    "@rspress/shared" "1.45.0"
     cac "^6.7.14"
     chokidar "^3.6.0"
     picocolors "^1.1.1"
