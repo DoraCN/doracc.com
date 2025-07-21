@@ -11,6 +11,7 @@
     "rspress": "^1.45.0"
   },
   "devDependencies": {
+    "@rspress/plugin-last-updated": "^1.45.0",
     "@types/node": "^18.11.17"
   }
 }
