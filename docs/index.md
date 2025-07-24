@@ -2,7 +2,7 @@
 pageType: home
 
 hero:
-  name: Dora中文社区
+  name: dora-rs
   text: 为AI时代打造的现代机器人框架
   tagline: 极简 · 安全 · 高效
   actions:

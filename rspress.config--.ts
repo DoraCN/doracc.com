@@ -1,5 +1,5 @@
 import * as path from 'node:path';
-import { defineConfig } from '@rspress/core';
+import { defineConfig } from 'rspress/config';
 
 export default defineConfig({
   root: path.join(__dirname, 'docs'),
@@ -42,15 +42,14 @@ export default defineConfig({
   },
   markdown: {
     showLineNumbers: true,
-    defaultWrapCode: true,
-    // highlightLanguages: [
-    //   ['py', 'python'],
-    //   ['rust', 'rust'],
-    // ],
+    highlightLanguages: [
+      ['py', 'python'],
+      ['rust', 'rust'],
+    ],
   },
   mediumZoom: {
     selector: '.rspress-doc img',
   },
-  // globalStyles: path.join(__dirname, 'styles/global.css'),
-  // globalUIComponents: [path.join(__dirname, 'components', 'compTongji.tsx')],
+  globalStyles: path.join(__dirname, 'styles/global.css'),
+  globalUIComponents: [path.join(__dirname, 'components', 'compTongji.tsx')],
 });

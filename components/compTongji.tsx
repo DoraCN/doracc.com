@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useLocation } from "rspress/runtime";
+import { useLocation } from "@rspress/core/runtime";
 
 
 export default function PluginTongji() {
