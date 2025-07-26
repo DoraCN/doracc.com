@@ -1,0 +1,173 @@
+@media screen and (min-width: 1281px) {
+  .featureCard-pszTrm {
+    flex: 1 0 20% !important;
+  }
+}
+
+@media screen and (min-width: 835px) and (max-width: 1280px) {
+  .featureCard-pszTrm {
+    min-width: 40% !important;
+    max-width: 50% !important;
+  }
+}
+
+@media screen and (min-width: 601px) and (max-width: 834px) {
+  .whyRspack-A_WTpz {
+    padding: 16px !important;
+  }
+
+  .whyRspack-A_WTpz .whyRspackTitle-tp0mrZ {
+    letter-spacing: -1.28px !important;
+    font-size: 32px !important;
+    font-weight: 700 !important;
+    line-height: normal !important;
+  }
+
+  .whyRspack-A_WTpz .whyRspackDescription-j70toO {
+    font-size: 19px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: normal !important;
+  }
+
+  .featureCard-pszTrm {
+    min-width: 45% !important;
+    max-width: 50% !important;
+  }
+
+  .featureCard-pszTrm .featureCardInner-X8DiWy {
+    padding: 16px !important;
+  }
+
+  .featureCard-pszTrm .featureDescription-yPv0tv {
+    font-size: 14px !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .whyRspack-A_WTpz {
+    min-width: 100% !important;
+    padding: 16px !important;
+  }
+
+  .whyRspack-A_WTpz .whyRspackTitle-tp0mrZ {
+    letter-spacing: -.96px !important;
+    font-size: 24px !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+    line-height: normal !important;
+  }
+
+  .whyRspack-A_WTpz .whyRspackDescription-j70toO {
+    font-size: 16px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: normal !important;
+  }
+
+  .featureCard-pszTrm {
+    min-width: 100% !important;
+  }
+
+  .featureCard-pszTrm .featureCardInner-X8DiWy {
+    padding: 16px !important;
+  }
+
+  .featureCard-pszTrm .featureDescription-yPv0tv {
+    font-size: 14px !important;
+  }
+
+  .whyRspackBg-DglQGL {
+    max-width: 50% !important;
+    max-height: 50% !important;
+  }
+}
+
+html:not(.dark) {
+  --rs-why-rspack-shadow-color: #f9f9f9;
+  --rs-why-rspack-title-color: #0b0c0e;
+  --rs-why-rspack-desc-color: #6b7075;
+  --rs-why-rspack-card-stroke: rgba(226, 232, 240, .5);
+  --rs-why-rspack-card-gradient: linear-gradient(135deg, #fff, rgba(249, 249, 249, .5));
+  --rs-why-rspack-description-bg: linear-gradient(90deg, #0b0c0e 0%, rgba(11, 12, 14, .4) 100%);
+}
+
+html.dark {
+  --rs-why-rspack-shadow-color: #23272f;
+  --rs-why-rspack-title-color: white;
+  --rs-why-rspack-desc-color: #c6cacd;
+  --rs-why-rspack-card-stroke: #23272f;
+  --rs-why-rspack-card-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, .03));
+  --rs-why-rspack-description-bg: linear-gradient(87deg, #fff -2.53%, rgba(255, 255, 255, .4) 103.84%);
+}
+
+.features-VP6Ici {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 0;
+  display: flex;
+}
+
+.features-VP6Ici .featureCard-pszTrm {
+  flex: 1 0 30%;
+  align-self: stretch;
+  display: flex;
+}
+
+.features-VP6Ici .featureCard-pszTrm .featureCardInner-X8DiWy {
+  border: 1px solid var(--rs-why-rspack-card-stroke);
+  background: var(--rs-why-rspack-card-gradient);
+  border-radius: 20px;
+  flex-direction: column;
+  flex: 1;
+  align-items: center;
+  gap: 16px;
+  padding: 28px;
+  text-decoration: none;
+  display: flex;
+}
+
+.features-VP6Ici .featureCard-pszTrm .featureCardInner-X8DiWy .featureIcon-_1CaCl {
+  -webkit-user-select: none;
+  user-select: none;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  display: flex;
+}
+
+.features-VP6Ici .featureCard-pszTrm .featureCardInner-X8DiWy .featureIcon-_1CaCl .featureIconImg-XGmAIS {
+  width: 150px;
+  height: 110px;
+}
+
+.features-VP6Ici .featureCard-pszTrm .featureCardInner-X8DiWy .featureContent-DPzQJp {
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  display: flex;
+}
+
+.features-VP6Ici .featureCard-pszTrm .featureCardInner-X8DiWy .featureContent-DPzQJp .featureTitle-WlHG0x {
+  color: var(--rs-why-rspack-title-color);
+  margin: 0;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.features-VP6Ici .featureCard-pszTrm .featureCardInner-X8DiWy .featureContent-DPzQJp .featureDescription-yPv0tv {
+  color: var(--rs-why-rspack-desc-color);
+  margin: 0;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+}
+

@@ -1,0 +1,12 @@
+.background-k7Kx8T {
+  width: 100%;
+  top: calc(-1 * var(--rp-nav-height));
+  z-index: -1;
+  filter: blur(2px);
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
+  position: absolute;
+  left: 0;
+}
+

@@ -1,0 +1,129 @@
+@media screen and (min-width: 601px) and (max-width: 1050px) {
+  .title-yh_kQ7 {
+    font-size: 40px !important;
+    line-height: 48px !important;
+  }
+
+  .innerContainer-z6bHq_ {
+    background-size: 100% 100% !important;
+  }
+
+  .logo-vQfE2V {
+    transform: scale(.8);
+    flex: 1 0 !important;
+    min-width: 180px !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .title-yh_kQ7 {
+    font-size: 30px !important;
+    line-height: 48px !important;
+  }
+
+  .innerContainer-z6bHq_ {
+    background-size: 100% 100% !important;
+    padding: 48px 0 0 !important;
+  }
+
+  .innerContainer-z6bHq_:before, .innerContainer-z6bHq_:after {
+    width: 300px !important;
+    height: 300px !important;
+  }
+
+  .logo-vQfE2V {
+    transform: scale(.8);
+    flex: 1 0 50% !important;
+    max-width: 50% !important;
+  }
+}
+
+.innerContainer-z6bHq_ {
+  box-sizing: border-box;
+  background-size: 100% 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  padding: 64px 48px;
+  display: flex;
+  position: relative;
+}
+
+.innerContainer-z6bHq_:before {
+  content: "";
+  -webkit-user-select: none;
+  user-select: none;
+  z-index: -1;
+  background: url("https://assets.rspack.rs/rspack/assets/landingpage-who-is-using-left-border.png") 0 0 / 100% 100% no-repeat;
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.innerContainer-z6bHq_:after {
+  content: "";
+  -webkit-user-select: none;
+  user-select: none;
+  z-index: -1;
+  background: url("https://assets.rspack.rs/rspack/assets/landingpage-who-is-using-right-border.png") 0 0 / 100% 100% no-repeat;
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.title-yh_kQ7 {
+  text-align: center;
+  -webkit-text-fill-color: rgba(0, 0, 0, 0);
+  background: linear-gradient(279deg, #ff8b00 27.12%, #f93920 72.56%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.logos-razs4s {
+  filter: var(--rs-built-with-rspack-invert-filter, none);
+  flex-wrap: wrap;
+  align-self: stretch;
+  align-items: flex-start;
+  display: flex;
+}
+
+.logos-razs4s .logo-vQfE2V {
+  flex: 250px;
+  justify-content: center;
+  align-self: stretch;
+  align-items: center;
+  gap: 8px;
+  min-height: 100px;
+  padding-left: 8px;
+  padding-right: 8px;
+  text-decoration: none;
+  display: flex;
+}
+
+.logos-razs4s .logoText-ZwEAa5 {
+  color: #0b0c0e;
+  text-align: center;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 28px;
+}
+
+html:not(.dark) {
+  --rs-built-with-rspack-invert-filter: none;
+}
+
+html.dark {
+  --rs-built-with-rspack-invert-filter: invert(1);
+}
+

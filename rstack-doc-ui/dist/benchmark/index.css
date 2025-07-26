@@ -1,0 +1,122 @@
+.container-FuNiZu {
+  box-sizing: content-box;
+  border-radius: 10px;
+  justify-content: space-between;
+  align-self: stretch;
+  align-items: center;
+  width: 100%;
+  height: 18px;
+  display: flex;
+}
+
+@media screen and (max-width: 1060px) {
+  .container-FuNiZu {
+    width: 85vw;
+  }
+}
+
+.innerContainer-Fc0J9Z {
+  background: var(--rp-c-gray-light-5);
+  border-radius: 5px;
+  justify-content: space-between;
+  width: 100%;
+  height: 8px;
+  display: flex;
+}
+
+.dark .innerContainer-Fc0J9Z {
+  background: var(--rp-c-bg-soft);
+}
+
+.bar-WHFMsk {
+  background: var(--rs-benchmark-bar-background, linear-gradient(279deg, #ff8b00 35.21%, #f93920 63.34%));
+  border-radius: 5px;
+  height: 100%;
+}
+
+.desc-lTD7cf {
+  min-width: 100px;
+  color: var(--rp-c-text-2);
+  width: 100px;
+  margin-left: 16px;
+  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+  font-size: 12px;
+}
+
+.time-JXJR1M {
+  text-align: left;
+  width: 38px;
+  display: inline-block;
+}
+
+.root-Ollge_ {
+  flex-direction: column;
+  justify-content: center;
+  align-self: stretch;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+}
+
+.title-JepjCS {
+  color: var(--rp-c-text-1);
+}
+
+.desc-npKeId {
+  color: var(--rp-c-text-2);
+}
+
+.bottomLink-pzbjuT {
+  color: var(--rp-c-text-2);
+  margin-top: 16px;
+  font-size: 16px;
+  display: block;
+}
+
+.bottomLink-pzbjuT:hover {
+  color: var(--rp-c-link);
+}
+
+.progressName-Ke8hc2 {
+  color: var(--rp-c-text-1);
+  min-width: 170px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.item-sOpi_3 {
+  justify-content: center;
+  align-self: stretch;
+  align-items: center;
+  width: 100%;
+  padding: 1.25rem;
+  display: flex;
+}
+
+.metricItem-YxRN9U {
+  flex-direction: column;
+  flex: 1 0;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+@media screen and (min-width: 1060px) {
+  .item-sOpi_3 {
+    flex-direction: row;
+  }
+}
+
+@media screen and (max-width: 1060px) {
+  .item-sOpi_3 {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .progressName-Ke8hc2 {
+    width: 180px;
+    margin-bottom: 8px;
+  }
+}
+
