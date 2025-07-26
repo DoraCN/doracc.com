@@ -11,6 +11,7 @@
     "@rspress/core": "^2.0.0-beta.21"
   },
   "devDependencies": {
+    "@rstack-dev/doc-ui": "^1.10.8",
     "@types/node": "^22.8.1"
   }
 }

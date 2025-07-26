@@ -17,8 +17,24 @@
     /* margin-bottom: 80px; */
 }
 
+.author {
+  color: var(--rp-c-link);
+  font-weight: 500;
+  transition: color .25s;
+}
+.author:after {
+  content: "↗";
+  margin-left: .2em;
+  margin-right: .1em;
+  font-size: .7em;
+  font-weight: 700;
+  transition: transform .2s;
+  display: inline-block;
+  transform: translate(0, -.3em);
+}
+
 @media (min-width: 768px) {
-  .md\:text-6xl {
+  .md\:rp-text-6xl {
     font-size: 2.50rem;
     line-height: 1;
   }

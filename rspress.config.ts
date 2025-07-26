@@ -6,7 +6,13 @@ export default defineConfig({
   title: 'Dora中文社区',
   description: 'Dora中文社区 - 信息收集、文章推送、教程学习、技巧分享、社区交流',
   icon: '/favicon.ico',
-  // lang: 'zh-CN',
+  // lang: 'zh',
+  // locales: [
+  //   {
+  //     lang: 'zh',
+  //     label: '中文',
+  //   },
+  // ],
   logo: {
     light: '/logo.svg',
     dark: '/logo-dark.svg',
@@ -36,9 +42,9 @@ export default defineConfig({
     searchPlaceholderText: '搜索文档',
     lastUpdated: true,
     lastUpdatedText: '上次更新',
-    footer: {
-      message: '<img src="/logo.svg" style="width:30px;display:inline;"><br>Dora中文社区 © 2025 <a href="/">doracc.com</a><br><a href="https://beian.miit.gov.cn/" rel="noreferrer"> 苏ICP备14007268号-19 </a> | <img src="/beian.png" style="width:12px;display:inline;"><a href="https://beian.mps.gov.cn/#/query/webSearch?code=32050602013520" rel="noreferrer"> 苏公网安备32050602013520号 </a>',
-    },
+    // footer: {
+    //   message: '<img src="/logo.svg" style="width:30px;display:inline;"><br>Dora中文社区 © 2025 <a href="/">doracc.com</a><br><a href="https://beian.miit.gov.cn/" rel="noreferrer"> 苏ICP备14007268号-19 </a> | <img src="/beian.png" style="width:12px;display:inline;"><a href="https://beian.mps.gov.cn/#/query/webSearch?code=32050602013520" rel="noreferrer"> 苏公网安备32050602013520号 </a>',
+    // },
   },
   markdown: {
     showLineNumbers: true,
@@ -51,6 +57,6 @@ export default defineConfig({
   mediumZoom: {
     selector: '.rspress-doc img',
   },
-  // globalStyles: path.join(__dirname, 'styles/global.css'),
-  // globalUIComponents: [path.join(__dirname, 'components', 'compTongji.tsx')],
+  globalUIComponents: [path.join(__dirname, 'components', 'compTongji.tsx')],
 });
+ 
