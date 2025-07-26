@@ -1,0 +1,36 @@
+[
+  {
+    "title": "",
+    "titleEn": "",
+    "links": [
+      {
+        "name": "dora-rs",
+        "desc": "AI时代机器人框架",
+        "descEn": "AI时代机器人框架",
+        "logo": "https://g.hgcdn.cn/doracc/dora.svg",
+        "url": "https://dora-rs.ai"
+      },
+      {
+        "name": "Github",
+        "desc": "dora-rs Github仓库",
+        "descEn": "dora-rs Github仓库",
+        "logo": "https://g.hgcdn.cn/static/github-480.png",
+        "url": "https://github.com/dora-rs/dora"
+      },
+      {
+        "name": "doracc.com",
+        "desc": "中文社区仓库",
+        "descEn": "中文社区仓库",
+        "logo": "https://g.hgcdn.cn/static/github-480.png",
+        "url": "https://github.com/DoraCN/doracc.com"
+      },
+      {
+        "name": "李扬",
+        "desc": "我的技术笔记",
+        "descEn": "我的技术笔记",
+        "logo": "https://g.hgcdn.cn/echoli/avatar256.png",
+        "url": "https://echoli.cn"
+      }
+    ]
+  }
+]

@@ -135,9 +135,9 @@
   integrity sha512-O3rHJzAQKamUz1fvE0Qaw0xSFqsA/yafi2iqeE0pvdFtCO1viYx8QL6f3Ln/aCCTLxs68SLf0KPM9eSeM8yBnA==
 
 "@rsbuild/core@~1.4.8":
-  version "1.4.10"
-  resolved "https://registry.yarnpkg.com/@rsbuild/core/-/core-1.4.10.tgz#6385e40ef2ec84e223f185de4243aa067ad70123"
-  integrity sha512-CUy3MyO/XZIn+Dfb0ffwNJr3RA+iUpZFrzCzDwCpM18rbUjVsj5bjTwf1aVcWHMZSpJHX+j8pH02ttGomfeNIQ==
+  version "1.4.11"
+  resolved "https://registry.yarnpkg.com/@rsbuild/core/-/core-1.4.11.tgz#2cb3b7f614a156c2ad56fe635c8e1625a4b55115"
+  integrity sha512-G5x7jUGxVw0Z984IEKmOP/tW8gslhUjN81D3fuogKb95hlESWpc+LuckuA5iO1ydbLVrhuYKLv1tC8wTAIDsqA==
   dependencies:
     "@rspack/core" "1.4.10"
     "@rspack/lite-tapable" "~1.0.1"
@@ -383,10 +383,8 @@
     react-dom "^19.1.0"
     shiki "^3.8.1"
 
-"@rstack-dev/doc-ui@^1.10.8":
+"@rstack-dev/doc-ui@file:rstack-doc-ui":
   version "1.10.8"
-  resolved "https://registry.yarnpkg.com/@rstack-dev/doc-ui/-/doc-ui-1.10.8.tgz#83ede7f1c966a2c0ca067b00c34ff30784cf0fb4"
-  integrity sha512-F/v0XzRI1ZIAzBBLx91um4TLMIUWw3LiQsPXtZe8ZAF6wQUVk47YPK/kB1VPkLLaD214JrwWq+L6P7UnD8MT7A==
   dependencies:
     framer-motion "^12.20.1"
 
