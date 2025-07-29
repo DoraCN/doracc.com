@@ -199,8 +199,262 @@
       * **含义**: 在 `dora build` 阶段执行的构建命令。
       * **限制条件**: `env` 中定义的环境变量对此命令生效。
 
+## 源码分析
+
+在 `dora` 的核心库中详细定义了 `Node` 节点的参数。
+
+文件 [`libraries/message/src/descriptor.rs`](https://github.com/dora-rs/dora/blob/main/libraries/message/src/descriptor.rs#L115) 第 `115行`
+
+```rust title="descriptor.rs"
+/// # Dora Node Configuration
+///
+/// A node represents a computational unit in a Dora dataflow. Each node runs as a
+/// separate process and can communicate with other nodes through inputs and outputs.
+#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct Node {
+    pub id: NodeId,
+    pub name: Option<String>,
+    pub description: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub args: Option<String>,
+    pub env: Option<BTreeMap<String, EnvValue>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub operators: Option<RuntimeNode>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub operator: Option<SingleOperatorDefinition>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub custom: Option<CustomNode>,
+    #[serde(default)]
+    pub outputs: BTreeSet<DataId>,
+    #[serde(default)]
+    pub inputs: BTreeMap<DataId, Input>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub send_stdout_as: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub build: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub git: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub branch: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub tag: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub rev: Option<String>,
+    #[schemars(skip)]
+    #[serde(rename = "_unstable_deploy")]
+    pub deploy: Option<Deploy>,
+}
+```
+
+### 详细字段分析
+
+#### 核心身份信息 (Identity)
+
+### `id: NodeId`
+* **作用**: **必需的唯一标识符**。这是节点在数据流图中的“身份证”，所有节点的 `id` 必须唯一，且不能包含 `/` 字符。`inputs` 字段用它来路由数据。
+
+### `name: Option<String>`
+* **作用**: 可选的、人类可读的名称。主要用于文档和日志，以提高可读性。
+
+### `description: Option<String>`
+* **作用**: 可选的、对节点功能的详细文字描述。进一步增强了数据流图的可读性和可维护性。
+
+#### 独立进程节点配置 (Standalone Node Configuration)
+
+### `path: Option<String>`
+* **作用**: **定义独立进程节点的关键**。指向一个可执行文件（如 Rust 编译产物）或脚本（如 Python 脚本）的路径。`dora` 会运行这个文件。如果一个 `Node` 定义了 `path`，它就是一个独立进程节点。
+
+### `args: Option<String>`
+* **作用**: 传递给 `path` 指定的可执行文件的命令行参数。
+
+### `env: Option<BTreeMap<String, EnvValue>>`
+* **作用**: 为节点进程（包括构建和运行阶段）设置环境变量。
+
+#### 运行时与算子配置 (Runtime & Operator Configuration)
+
+### `operators: Option<RuntimeNode>`
+* **作用**: **定义运行时节点的关键**。包含一个或多个算子（Operator）的定义。如果一个 `Node` 定义了 `operators` 字段（而没有 `path` 字段），它就成为一个运行时节点。
+
+### `operator: Option<SingleOperatorDefinition>`
+* **作用**: `operators` 字段的便利版。当一个运行时节点只包含**一个**算子时，可以使用此字段来简化 YAML 配置。它和 `operators` 是互斥的。
+
+#### 数据流连接 (Dataflow Connectivity)
+
+### `outputs: BTreeSet<DataId>`
+* **作用**: **声明该节点产生的所有输出流的 ID**。这是一个集合，列出了所有该节点可能发送数据的“通道名称”。下游节点通过这些 ID 来订阅数据。
+
+### `inputs: BTreeMap<DataId, Input>`
+* **作用**: **定义该节点的输入流连接**。这是一个映射表，key 是本节点内部使用的输入名称 (`input_id`)，value (`Input`) 则指明了该输入来源于哪个上游节点 (`source_node_id`) 的哪个输出 (`source_node_output_id`)。这是构建数据流图（DAG）连接关系的核心。
+
+### `send_stdout_as: Option<String>`
+* **作用**: 一个非常实用的功能，可以将节点进程的标准输出（stdout）和标准错误（stderr）重定向到一个 `dora` 的数据输出流中。这使得日志和调试信息可以像普通数据一样在数据流中传递。
+
+#### 构建与源码管理 (Build & Source Management)
+
+### `build: Option<String>`
+* **作用**: 定义在 `dora build` 期间需要执行的构建命令。例如 `cargo build` 或 `pip install`。这使得 `dora` 可以直接从源代码构建节点。
+
+### `git: Option<String>`
+* **作用**: 指定一个 Git 仓库地址。`dora build` 会自动克隆这个仓库，使得数据流可以轻松分发和复现。
+
+### `branch: Option<String>`, `tag: Option<String>`, `rev: Option<String>`
+* **作用**: 与 `git` 字段配合使用，用于检出（checkout）指定的 Git 分支、标签或提交版本。这确保了构建的一致性。
+
+#### 其他字段
+
+### `custom: Option<CustomNode>`
+* **作用**: **已弃用 (deprecated)** 的旧版字段。源码注释明确指出应使用顶层的 `path`, `args` 等字段。
+
+### `deploy: Option<Deploy>`
+* **作用**: 用于机器部署的非稳定（unstable）配置。从 `#[schemars(skip)]` 属性看，它不包含在公开的配置 schema 中，属于内部或实验性功能。
+
+---
+
+### 技术方案总结
+
+这份最新的 `Node` 定义展示了一个成熟且高度灵活的设计方案：
+
+1.  **声明式与配置驱动**: 整个数据流图完全通过 YAML 文件进行声明式定义。`Node` 结构体是这个声明的核心，它是一个纯粹的数据容器，可以被 `serde` 完美地解析。
+2.  **隐式模式切换**: 通过检查 `path` 与 `operators`/`operator` 字段的存在与否，`dora` 能够智能地推断出节点是应作为独立进程运行，还是作为轻量级算子的宿主运行。这种设计使得 YAML 语法非常直观和扁平。
+3.  **构建与源码集成**: 通过 `git` 和 `build` 字段，`dora` 将节点的源码管理和构建过程无缝集成到其工作流中，极大地提升了项目的可移植性和可复现性。
+4.  **清晰的关注点分离**:
+    * **身份 (who)**: `id`, `name`, `description`
+    * **行为 (what)**: `path` 或 `operators`
+    * **连接 (how)**: `inputs`, `outputs`
+    * **准备 (prepare)**: `build`, `git`
 
 ## 最佳实践与最终建议
+
+现在你已经是 dora 节点配置专家了！一个全功能的节点定义可能看起来像下面这样，但别怕，你已经理解了每一部分！
+
+```yaml title="dataflow.yml"
+# 这是一个 dora 数据流的综合示例文件 (dataflow.yml)
+# 它展示了如何使用 Node 的各种属性来定义一个复杂的多节点应用。
+
+nodes:
+  # --------------------------------------------------------------------------
+  # 节点 1: 独立进程节点 (Standalone Rust Node) - 从 Git 构建
+  # 职责: 模拟从摄像头捕获视频帧。
+  # 特点: 使用 git, tag, build, env, 和 send_stdout_as 字段。
+  # --------------------------------------------------------------------------
+  - id: video_capture
+    name: "Camera Capture Node (Rust)"
+    description: "从 Git 仓库构建的 Rust 节点，模拟捕获视频帧并发送。同时，它的标准输出会被重定向为 'log_stream' 输出。"
+
+    # 源码管理: 指定从哪个 Git 仓库获取源代码
+    git: https://github.com/dora-rs/dora.git
+    # 版本控制: 锁定到 v0.4.0 标签，确保构建的可复现性
+    tag: v0.4.0
+
+    # 构建命令: 在 dora build 期间执行的命令
+    build: cargo build --release -p camera-source
+
+    # 环境变量: 为构建和运行环境设置环境变量
+    env:
+      RUST_LOG: info
+      CAMERA_ID: 0
+
+    # 运行配置: 构建完成后，要执行的程序路径
+    # 注意：路径是相对于 git 仓库的根目录
+    path: target/release/camera-source
+
+    # 输出: 声明此节点会产生两个输出流
+    outputs:
+      - video_frame # 主要的数据输出
+      - log_stream  # 用于接收标准输出的流
+
+    # 特殊功能: 将此节点的 stdout 和 stderr 重定向到名为 'log_stream' 的输出流
+    send_stdout_as: log_stream
+
+  # --------------------------------------------------------------------------
+  # 节点 2: 独立进程节点 (Standalone Python Node)
+  # 职责: 调整接收到的视频帧尺寸。
+  # 特点: 使用 args, inputs, 和 branch 字段 (演示与 tag 的不同)。
+  # --------------------------------------------------------------------------
+  - id: frame_resizer
+    name: "Image Resizer (Python)"
+    description: "一个 Python 节点，用于调整图像大小。从开发分支获取代码。"
+
+    # 使用同一个 git 仓库，但切换到主开发分支
+    git: https://github.com/dora-rs/dora.git
+    branch: main
+
+    # 运行配置: 直接指定 Python 脚本路径和命令行参数
+    path: examples/python-dataflow/nodes/resize.py
+    args: "--width 640 --height 480"
+
+    # 输入: 定义数据来源
+    # 'image' 输入流 -> 连接到 'video_capture' 节点的 'video_frame' 输出
+    inputs:
+      image: video_capture/video_frame
+
+    # 输出: 声明会产生一个名为 'resized_image' 的输出
+    outputs:
+      - resized_image
+
+  # --------------------------------------------------------------------------
+  # 节点 3: 运行时节点 (Runtime Node) - 托管多个算子
+  # 职责: 作为宿主进程，运行两个轻量级算子。
+  # 特点: 使用 operators 字段，没有 path 字段。
+  # --------------------------------------------------------------------------
+  - id: processing_hub
+    name: "AI & Data Processing Hub"
+    description: "这是一个运行时节点，它本身不执行逻辑，而是为其内部的算子提供运行环境。"
+
+    # 注意：没有 path, args, build 等字段，因为它不是一个独立的进程节点。
+    
+    # 算子定义:
+    operators:
+      # 运行时内的第一个算子
+      - id: yolo_detector
+        name: "YOLOv8 Detection Operator"
+        description: "对输入的图片运行目标检测算法。"
+        # 算子的实现代码
+        python: path/to/yolo_operator.py
+        # 算子的输入
+        inputs:
+          image: frame_resizer/resized_image
+        # 算子的输出
+        outputs:
+          - detections # 检测结果
+          - metadata   # 附加元数据
+
+      # 运行时内的第二个算子 (设想中的 Rust 算子)
+      - id: aggregator
+        name: "Data Aggregator Operator"
+        description: "聚合来自多个源的数据。"
+        # 设想中的 Rust 共享库算子
+        shared_library: path/to/libaggregator.so
+        # 算子的输入
+        inputs:
+          # 可以订阅来自其他算子或其他节点的数据
+          yolo_meta: yolo_detector/metadata
+          camera_log: video_capture/log_stream
+        # 算子的输出
+        outputs:
+          - summary_report
+
+  # --------------------------------------------------------------------------
+  # 节点 4: 最终的日志和存储节点 (Sink Node)
+  # 职责: 收集所有最终结果并打印日志。
+  # 特点: 拥有多个复杂的输入，是数据流的终点。
+  # --------------------------------------------------------------------------
+  - id: sink_logger
+    name: "Final Logger"
+    description: "接收所有处理结果并将其打印到控制台。"
+    path: examples/python-dataflow/nodes/logger.py
+    
+    # 输入: 演示如何订阅来自不同节点和算子的多个数据流
+    inputs:
+      detections_input: processing_hub/yolo_detector/detections
+      report_input: processing_hub/aggregator/summary_report
+      raw_logs_input: video_capture/log_stream
+
+    # 没有 outputs 字段，因为它是数据流的终点（Sink）。
+```
 
 1.  **ID 清晰唯一**: 这是数据流的基石，请认真命名。
 2.  **文档即代码**: 善用 `name` 和 `description`，让你的数据流蓝图自己会说话。
