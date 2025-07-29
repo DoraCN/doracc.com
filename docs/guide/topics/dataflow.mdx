@@ -116,7 +116,7 @@
     ```
   * **参数详解**
       * **类型**: `Option<RuntimeNode>` / `Option<SingleOperatorDefinition>`
-      * **含义**: 定义在运行时节点内部署的一个或多个轻量级**操作符**。它的存在标志着该节点是一个算子宿主。
+      * **含义**: 定义在运行时节点内部署的一个或多个轻量级**操作符**。它的存在标志着该节点是一个操作符宿主。
       * **限制条件**: 与 `path` 字段**互斥**；`operators` 和 `operator` 自身也**互斥**。
 
 
@@ -273,13 +273,13 @@ pub struct Node {
 ### `env: Option<BTreeMap<String, EnvValue>>`
 * **作用**: 为节点进程（包括构建和运行阶段）设置环境变量。
 
-#### 运行时与算子配置 (Runtime & Operator Configuration)
+#### 运行时与操作符配置 (Runtime & Operator Configuration)
 
 ### `operators: Option<RuntimeNode>`
-* **作用**: **定义运行时节点的关键**。包含一个或多个算子（Operator）的定义。如果一个 `Node` 定义了 `operators` 字段（而没有 `path` 字段），它就成为一个运行时节点。
+* **作用**: **定义运行时节点的关键**。包含一个或多个操作符（Operator）的定义。如果一个 `Node` 定义了 `operators` 字段（而没有 `path` 字段），它就成为一个运行时节点。
 
 ### `operator: Option<SingleOperatorDefinition>`
-* **作用**: `operators` 字段的便利版。当一个运行时节点只包含**一个**算子时，可以使用此字段来简化 YAML 配置。它和 `operators` 是互斥的。
+* **作用**: `operators` 字段的便利版。当一个运行时节点只包含**一个**操作符时，可以使用此字段来简化 YAML 配置。它和 `operators` 是互斥的。
 
 #### 数据流连接 (Dataflow Connectivity)
 
@@ -318,7 +318,7 @@ pub struct Node {
 这份最新的 `Node` 定义展示了一个成熟且高度灵活的设计方案：
 
 1.  **声明式与配置驱动**: 整个数据流图完全通过 YAML 文件进行声明式定义。`Node` 结构体是这个声明的核心，它是一个纯粹的数据容器，可以被 `serde` 完美地解析。
-2.  **隐式模式切换**: 通过检查 `path` 与 `operators`/`operator` 字段的存在与否，`dora` 能够智能地推断出节点是应作为独立进程运行，还是作为轻量级算子的宿主运行。这种设计使得 YAML 语法非常直观和扁平。
+2.  **隐式模式切换**: 通过检查 `path` 与 `operators`/`operator` 字段的存在与否，`dora` 能够智能地推断出节点是应作为独立进程运行，还是作为轻量级操作符的宿主运行。这种设计使得 YAML 语法非常直观和扁平。
 3.  **构建与源码集成**: 通过 `git` 和 `build` 字段，`dora` 将节点的源码管理和构建过程无缝集成到其工作流中，极大地提升了项目的可移植性和可复现性。
 4.  **清晰的关注点分离**:
     * **身份 (who)**: `id`, `name`, `description`
@@ -396,44 +396,44 @@ nodes:
       - resized_image
 
   # --------------------------------------------------------------------------
-  # 节点 3: 运行时节点 (Runtime Node) - 托管多个算子
-  # 职责: 作为宿主进程，运行两个轻量级算子。
+  # 节点 3: 运行时节点 (Runtime Node) - 托管多个操作符
+  # 职责: 作为宿主进程，运行两个轻量级操作符。
   # 特点: 使用 operators 字段，没有 path 字段。
   # --------------------------------------------------------------------------
   - id: processing_hub
     name: "AI & Data Processing Hub"
-    description: "这是一个运行时节点，它本身不执行逻辑，而是为其内部的算子提供运行环境。"
+    description: "这是一个运行时节点，它本身不执行逻辑，而是为其内部的操作符提供运行环境。"
 
     # 注意：没有 path, args, build 等字段，因为它不是一个独立的进程节点。
     
-    # 算子定义:
+    # 操作符定义:
     operators:
-      # 运行时内的第一个算子
+      # 运行时内的第一个操作符
       - id: yolo_detector
         name: "YOLOv8 Detection Operator"
         description: "对输入的图片运行目标检测算法。"
-        # 算子的实现代码
+        # 操作符的实现代码
         python: path/to/yolo_operator.py
-        # 算子的输入
+        # 操作符的输入
         inputs:
           image: frame_resizer/resized_image
-        # 算子的输出
+        # 操作符的输出
         outputs:
           - detections # 检测结果
           - metadata   # 附加元数据
 
-      # 运行时内的第二个算子 (设想中的 Rust 算子)
+      # 运行时内的第二个操作符 (设想中的 Rust 操作符)
       - id: aggregator
         name: "Data Aggregator Operator"
         description: "聚合来自多个源的数据。"
-        # 设想中的 Rust 共享库算子
+        # 设想中的 Rust 共享库操作符
         shared_library: path/to/libaggregator.so
-        # 算子的输入
+        # 操作符的输入
         inputs:
-          # 可以订阅来自其他算子或其他节点的数据
+          # 可以订阅来自其他操作符或其他节点的数据
           yolo_meta: yolo_detector/metadata
           camera_log: video_capture/log_stream
-        # 算子的输出
+        # 操作符的输出
         outputs:
           - summary_report
 
@@ -447,7 +447,7 @@ nodes:
     description: "接收所有处理结果并将其打印到控制台。"
     path: examples/python-dataflow/nodes/logger.py
     
-    # 输入: 演示如何订阅来自不同节点和算子的多个数据流
+    # 输入: 演示如何订阅来自不同节点和操作符的多个数据流
     inputs:
       detections_input: processing_hub/yolo_detector/detections
       report_input: processing_hub/aggregator/summary_report
