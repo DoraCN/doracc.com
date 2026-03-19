@@ -1,6 +1,6 @@
 # 数据流
 
-欢迎来到 `dora` 教程！ `dora` 是一个强大的框架，旨在帮助您构建复杂的应用程序，尤其是那些需要处理实时数据的应用程序，例如机器人技术或 `AI` 应用。
+欢迎来到 `DORA` 教程！ `DORA` 是一个强大的框架，旨在帮助您构建复杂的应用程序，尤其是那些需要处理实时数据的应用程序，例如机器人技术或 `AI` 应用。
 
 但是，如何设计和管理这些需要不同组件协同工作并共享信息的应用程序呢？这就是 **`Dataflow 数据流`** 的概念！
 
@@ -20,7 +20,7 @@
 
 ## 定义数据流
 
-在 `dora` 中，您可以使用 `YAML` 格式编写的简单文本文件来定义此数据流。`YAML` 是一种人类可读的数据格式，常用于配置文件。
+在 `DORA` 中，您可以使用 `YAML` 格式编写的简单文本文件来定义此数据流。`YAML` 是一种人类可读的数据格式，常用于配置文件。
 
 让我们看一个基于相机、物体检测和可视化用例的简化示例。
 
@@ -29,20 +29,20 @@ nodes:
   # 定义相机节点
   - id: camera
     outputs:
-      - image
+      - image                      # 节点输出 image 数据
 
   # 定义目标识别节点
   - id: object_detection
     inputs:
-      image: camera/image
+      image: camera/image          # 从 camera 节点的 image 输出接收数据
     outputs:
-      - bbox
+      - bbox                       # 节点输出 bbox 数据
 
   # 定义可视化节点
   - id: plot
     inputs:
-      image: camera/image
-      bbox: object_detection/bbox
+      image: camera/image          # 从 camera 节点的 image 输出接收数据
+      bbox: object_detection/bbox  # 从 object_detection 节点的 bbox 输出接收数据
 ```
 
 让我们来分析一下
@@ -101,30 +101,30 @@ nodes:
       bbox: object_detection/bbox
 ```
 
-即使在这个完整的示例中，`inputs` 和 `outputs` 部分也清晰的定义了数据流连接图。其它部分（`build`、`path`、`env`等）这告诉 `dora` 如何设置和运行各个节点进程。
+即使在这个完整的示例中，`inputs` 和 `outputs` 部分也清晰的定义了数据流连接图。其它部分（`build`、`path`、`env`等）这告诉 `DORA` 如何设置和运行各个节点进程。
 
 ## 运行数据流
 
-在 `YAML` 文件（假设为 `dataflow.yml` ）中定义数据流后，您可以使用 `dora` 命令行界面 (`CLI`) 来运行它。
+在 `YAML` 文件（假设为 `dataflow.yml` ）中定义数据流后，您可以使用 `DORA` 命令行界面 (`CLI`) 来运行它。
 
 ```bash
 dora run dataflow.yml
 ```
 
-## `dora`如何使用数据流
+## `DORA`如何使用数据流
 
 当你运行 `dora run dataflow.yml` 时：
 
-1. `dora`（具体来说涉及到 `Dora daemon` 和 `Dora coordinator` 等组件）读取 `dataflow.yml` 文件。
+1. `DORA`（具体来说涉及到 `Dora daemon` 和 `Dora coordinator` 等组件）读取 `dataflow.yml` 文件。
 2. 它识别你定义的所有的节点（`camera` `object_detection` `plot`）。
 3. 它将每个节点作为系统上的单独进程启动。
-4. 至关重要的是，根据 `YAML` 中定义的 `inputs` 和 `outputs` 以及它们的连接方式，`dora` 在这些正在运行的节点进程之间建立了通信通道。
-5. 当 `camera` 节点生成 `image` 输出时，`dora` 会自动将该数据发送到 `object_detection` 节点的 `image` 输入和 `plot` 节点的 `images` 输入。同样 `object_detection` 的 `bbox` 数据也会发送到 `plot` 节点。
+4. 至关重要的是，根据 `YAML` 中定义的 `inputs` 和 `outputs` 以及它们的连接方式，`DORA` 在这些正在运行的节点进程之间建立了通信通道。
+5. 当 `camera` 节点生成 `image` 输出时，`DORA` 会自动将该数据发送到 `object_detection` 节点的 `image` 输入和 `plot` 节点的 `images` 输入。同样 `object_detection` 的 `bbox` 数据也会发送到 `plot` 节点。
 
-数据流 `YAML` 告诉 `dora` 运行什么以及如何连接它们之间的数据流，而无需您编写代码来在节点内明确管理这些连接。
+数据流 `YAML` 告诉 `DORA` 运行什么以及如何连接它们之间的数据流，而无需您编写代码来在节点内明确管理这些连接。
 
 ## 总结
 
-在本节中，我们了解到数据流是 `dora` 应用程序的蓝图，它定义了节点以及数据在节点之间的流动方式。它由 `YAML` 文件描述，类似于管道图，显示了一个节点的输出与另一个节点的输入之间的连接。当您使用 `dora CLI` 运行数据流时， `dora` 会读取此蓝图并设置必要的通信通道。
+在本节中，我们了解到数据流是 `DORA` 应用程序的蓝图，它定义了节点以及数据在节点之间的流动方式。它由 `YAML` 文件描述，类似于管道图，显示了一个节点的输出与另一个节点的输入之间的连接。当您使用 `dora CLI` 运行数据流时， `DORA` 会读取此蓝图并设置必要的通信通道。
 
 现在您已经了解了整体数据流蓝图，下一章让我们深入了解构成该蓝图的各个构建块： **`Node 节点`** 。

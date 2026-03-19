@@ -2,8 +2,8 @@
 pageType: home
 
 hero:
-  name: dora-rs
-  text: 为AI时代打造的现代机器人框架
+  name: DORA
+  text: 为AI时代打造的现代机器人开发框架
   tagline: 极简 · 安全 · 高效
   actions:
     - theme: brand
@@ -13,10 +13,10 @@ hero:
       text: GitHub仓库
       link: https://github.com/dora-rs/dora
   image:
-    src: 
+    src:
       dark: /logo-dark.svg
       light: /logo.svg
-    alt: Dora中文社区
+    alt: DORA中文社区
 features:
   - title: 极致性能的零拷贝通信
     details: 通过自研的共享内存服务器和标准化的 Apache Arrow 消息格式，在单机内部实现了真正的“零拷贝”数据传输。这一机制从根本上消除了传统进程间通信的主要性能瓶颈，使其在处理大数据量时延迟极低。

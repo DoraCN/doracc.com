@@ -1,8 +1,12 @@
-# 操作符
+# 算子
 
-欢迎回来！在[数据流](./dataflow)中，我们学习了 `dora` 应用程序的整体蓝图以及它如何连接各个部分。在[节点](./node)中，我们深入探讨了这些节点部分，并了解到每个节点通常作为一个独立的进程运行，执行特定的任务，并通过数据流 `YAML` 中定义的输入和输出进行通信。
+:::info
+在早期的文档版本中，`Operator` 一词被翻译为`操作符`。然而，经过进一步的考虑和社区反馈，`算子`一词更符合其在数据处理和编程中的实际含义。`算子`通常用于描述执行特定计算或转换的独立模块，这与`DORA`中`Operator`的功能更为契合。因此，后续文档中将统一使用`算子`一词。
+:::
 
-现在，让我们探索一种在 `Node` 内部添加更多结构和可重用性的方法： **`Operator 操作符`** 的概念。
+欢迎回来！在[数据流](./dataflow)中，我们学习了 `DORA` 应用程序的整体蓝图以及它如何连接各个部分。在[节点](./node)中，我们深入探讨了这些节点部分，并了解到每个节点通常作为一个独立的进程运行，执行特定的任务，并通过数据流 `YAML` 中定义的输入和输出进行通信。
+
+现在，让我们探索一种在 `Node` 内部添加更多结构和可重用性的方法： **`Operator 算子`** 的概念。
 
 ## 节点内部更小、可重复使用的步骤
 
@@ -17,27 +21,27 @@
 
 这时， **`Operator`** 就派上用场了。`Operator` 是一种较小的模块化逻辑，设计用于在一种名为 `Dora Runtime Node` 的特殊节点内运行。`Operator` 允许你将单个节点的工作分解为可重用的独立步骤。
 
-可以将节点想象成工厂车间的工作站（一栋独立的建筑），而操作符则是该工作站内的专用工具或机器。工作站（节点）是独立的单元，但其内部的工作由其工具集（操作符）完成。
+可以将节点想象成工厂车间的工作站（一栋独立的建筑），而算子则是该工作站内的专用工具或机器。工作站（节点）是独立的单元，但其内部的工作由其工具集（算子）完成。
 
-## 操作符与自定义节点
+## 算子与自定义节点
 
 让我们快速比较一下：
 
-| 特征         | 自定义节点                                  | Dora 运行时节点和操作符                                        |
+| 特征         | 自定义节点                                  | Dora 运行时节点和算子                                        |
 | :----------- | :------------------------------------------ | :------------------------------------------------------------- |
 | **运行方式** | 独立节点                                    | 单进程                                                         |
-| **包含**     | 一段自定义的代码                            | 一个或多个操作符                                               |
-| **逻辑单元** | 整个节点代码                                | 单个操作符                                                     |
-| **通讯**     | 使用 `dora Node API` 直接与 `dora` 系统交互 | 节点运行时使用 `dora Node API`; 操作符使用 `dora Operator API` |
-| **可重用性** | 重用整个 `Node` 进程                        | 重复使用单个操作符逻辑模块                                     |
+| **包含**     | 一段自定义的代码                            | 一个或多个算子                                               |
+| **逻辑单元** | 整个节点代码                                | 单个算子                                                     |
+| **通讯**     | 使用 `dora Node API` 直接与 `DORA` 系统交互 | 节点运行时使用 `dora Node API`; 算子使用 `dora Operator API` |
+| **可重用性** | 重用整个 `Node` 进程                        | 重复使用单个算子逻辑模块                                     |
 
 因此，虽然自定义节点是其自己独立的程序（ `.py` 、 `.rs` 可执行文件等），但 `Dora 运行时` 节点是一个运行 `dora-runtime` 程序的进程，然后加载和管理数据流 `YAML` 中指定的一个或多个操作员的代码。
 
-## 在数据流 `YAML` 中定义操作符
+## 在数据流 `YAML` 中定义算子
 
 运算符是在 `Dataflow YAML` 中节点的定义内定义的。您无需为节点的实现指定单个 `path` 或 `custom` 块，而是使用 `operators` 符块。
 
-让我们想象一下之前的图像处理节点，现在使用操作符来实现。
+让我们想象一下之前的图像处理节点，现在使用算子来实现。
 
 ```py title="dataflow.yml"
 nodes:
@@ -128,21 +132,21 @@ class Operator:
         dora_event, # The event received by the operator
         send_output, # Function to send outputs
     ) -> DoraStatus:
-        
+
         if dora_event["type"] == "INPUT":
             # Check if the input is the one we expect
             if dora_event["id"] == "input_image":
                 image_data = dora_event["value"] # Get the incoming image data
-                
+
                 print(f"Received image on input_image.")
-                
+
                 # --- Operator's specific logic ---
                 # (Actual image processing code goes here)
-                grayscale_image_data = convert_to_grayscale(image_data) 
+                grayscale_image_data = convert_to_grayscale(image_data)
                 # ---------------------------------
 
                 # Send the result to the operator's output
-                send_output("gray_image", grayscale_image_data, dora_event["metadata"]) 
+                send_output("gray_image", grayscale_image_data, dora_event["metadata"])
 
         return DoraStatus.CONTINUE # Keep running
 ```
@@ -150,15 +154,15 @@ class Operator:
 在此 `Python` 代码片段中：
 
 - `Operator` 代码的结构为 `Python` 类（或 `Rust` 中的函数）。
-- 它有一个 `on_event` 方法（或函数），每当发生与该操作符有关的事件（例如接收输入或停止信号）时， `dora-runtime` 就会调用该方法。
+- 它有一个 `on_event` 方法（或函数），每当发生与该算子有关的事件（例如接收输入或停止信号）时， `dora-runtime` 就会调用该方法。
 - `dora_event` 字典包含有关事件的信息（其 `type` 、 `id` 、 `value` 等。我们将在下一章介绍**事件流** ）。
 - `send_output` 函数（或方法）由运行时提供，供 `Operator` 在其定义的输出上发送数据。它接受输出 `id` 、 `data` 以及可选的 `metadata` 。
 
 这个模式（ `on_event -> process -> send_output` ）是 `Operator` 逻辑的核心。
 
-## 底层：运行时节点和操作符
+## 底层：运行时节点和算子
 
-当您使用 `dora run` 和定义了带有操作符的运行时节点的 `Dataflow YAML` 时，下面是发生情况的简化视图：
+当您使用 `dora run` 和定义了带有算子的运行时节点的 `Dataflow YAML` 时，下面是发生情况的简化视图：
 
 1. `dora CLI` 和 `Dora Daemon / Dora Coordinator` 读取数据流 `YAML`。
 2. 他们将 `image-processor-node` 标识为一个节点。
@@ -185,5 +189,5 @@ class Operator:
 
 在本章中，我们了解到 `Operator` 是运行在 `Dora Runtime` 节点进程中的模块化逻辑。它们在 `Dataflow YAML` 的 `Node` 块中定义，允许您在单个节点内构建复杂的处理流水线。`Operator` 使用 `Operator API` 接收输入并发送输出， `dora-runtime` 负责加载它们、在它们之间建立内部通信，以及在节点的外部输入/输出和 `Operator` 的输入/输出之间路由数据。这提供了一种创建可复用处理步骤的方法。
 
-现在我们了解了节点和操作符，让我们看看数据在系统中移动的基本概念： **`Event Stream 事件流`** 。
+现在我们了解了节点和算子，让我们看看数据在系统中移动的基本概念： **`Event Stream 事件流`** 。
 
