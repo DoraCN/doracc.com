@@ -1,6 +1,6 @@
-# Dora 数据流节点终极指南
+# DORA 数据流节点终极指南
 
-## 引言：欢迎来到 Dora 的自动化工厂
+## 引言：欢迎来到 DORA 的自动化工厂
 
 欢迎您，未来的数据流架构师！请将 **`DORA`** 想象成一个高度智能的自动化工厂，而您，就是这家工厂的总设计师。您的核心任务是设计一条或多条高效的**流水线 (Dataflow)**，用于处理、转换和传输数据。
 
@@ -206,9 +206,9 @@
 文件 [`libraries/message/src/descriptor.rs`](https://github.com/dora-rs/dora/blob/main/libraries/message/src/descriptor.rs#L115) 第 `115行`
 
 ```rust title="descriptor.rs"
-/// # Dora Node Configuration
+/// # DORA Node Configuration
 ///
-/// A node represents a computational unit in a Dora dataflow. Each node runs as a
+/// A node represents a computational unit in a DORA dataflow. Each node runs as a
 /// separate process and can communicate with other nodes through inputs and outputs.
 #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
@@ -328,10 +328,10 @@ pub struct Node {
 
 ## 最佳实践与最终建议
 
-现在你已经是 dora 节点配置专家了！一个全功能的节点定义可能看起来像下面这样，但别怕，你已经理解了每一部分！
+现在你已经是 DORA 节点配置专家了！一个全功能的节点定义可能看起来像下面这样，但别怕，你已经理解了每一部分！
 
 ```yaml title="dataflow.yml"
-# 这是一个 dora 数据流的综合示例文件 (dataflow.yml)
+# 这是一个 DORA 数据流的综合示例文件 (dataflow.yml)
 # 它展示了如何使用 Node 的各种属性来定义一个复杂的多节点应用。
 
 nodes:
