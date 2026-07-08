@@ -1,0 +1,72 @@
+name: Deploy to Aliyun OSS
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build
+        run: bun run build
+
+      - name: Setup ossutil
+        run: |
+          curl -o ossutil.zip https://gosspublic.alicdn.com/ossutil/v2/2.1.1/ossutil-2.1.1-linux-amd64.zip
+          unzip -q ossutil.zip
+          mv ossutil-2.1.1-linux-amd64/ossutil /usr/local/bin/ossutil
+          chmod +x /usr/local/bin/ossutil
+
+      - name: Deploy to OSS
+        env:
+          OSS_ACCESS_KEY_ID: ${{ secrets.OSS_ACCESS_KEY_ID }}
+          OSS_ACCESS_KEY_SECRET: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
+          OSS_ENDPOINT: ${{ secrets.OSS_ENDPOINT }}
+          OSS_BUCKET: ${{ secrets.OSS_BUCKET }}
+        run: |
+          ossutil sync doc_build/ oss://"$OSS_BUCKET"/ \
+            --delete \
+            --force \
+            --access-key-id "$OSS_ACCESS_KEY_ID" \
+            --access-key-secret "$OSS_ACCESS_KEY_SECRET" \
+            --endpoint "$OSS_ENDPOINT"
+
+      - name: Setup Aliyun CLI
+        run: |
+          curl -o aliyun-cli.tgz https://aliyuncli.alicdn.com/aliyun-cli-linux-latest-amd64.tgz
+          tar -xzf aliyun-cli.tgz
+          mv aliyun /usr/local/bin/aliyun
+          chmod +x /usr/local/bin/aliyun
+
+      - name: Refresh DCDN cache
+        env:
+          OSS_ACCESS_KEY_ID: ${{ secrets.OSS_ACCESS_KEY_ID }}
+          OSS_ACCESS_KEY_SECRET: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
+          DCDN_REFRESH_URL: ${{ secrets.DCDN_REFRESH_URL }}
+        run: |
+          aliyun configure set \
+            --profile deploy \
+            --mode AK \
+            --access-key-id "$OSS_ACCESS_KEY_ID" \
+            --access-key-secret "$OSS_ACCESS_KEY_SECRET" \
+            --region cn-hangzhou
+          aliyun dcdn RefreshDcdnObjectCaches \
+            --profile deploy \
+            --ObjectPath "$DCDN_REFRESH_URL" \
+            --ObjectType Directory
