@@ -33,7 +33,7 @@
 
 保留：
 - **ICP/公安备案页脚**（境内上线法律必需）。
-- **百度统计**（`components/compTongji.tsx` + head 脚本）。
+- **百度统计**（`head` 中注入加载脚本 + `theme/` 自定义主题上报路由 PV）。
 - 社区 Logo/favicon。
 
 调整：

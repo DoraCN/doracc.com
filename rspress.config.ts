@@ -61,6 +61,5 @@ export default defineConfig({
   mediumZoom: {
     selector: '.rspress-doc img',
   },
-  globalUIComponents: [path.join(__dirname, 'components', 'compTongji.tsx')],
   plugins: [rspressPluginMermaid()],
 });
