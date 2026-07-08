@@ -1,0 +1,32 @@
+[
+  {
+    "type": "file",
+    "name": "python-crash-course",
+    "label": "Python 极简速成"
+  },
+  {
+    "type": "file",
+    "name": "glossary",
+    "label": "术语中英对照表"
+  },
+  {
+    "type": "file",
+    "name": "dora-cli-cheatsheet",
+    "label": "dora 命令速查表"
+  },
+  {
+    "type": "file",
+    "name": "dataflow-yaml",
+    "label": "dataflow.yml 速查"
+  },
+  {
+    "type": "file",
+    "name": "troubleshooting",
+    "label": "常见报错与求助指南"
+  },
+  {
+    "type": "file",
+    "name": "resources",
+    "label": "学习资源与社区"
+  }
+]

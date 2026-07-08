@@ -1,0 +1,22 @@
+[
+  {
+    "type": "file",
+    "name": "camera-node",
+    "label": "7.1 摄像头节点"
+  },
+  {
+    "type": "file",
+    "name": "image-in-dataflow",
+    "label": "7.2 图像在数据流中传递"
+  },
+  {
+    "type": "file",
+    "name": "yolo-nodehub",
+    "label": "7.3 Node Hub 接入 YOLO"
+  },
+  {
+    "type": "file",
+    "name": "project-detection",
+    "label": "🎯 小项目④：实时物体检测"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "type": "file",
+    "name": "node-lifecycle",
+    "label": "4.1 节点生命周期"
+  },
+  {
+    "type": "file",
+    "name": "write-node",
+    "label": "4.2 写一个 Python 节点"
+  },
+  {
+    "type": "file",
+    "name": "connect-node",
+    "label": "4.3 把节点接进数据流"
+  },
+  {
+    "type": "file",
+    "name": "timer-params",
+    "label": "4.4 定时器与参数"
+  }
+]

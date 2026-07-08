@@ -1,0 +1,27 @@
+[
+  {
+    "type": "file",
+    "name": "logs-errors",
+    "label": "12.1 日志与排错"
+  },
+  {
+    "type": "file",
+    "name": "record-replay",
+    "label": "12.2 录制回放"
+  },
+  {
+    "type": "file",
+    "name": "distributed",
+    "label": "12.3 多机分布式"
+  },
+  {
+    "type": "file",
+    "name": "observability",
+    "label": "12.4 可观测性"
+  },
+  {
+    "type": "file",
+    "name": "whats-next",
+    "label": "12.5 路线图与生态"
+  }
+]

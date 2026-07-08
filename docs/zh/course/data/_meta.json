@@ -1,0 +1,22 @@
+[
+  {
+    "type": "file",
+    "name": "why-arrow",
+    "label": "5.1 为什么是 Arrow"
+  },
+  {
+    "type": "file",
+    "name": "data-types",
+    "label": "5.2 常见数据类型"
+  },
+  {
+    "type": "file",
+    "name": "multi-input",
+    "label": "5.3 多输入合并"
+  },
+  {
+    "type": "file",
+    "name": "project-pipeline",
+    "label": "🎯 小项目②：数据处理流水线"
+  }
+]

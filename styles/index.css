@@ -1,0 +1,11 @@
+/* 保留多语言能力（locales 仍配置 zh/en），但隐藏导航栏中的语言切换入口。
+   仅作用于 rp-nav__others 内的语言项与分隔线，不影响主导航、外观切换、社交图标。 */
+.rp-nav__others > .rp-nav-menu__divider,
+.rp-nav__others > .rp-nav-menu__item {
+  display: none !important;
+}
+
+/* 移动端/展开菜单里的语言选择 */
+.rp-nav-screen-langs {
+  display: none !important;
+}

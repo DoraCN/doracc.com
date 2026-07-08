@@ -1,17 +1,24 @@
 {
-  "name": "doracc-com",
+  "name": "dora-course",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
+  "author": "DORA 中文社区、LoopFun 开源社区",
+  "license": "MIT",
   "scripts": {
     "build": "rspress build",
     "dev": "rspress dev",
     "preview": "rspress preview"
   },
   "dependencies": {
-    "@rspress/core": "^2.0.0-beta.21"
+    "@rspress/core": "^2.0.14"
   },
   "devDependencies": {
-    "@rstack-dev/doc-ui": "file:rstack-doc-ui",
-    "@types/node": "^22.8.1"
+    "@types/node": "^22.8.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "rspress-plugin-mermaid": "^1.0.1"
   }
 }

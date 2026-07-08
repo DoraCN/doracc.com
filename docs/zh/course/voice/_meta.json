@@ -1,0 +1,27 @@
+[
+  {
+    "type": "file",
+    "name": "audio-stream",
+    "label": "8.1 麦克风与音频流"
+  },
+  {
+    "type": "file",
+    "name": "asr-sensevoice",
+    "label": "8.2 语音识别：SenseVoiceSmall"
+  },
+  {
+    "type": "file",
+    "name": "tts",
+    "label": "8.3 语音合成 TTS"
+  },
+  {
+    "type": "file",
+    "name": "streaming-dialog",
+    "label": "8.4 可打断对话"
+  },
+  {
+    "type": "file",
+    "name": "project-voice",
+    "label": "🎯 小项目⑤：和小多语音互动"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "type": "file",
+    "name": "why-rust",
+    "label": "9.1 何时用 Rust"
+  },
+  {
+    "type": "file",
+    "name": "write-rust-node",
+    "label": "9.2 写一个 Rust 节点"
+  },
+  {
+    "type": "file",
+    "name": "mix-python-rust",
+    "label": "9.3 Python 与 Rust 混合"
+  },
+  {
+    "type": "file",
+    "name": "project-highfreq",
+    "label": "🎯 小项目⑥：高频处理节点"
+  }
+]

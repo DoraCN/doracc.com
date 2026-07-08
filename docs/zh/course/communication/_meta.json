@@ -1,0 +1,27 @@
+[
+  {
+    "type": "file",
+    "name": "topic",
+    "label": "6.1 Topic 发布订阅"
+  },
+  {
+    "type": "file",
+    "name": "service",
+    "label": "6.2 Service 请求应答"
+  },
+  {
+    "type": "file",
+    "name": "action",
+    "label": "6.3 Action 长任务"
+  },
+  {
+    "type": "file",
+    "name": "streaming",
+    "label": "6.4 Streaming 流式"
+  },
+  {
+    "type": "file",
+    "name": "project-interaction",
+    "label": "🎯 小项目③：问答 / 任务交互"
+  }
+]

@@ -1,0 +1,72 @@
+[
+  {
+    "type": "dir",
+    "name": "intro",
+    "label": "开篇"
+  },
+  {
+    "type": "dir",
+    "name": "concepts",
+    "label": "第一章 · 认识 DORA 与具身智能"
+  },
+  {
+    "type": "dir",
+    "name": "environment",
+    "label": "第二章 · 朵拉魔盒与环境搭建"
+  },
+  {
+    "type": "dir",
+    "name": "first-dataflow",
+    "label": "第三章 · 第一个数据流：dora 小飞机"
+  },
+  {
+    "type": "dir",
+    "name": "python-node",
+    "label": "第四章 · Python 节点开发基础"
+  },
+  {
+    "type": "dir",
+    "name": "data",
+    "label": "第五章 · 数据的语言：Arrow"
+  },
+  {
+    "type": "dir",
+    "name": "communication",
+    "label": "第六章 · 节点如何对话：四种通信模式"
+  },
+  {
+    "type": "dir",
+    "name": "vision",
+    "label": "第七章 · 让小多看见：视觉与感知"
+  },
+  {
+    "type": "dir",
+    "name": "voice",
+    "label": "第八章 · 让小多听见与说话：语音与流式"
+  },
+  {
+    "type": "dir",
+    "name": "rust",
+    "label": "第九章 · 加速小多：Rust 节点"
+  },
+  {
+    "type": "dir",
+    "name": "control",
+    "label": "第十章 · 让小多动起来：控制与仿真"
+  },
+  {
+    "type": "dir",
+    "name": "embodied",
+    "label": "第十一章 · 让小多思考并行动：VLM"
+  },
+  {
+    "type": "dir",
+    "name": "deploy",
+    "label": "第十二章 · 调试、部署与进阶"
+  },
+  {
+    "type": "dir",
+    "name": "appendix",
+    "label": "附录"
+  }
+]

@@ -1,0 +1,27 @@
+[
+  {
+    "type": "file",
+    "name": "build-aviation",
+    "label": "3.1 获取并编译小飞机工程"
+  },
+  {
+    "type": "file",
+    "name": "run-dataflow",
+    "label": "3.2 dora run 跑起来"
+  },
+  {
+    "type": "file",
+    "name": "read-yaml",
+    "label": "3.3 读懂 dataflow.yml"
+  },
+  {
+    "type": "file",
+    "name": "data-cmd-pose",
+    "label": "3.4 看懂流动的数据：cmd 与 pose"
+  },
+  {
+    "type": "file",
+    "name": "aha-experiment",
+    "label": "3.5 啊哈实验：删掉连线"
+  }
+]

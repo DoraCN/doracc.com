@@ -1,0 +1,22 @@
+[
+  {
+    "type": "file",
+    "name": "control-modeling",
+    "label": "10.1 控制信号建模"
+  },
+  {
+    "type": "file",
+    "name": "pybullet-so101",
+    "label": "10.2 PyBullet 仿真 SO-101"
+  },
+  {
+    "type": "file",
+    "name": "real-hardware",
+    "label": "10.3 可选：真实硬件"
+  },
+  {
+    "type": "file",
+    "name": "project-arm",
+    "label": "🎯 小项目⑦：控制仿真机械臂"
+  }
+]

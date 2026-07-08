@@ -1,0 +1,17 @@
+[
+  {
+    "type": "file",
+    "name": "vlm-in-dataflow",
+    "label": "11.1 VLM 融入数据流"
+  },
+  {
+    "type": "file",
+    "name": "perception-decision-loop",
+    "label": "11.2 感知-决策-动作闭环"
+  },
+  {
+    "type": "file",
+    "name": "project-graduation",
+    "label": "🎯 毕业项目⑧：说话抓取"
+  }
+]
