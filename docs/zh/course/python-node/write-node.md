@@ -1,9 +1,268 @@
 ---
-description: 4.2 写一个 Python 节点 — 《跟朵拉学机器人：从零到具身智能》
+description: 4.2 写一个 Python 节点——亲手写出第一个 DORA 节点：一个每隔半秒"开机"的发送者，和一个原样转发的回声。
 ---
 
 # 4.2 写一个 Python 节点
 
-:::warning 施工中
-本页正在编写中，敬请期待。
+上一节你看到了一套"三段式"骨架。光看是学不会写节点的——这一节，我们**真的写出来、跑起来**。
+
+你将要写出两个 Python 节点：
+
+- **发送者（sender）**：每半秒在黑板上写一条"开灯"或"关灯"的指令；
+- **回声（echo）**：听到指令就原样朗读一遍——它是小多的第一个"零件"，虽然简单，但能**听懂并应答**。
+
+:::info 小多说
+这是我的第一个"肌肉"！虽然现在只会原样复读，但有了这块肌肉，以后就能装上各种聪明的大脑。
 :::
+
+## 学习目标
+
+学完本节，你将能够：
+
+- 亲手用 Python 写出一个能**发送数据**的 DORA 节点；
+- 亲笔写出一个能**接收数据并原样转发**的回声节点；
+- 理解 `pyarrow` 的 `pa.array` 是怎么造出"黑板上的字"的；
+- 在朵拉魔盒终端里用 `python sender.py` 确认代码能跑通。
+
+## 前置要求
+
+- 已读完 [4.1 节点生命周期](./node-lifecycle)，脑子里有"三段式"骨架；
+- 会基本的 Python 语法（变量、`for`、`if`、函数），不熟先看[附录 · Python 极简速成](../appendix/python-crash-course)。
+
+## 准备工作：创建你的代码目录
+
+在朵拉魔盒内置终端里，先在你的工作目录下建一个放本章代码的位置：
+
+```bash
+mkdir -p course/ch04
+cd course/ch04
+```
+
+本章的所有 `.py` 和 `.yml` 都放在这里，方便统一管理。
+
+## 第一个节点：发送者（sender）
+
+发送者的工作是：**每隔一段固定的时间，往黑板上写一条数据。**
+
+### 思路：怎么让它"每隔一段就写一次"？
+
+你可能会想："写一个 `while True` 加上 `time.sleep(0.5)`，不就行了吗？"
+
+这样确实行，但在 DORA 里有一个**更好的做法**：不用自己写定时器，而是让 DORA 运行时帮我们"喊"——**每次运行时给节点发一个 `INPUT` 事件，节点收到就发一条数据**。这就像老师在讲台上每隔半秒叫一声"下一个！"，叫到谁谁干活。
+
+实现它只需要在 `dataflow.yml` 里配一行（这一节我们先专注看代码，下一节串 YAML）：
+
+```yaml
+inputs:
+  tick: dora/timer/millis/500    # 每 500 毫秒，往 tick 这个输入上发一个事件
+```
+
+节点代码这边，只要监听 `tick` 输入即可。
+
+### 代码：`sender.py`
+
+下面就是发送者的完整代码。你可以**一个字一个字照着敲**——敲完你的理解会更深：
+
+```python
+# sender.py —— 发送者节点
+# 职责：每收到一次 tick 事件，就切换一次"开"/"关"状态，
+#       并把当前状态用 Arrow 数组发到 data 输出上。
+
+import pyarrow as pa          # pyarrow：用来造"黑板上的字"（Arrow 格式）
+from dora import Node         # 节点模板
+
+
+def main():
+    node = Node()             # ① 出生：报到连线
+
+    state = False             # 当前状态：False = 关, True = 开
+
+    for event in node:        # ② 主循环：一遍遍收事件
+        if event["type"] == "INPUT":
+            # 每次收到事件（来自定时器 tick），就把状态翻一下
+            state = not state
+
+            # 把当前状态变成一个 Arrow 字符串数组，发到 data 输出
+            status_text = "开" if state else "关"
+            node.send_output("data", pa.array([status_text]))
+
+        elif event["type"] == "STOP":   # ③ 退场
+            break
+
+
+if __name__ == "__main__":
+    main()
+```
+
+### 逐行讲解（慢读）
+
+```python
+import pyarrow as pa
+from dora import Node
+```
+
+- `pyarrow` 是 Apache Arrow 在 Python 里的工具箱——用来造数据、读数据。DORA 里所有节点之间传递的数据，都必须是 Arrow 格式（黑板的"统一书写规范"）。
+- `from dora import Node` 把节点模板拿进来。
+
+```python
+def main():
+    node = Node()
+    state = False
+```
+
+- 把逻辑包在 `main()` 函数里是好习惯，配合最后的 `if __name__ == "__main__"` 可以避免代码被 import 时意外执行。
+- `state = False` 是个"状态变量"——记住当前灯是开还是关。每次收到事件就翻一下：`开 → 关 → 开 → …`
+
+:::info 小多说
+`not` 就是"取反"的意思。`not True` = `False`，`not False` = `True`。用它来翻转开关再方便不过了。
+:::
+
+```python
+    for event in node:
+        if event["type"] == "INPUT":
+            state = not state
+            status_text = "开" if state else "关"
+            node.send_output("data", pa.array([status_text]))
+```
+
+- `for event in node:` — 主循环，等事件来。
+- `if event["type"] == "INPUT":` — 是"数据来了"这种事件。
+- `state = not state` — 翻转状态。
+- `"开" if state else "关"` — Python 的一行条件表达式：如果 `state` 是 `True` 就用 `"开"`，否则用 `"关"`。
+- `pa.array([status_text])` — 把字符串变成一个 Arrow 数组（一个元素）。**为什么非要用 Arrow？** 因为 DORA 的黑板上只认 Arrow，不认原始 Python 字符串。用别的格式写上去，别的节点看不懂。第五章会详解。
+- `node.send_output("data", pa.array([...]))` — 把数据写到名为 `data` 的输出上（注意：`pa.array` 的参数必须包在方括号 `[]` 里，哪怕只有一个值）。
+
+```python
+        elif event["type"] == "STOP":
+            break
+```
+
+"放学铃"响，跳出循环，干净结束。
+
+```python
+if __name__ == "__main__":
+    main()
+```
+
+这行的作用是：**当这个文件被直接运行时**（`python sender.py`），执行 `main()`；但如果只被 `import` 引用，不自动运行。是 Python 的常见约定。
+
+## 第二个节点：回声（echo）
+
+回声节点的职责更简单：**听到什么，就原样吆喝出去。** 它和你上一节在练习里见过的 echo 几乎一样，但这次你亲手写。
+
+### 代码：`echo.py`
+
+```python
+# echo.py —— 回声节点
+# 职责：收到任何数据，都原样转发到自己的 data 输出上。
+
+from dora import Node
+
+
+def main():
+    node = Node()
+
+    for event in node:
+        if event["type"] == "INPUT":
+            # 原样转发：把收到的数据和元信息，一模一样地写回黑板
+            node.send_output("data", event["value"], event["metadata"])
+
+        elif event["type"] == "STOP":
+            break
+
+
+if __name__ == "__main__":
+    main()
+```
+
+### 逐行讲解
+
+- **`event["value"]`** — 收到的数据本身（一个 Arrow 数组）。我们不做任何修改，直接当输出发出。
+- **`event["metadata"]`** — 事件附带的"元信息"，可以理解为"写在黑板角落的备注"。DORA 用它在节点间传递一些幕后信息（比如时间戳），这里一并**原样转发**，是好习惯——下游节点可能会需要。
+
+这个节点就是"你说啥，我重复啥"，所以它叫 **echo（回声）**。
+
+:::tip echo 有什么用？
+别小看这个简单的"复读机"——在真实数据流里，echo 常被用来测试连线是否通畅，或是充当"中转站"：比如 A 发数据，C 要收，但中间可以让 echo 做个 buffered 的桥接。后续章节你会经常见到它的身影。
+:::
+
+## 验证代码能跑通
+
+写完了，先在终端里试一下节点本身能不能跑（还没接数据流，只是确保没语法错误）：
+
+```bash
+cd course/ch04
+python sender.py
+```
+
+因为 sender 依赖定时器来触发 `INPUT`，单独跑它没有定时器给它发事件，所以它会**卡在 `for event in node:` 一直等着不动**，这是正常的。检测方法是按 `Ctrl+C` 停掉它——如果**没报错、正常退出**，说明代码写对了。
+
+echo 同理：
+
+```bash
+$ python echo.py
+(等在那里不动 → 按 Ctrl+C 退出)
+```
+
+:::warning 如果报了语法错误
+仔细检查：
+- 冒号 `:` 有没有漏？Python 靠冒号区分"这一行后面是子句"；
+- 缩进是不是一致？同一层级要对齐（通常 4 格空格）；
+- `pa.array` 的括号是不是 `pa.array([...])` 两层？外层是函数调用的括号，内层是列表的方括号。
+
+:::
+
+## 动手练习
+
+:::tip 练习：改一下 sender，让它输出数字而不是"开/关"
+把 `sender.py` 改成一个**计数器**：每收到一次 tick，就把一个递增的数字（0, 1, 2, 3...）发出去，而不是翻转"开/关"。
+
+提示：
+- 把 `state = False` 和 `state = not state` 换成 `count = 0` 和 `count = count + 1`；
+- `pa.array([count])` 接收整数，不需要裹字符串。
+
+:::
+
+:::details 参考答案（修改过的 sender 计数器版）
+```python
+import pyarrow as pa
+from dora import Node
+
+def main():
+    node = Node()
+    count = 0
+
+    for event in node:
+        if event["type"] == "INPUT":
+            count = count + 1
+            node.send_output("data", pa.array([count]))
+        elif event["type"] == "STOP":
+            break
+
+if __name__ == "__main__":
+    main()
+```
+
+跑通后，echo 会原样转发数字——你可能在下一节接数据流时看到效果。
+:::
+
+## 常见报错 FAQ
+
+:::warning `AttributeError: 'bytes' object has no attribute 'to_pylist'`（或类似 Arrow 相关报错）
+你试图把普通 Python 对象（`str`、`int`、`bytes`）直接当 Arrow 数组用。记住：**`send_output` 的第二个参数必须是 `pa.array([...])` 包过的 Arrow 数组**，不是你随手写的原始字符串或数字。
+:::
+
+:::warning `TypeError: pa.array() takes 1 positional argument ...`
+检查 `pa.array` 的用法：`pa.array([1, 2, 3])` 是一个实参（一个列表），不是 `pa.array(1, 2, 3)` 三个实参。外面那对方括号不能省。
+:::
+
+:::warning 单独跑 `echo.py` 报了错
+echo 启动时会试图连 DORA 运行时，但没有数据流 `dora run` 启动它的话，环境变量缺失，可能报错。**单独跑只用来看语法有没有问题**；真正用起来是在下一步接到数据流后。
+:::
+
+## 小结
+
+- 你写出的**第一个 DORA 节点**（sender）已经具备了节点的一切要素：连线 `Node()` → 循环 `for event in node` → 收发 `send_output` → 退场 `STOP`。
+- **`pa.array([...])`** 是造"黑板上的字"的工具，所有节点间传递的数据必须走 Arrow 格式。
+- **echo 节点**是原样转发——收到什么发什么，是最小但最常用的一种节点。
+- **当前这些 `.py` 文件只是"零件"**——它们需要串进一张数据流 YAML 才能真正跑起来。这就是下一节要做的。
