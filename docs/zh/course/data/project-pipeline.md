@@ -1,9 +1,363 @@
 ---
-description: 🎯 小项目②：数据处理流水线 — 《跟朵拉学机器人：从零到具身智能》
+description: 小项目② 数据处理流水线——综合运用第五章知识，动手搭建生成→变换→可视化的三节点数据流，让数据在节点间流动、被处理、被看见。
 ---
 
 # 🎯 小项目②：数据处理流水线
 
-:::warning 施工中
-本页正在编写中，敬请期待。
+本章的知识，到这里该派上用场了。我们要动手搭一条完整的**数据处理流水线**：一个节点不断**生成**数据，一个节点把数据**变换**加工，最后一个节点把结果**可视化**（画出来）。
+
+这是小多解锁 **🧮 会处理数据** 的实战——它不再只是原样复读，而是能对数据"动手加工"了。
+
+:::info 小多说
+前面我只会把数据原样传来传去。这次我要真正"处理"它们了——生成、加工、展示，像个小小的数据工厂！
 :::
+
+## 项目目标
+
+搭一条三节点的流水线：
+
+```mermaid
+flowchart LR
+  G["generator<br/>生成正弦波"] -->|value| T["transform<br/>放大 + 平滑"]
+  T -->|result| P["plot<br/>字符图可视化"]
+```
+
+- **generator**：每隔一小段时间生成一个数字（我们让它生成一条"正弦波"，这样画出来是好看的波浪）；
+- **transform**：把收到的数字**放大**，并做**平滑**处理（体现"变换"）；
+- **plot**：把数值**画成字符条形图**打印出来，让我们在终端里肉眼"看见"数据的形状。
+
+学完你会得到一条**从无到有、能看见效果**的完整数据流。
+
+## 你将综合运用
+
+- 4.x：写节点、连数据流、定时器、参数；
+- 5.1：Arrow 是数据的统一格式；
+- 5.2：造和读数字、用 NumPy 计算；
+- 5.3：（transform 里的平滑用到"记住上一个值"的缓存思想）。
+
+## 前置要求
+
+- 完成 5.1 - 5.3；
+- 手边有能跑通的朵拉魔盒环境。
+
+## 准备目录
+
+在朵拉魔盒内置终端里，新建一个放本项目代码的文件夹并进入它：
+
+import { Tab, Tabs } from '@rspress/core/theme';
+
+<Tabs groupId="os">
+<Tab label="macOS / Linux">
+
+```bash
+mkdir -p course/ch05-pipeline
+cd course/ch05-pipeline
+```
+
+</Tab>
+<Tab label="Windows">
+
+```powershell
+mkdir course\ch05-pipeline
+cd course\ch05-pipeline
+```
+
+</Tab>
+</Tabs>
+
+本项目所有文件都放这里。
+
+## 第一步：generator（生成数据）
+
+它每隔 100 毫秒生成一个正弦波数值。正弦波会平滑地上下起伏，画出来是漂亮的波浪，很适合观察"数据在流动"。
+
+新建 `generator.py`：
+
+```python
+# generator.py —— 生成一条正弦波
+import math
+import pyarrow as pa
+from dora import Node
+
+
+def main():
+    node = Node()
+
+    step = 0                      # 计步器，用来算正弦波的相位
+
+    for event in node:
+        if event["type"] == "INPUT":       # 定时器 tick
+            # 用 sin 生成一个 -1 到 1 之间平滑变化的值
+            value = math.sin(step * 0.2)
+            node.send_output("value", pa.array([value]))
+            step = step + 1
+
+        elif event["type"] == "STOP":
+            break
+
+
+if __name__ == "__main__":
+    main()
+```
+
+- `math.sin(...)` 生成正弦值（-1 到 1 之间平滑起伏）；
+- `step * 0.2` 控制波浪的"疏密"，`step` 每次加 1，波形就缓缓推进；
+- 用 `pa.array([value])` 把这个数字发到 `value` 输出。
+
+## 第二步：transform（变换数据）
+
+它做两件"加工"：
+
+1. **放大**：把 -1~1 的小数值放大到 -10~10（放大倍数用参数配置，体现第四章的参数化）；
+2. **平滑**：把当前值和上一个值做个平均，让曲线更柔和（用到 5.3 的"记住上一个值"思想）。
+
+新建 `transform.py`：
+
+```python
+# transform.py —— 放大 + 平滑
+import os
+import pyarrow as pa
+from dora import Node
+
+
+def main():
+    node = Node()
+
+    scale = float(os.getenv("SCALE", "10"))   # 放大倍数，可配置
+    last = None                               # 记住上一个值，用于平滑
+
+    for event in node:
+        if event["type"] == "INPUT":
+            value = event["value"][0].as_py()      # 读出这个数字
+
+            amplified = value * scale              # ① 放大
+
+            if last is None:
+                smoothed = amplified               # 第一个值没法平滑，原样用
+            else:
+                smoothed = (amplified + last) / 2  # ② 和上一个平均，做平滑
+            last = smoothed                        # 更新缓存
+
+            node.send_output("result", pa.array([smoothed]))
+
+        elif event["type"] == "STOP":
+            break
+
+
+if __name__ == "__main__":
+    main()
+```
+
+- `scale` 从环境变量读，默认 10；
+- `last` 缓存上一次的结果，第一次为 `None` 时特殊处理（呼应 5.3 的 `is not None` 防护）；
+- 平滑就是"当前和上一个取平均"，是最简单实用的平滑法。
+
+## 第三步：plot（可视化数据）
+
+在终端里，我们用**字符条形图**把数值"画"出来——数值越大，横条越长。这样不用任何图形界面，也能直观看到波浪。
+
+新建 `plot.py`：
+
+```python
+# plot.py —— 把数值画成字符条形图
+from dora import Node
+
+
+def main():
+    node = Node()
+
+    for event in node:
+        if event["type"] == "INPUT":
+            value = event["value"][0].as_py()
+
+            # 把数值映射成横条长度：以中间为 0，向右画
+            # 数值范围大约 -10~10，我们平移到 0~20，再取整当作条长
+            bar_len = int(value + 10)
+            bar_len = max(0, min(20, bar_len))     # 限制在 0~20，防越界
+
+            bar = "█" * bar_len                    # 用方块字符拼成条
+            print(f"{value:6.2f} | {bar}", flush=True)
+
+        elif event["type"] == "STOP":
+            break
+
+
+if __name__ == "__main__":
+    main()
+```
+
+- `int(value + 10)` 把大约 -10~10 的值平移成 0~20 的条长；
+- `max(0, min(20, ...))` 把条长限制在合理范围，防止负数或过长；
+- `"█" * bar_len` 用方块字符重复出条形；
+- `f"{value:6.2f}"` 把数值格式化成宽 6、保留 2 位小数，对齐好看。
+
+## 第四步：连成数据流
+
+新建 `dataflow.yml`，把三个节点串起来：
+
+```yaml
+# dataflow.yml —— 生成 → 变换 → 可视化
+nodes:
+  - id: generator
+    path: generator.py
+    inputs:
+      tick: dora/timer/millis/100      # 每 100 毫秒生成一个数
+    outputs:
+      - value
+
+  - id: transform
+    path: transform.py
+    inputs:
+      value: generator/value           # 接收 generator 生成的数
+    outputs:
+      - result
+    env:
+      SCALE: 10                        # 放大倍数（可改）
+
+  - id: plot
+    path: plot.py
+    inputs:
+      result: transform/result         # 接收变换后的结果
+```
+
+三处连线：`generator/value → transform` 的 `value`，`transform/result → plot` 的 `result`。名字层层对应（回顾 4.3 的"四处对应"表）。
+
+## 第五步：跑起来！
+
+```bash
+dora build dataflow.yml
+dora run dataflow.yml
+```
+
+如果一切顺利，你会在终端里看到一条**上下起伏、缓缓流动的波浪**：
+
+```
+  0.00 | ██████████
+  1.99 | ███████████
+  3.89 | █████████████
+  5.60 | ███████████████
+  7.03 | █████████████████
+  ...
+ -1.99 | ████████
+ -3.89 | ██████
+  ...
+```
+
+方块条随着正弦波左右伸缩——**这就是你亲手造的数据，经过加工，被"看见"了！** 按 `Ctrl+C` 停止。
+
+:::info 小多说
+看那条波浪！数据从 generator 冒出来，被 transform 加工，最后被 plot 画出来——三个零件像流水线上的工人，各干一段，配合得天衣无缝。我会处理数据啦！🧮
+:::
+
+## 玩一玩：改参数看变化
+
+数据流的乐趣在于"改一点点，效果立刻不同"。试试：
+
+- 把 `transform` 的 `env: SCALE` 从 `10` 改成 `5` 或 `18`，波浪的振幅会变；
+- 把 `generator` 的定时器从 `millis/100` 改成 `millis/300`，波浪会变"慢"；
+- 把 `generator.py` 里的 `0.2` 改成 `0.5`，波浪会变"密"。
+
+每次改完重新 `dora run`，观察差异。**代码几乎不用动，改配置就能调出不同效果**——这正是数据流架构的魅力。
+
+## 动手挑战
+
+:::tip 挑战一：加一个"绝对值"节点
+在 transform 和 plot 之间，插入一个新节点 `abs_node`，把负数变成正数（取绝对值）。这样波浪就只在上半部分起伏了。
+
+提示：Python 的 `abs(x)` 求绝对值；记得改 `dataflow.yml` 的连线，让数据从 transform → abs_node → plot。
+:::
+
+:::details 参考答案
+`abs_node.py`：
+
+```python
+import pyarrow as pa
+from dora import Node
+
+def main():
+    node = Node()
+    for event in node:
+        if event["type"] == "INPUT":
+            value = event["value"][0].as_py()
+            node.send_output("result", pa.array([abs(value)]))
+        elif event["type"] == "STOP":
+            break
+
+if __name__ == "__main__":
+    main()
+```
+
+`dataflow.yml` 中间插一段，并改 plot 的来源：
+
+```yaml
+  - id: abs_node
+    path: abs_node.py
+    inputs:
+      result: transform/result
+    outputs:
+      - result
+  - id: plot
+    path: plot.py
+    inputs:
+      result: abs_node/result        # 改成从 abs_node 收
+```
+:::
+
+:::tip 挑战二：让 plot 同时显示原始值和变换值
+给 plot 加两路输入：一路来自 generator（原始），一路来自 transform（变换后），用不同符号画出来对比。
+
+提示：这就是 5.3 的多输入！用 `event["id"]` 区分两路。
+:::
+
+:::details 参考答案思路
+plot 配两个输入：
+
+```yaml
+  - id: plot
+    path: plot.py
+    inputs:
+      raw: generator/value
+      result: transform/result
+```
+
+plot 代码里用 `event["id"]` 区分，`raw` 用一种符号（如 `·`）、`result` 用 `█`，各画各的。这样能直观看到"变换前 vs 变换后"的差异。
+:::
+
+## 常见报错 FAQ
+
+:::warning 终端里没有波浪，只有零星几行
+检查 generator 的定时器 `tick` 配了没。没有定时器，generator 不会持续生成数据。
+:::
+
+:::warning 波浪是"锯齿"而不是平滑曲线
+正常现象——终端字符图分辨率有限，只能近似。想更平滑可减小 generator 里的相位步长（把 `0.2` 改小）。
+:::
+
+:::warning 条形图长度乱跳 / 超出屏幕
+检查 plot 里的 `max(0, min(20, bar_len))` 有没有写对——它负责把条长限制在 0~20，防止越界。若你调大了 `SCALE`，可能需要相应调整映射范围。
+:::
+
+## 小结
+
+你完成了**小项目②：数据处理流水线**！在这个项目里，你：
+
+- 搭出了一条 **生成 → 变换 → 可视化** 的完整数据流；
+- 用 Arrow（`pa.array`/`as_py`）在节点间传递数字；
+- 用参数（`env`/`os.getenv`）让变换可配置；
+- 用"记住上一个值"的缓存思想做了平滑处理；
+- 在终端里把抽象的数据**画成了看得见的波浪**。
+
+:::info 小多说
+从"只会传话"到"会加工数据"，这是我很大的一步进步！下一章，我要学习节点之间更丰富的"对话方式"——不只是单向传数据，还能一问一答、边做边报呢！
+:::
+
+## 本章回顾：小多解锁 🧮 会处理数据
+
+第五章到此圆满。回顾一下这一章的收获：
+
+- **5.1**：懂了 Arrow 为什么是"黑板的统一书写规范"，以及零拷贝为何快；
+- **5.2**：学会造和读数字、数组、图像三类数据；
+- **5.3**：掌握多输入的区分与"最新值缓存"合并模式；
+- **小项目②**：亲手搭出一条能看见效果的数据处理流水线。
+
+下一章 [第六章 · 节点如何对话](../communication/)，我们学习节点之间的**四种通信模式**，让小多掌握更灵活的沟通方式。
