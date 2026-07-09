@@ -1,21 +1,21 @@
 [
   {
-    "text": "跟朵拉学机器人",
+    "text": "🌱 跟朵拉学机器人",
     "link": "/course/intro/",
     "activeMatch": "/course/"
   },
   {
-    "text": "DORA 基础",
+    "text": "🎯 DORA 基础",
     "link": "/guide/start/introduction",
     "activeMatch": "/guide/"
   },
   {
-    "text": "示例",
+    "text": "📚 示例",
     "link": "/example/",
     "activeMatch": "/example/"
   },
   {
-    "text": "中文社区介绍",
+    "text": "💡 中文社区介绍",
     "link": "/doracc/",
     "activeMatch": "/doracc/"
   }

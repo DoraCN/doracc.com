@@ -14,8 +14,8 @@ hero:
       text: DORA 基础
       link: /guide/start/introduction
     - theme: alt
-      text: AtomGit
-      link: https://atomgit.com/DoraCN
+      text: GitHub
+      link: https://github.com/dora-rs/dora
   image:
     src:
       dark: /logo-dark.svg

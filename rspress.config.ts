@@ -46,7 +46,7 @@ export default defineConfig({
       {
         icon: 'github',
         mode: 'link',
-        content: 'https://github.com/DoraCN',
+        content: 'https://github.com/DoraCN/doracc.com',
       },
     ],
     footer: {
