@@ -1,9 +1,315 @@
 ---
-description: 🎯 小项目⑥：高频处理节点 — 《跟朵拉学机器人：从零到具身智能》
+description: 小项目⑥ 高频处理节点——用 Rust 写一个每秒上千次的高频信号处理节点，配 Python 可视化，亲身体验 Rust 加速与 Python-Rust 混编协作。
 ---
 
 # 🎯 小项目⑥：高频处理节点
 
-:::warning 施工中
-本页正在编写中，敬请期待。
+本章学的东西，到这里派上用场。我们要做一件"名副其实"的事：用 **Rust** 写一个**高频运行**的信号处理节点（每秒跑上千次），再用 **Python** 把结果画出来。这正是小多解锁 **💪 变强壮** 的实战——让它的关键零件跑得飞快。
+
+:::info 小多说
+终于要给自己"强身健体"了！这个项目里，Rust 零件在后台疯狂计算，Python 零件负责把成果展示出来——快与美，我都要！💪
 :::
+
+## 项目目标
+
+搭一条"高频计算 + 可视化"的混编数据流：
+
+```mermaid
+flowchart LR
+  R["🦀 processor (Rust)<br/>每秒上千次<br/>生成+处理信号"] -->|"value (Float32)"| P["🐍 plot (Python)<br/>字符图可视化"]
+```
+
+- **processor**（Rust）：以**高频**（每毫秒一次 = 每秒 1000 次）生成并处理一个信号值——体现 Rust 扛得住高频；
+- **plot**（Python）：把收到的值画成字符条形图——体现 Python 做展示的便利。
+
+做完你会**亲眼看到** Rust 节点和 Python 节点在一条流里高速协作。
+
+## 你将综合运用
+
+- 9.1：判断"高频计算"该用 Rust；
+- 9.2：写 Rust 节点（三段式 + `into_arrow`）；
+- 9.3：Python-Rust 混编、Arrow 互通、类型声明；
+- 第五章：Python 端读数据、字符图可视化。
+
+## 前置要求
+
+- 完成 9.1 - 9.3；
+- 朵拉魔盒环境就绪（Rust 工具链已隔离配好）。
+
+## 准备目录
+
+Rust 项目结构比纯 Python 多一层，我们这样组织：
+
+import { Tab, Tabs } from '@rspress/core/theme';
+
+<Tabs groupId="os">
+<Tab label="macOS / Linux">
+
+```bash
+mkdir -p course/ch09-highfreq/processor/src
+cd course/ch09-highfreq
+```
+
+</Tab>
+<Tab label="Windows">
+
+```powershell
+mkdir course\ch09-highfreq\processor\src
+cd course\ch09-highfreq
+```
+
+</Tab>
+</Tabs>
+
+最终结构：
+
+```
+course/ch09-highfreq/
+├── dataflow.yml            # 数据流
+├── plot.py                 # Python 可视化节点
+└── processor/              # Rust 节点项目
+    ├── Cargo.toml
+    └── src/
+        └── main.rs
+```
+
+## 第一步：Rust 高频处理节点
+
+这个节点每次 `tick`（很高频）就生成一个正弦波信号，并做一点处理（放大 + 取整），然后发出去。
+
+### `processor/Cargo.toml`
+
+```toml
+[package]
+name = "processor"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dora-node-api = "1.0.0-rc1"      # DORA Rust 节点库（锁定 1.0 RC）
+eyre = "0.3"                     # 错误处理
+```
+
+### `processor/src/main.rs`
+
+```rust
+// main.rs —— 高频信号处理节点（Rust）
+// 每次 tick：生成一个正弦波值，放大后发出。
+use dora_node_api::{
+    self, DoraNode, Event, IntoArrow, dora_core::config::DataId,
+};
+use eyre::Result;
+
+fn main() -> Result<()> {
+    // ① 连线
+    let (mut node, mut events) = DoraNode::init_from_env()?;
+    let output = DataId::from("value".to_owned());
+
+    let mut step: f32 = 0.0;     // 相位计步器
+
+    // ② 主循环
+    while let Some(event) = events.recv() {
+        match event {
+            // ③ 处理输入事件
+            Event::Input { id, metadata, .. } => {
+                if id.as_str() == "tick" {
+                    // 生成正弦波并放大 10 倍（这就是"高频计算"部分）
+                    let signal = (step * 0.1).sin() * 10.0;
+                    step += 1.0;
+
+                    // 发送：把 f32 转成 Arrow 发出去
+                    node.send_output(
+                        output.clone(),
+                        metadata.parameters,
+                        signal.into_arrow(),
+                    )?;
+                }
+            }
+            Event::Stop(_) => break,
+            _ => {}
+        }
+    }
+
+    Ok(())
+}
+```
+
+这段代码你现在应该觉得很眼熟了——就是 9.2 的三段式模板，把"随机数"换成了"正弦波信号"。`(step * 0.1).sin() * 10.0` 是 Rust 的数学写法（`.sin()` 求正弦），对应 Python 的 `math.sin(step*0.1)*10`。
+
+:::tip 为什么这里适合 Rust？
+我们的定时器会设成 `millis/1` —— **每毫秒触发一次，即每秒 1000 次**。这种高频的、每次都要算数学函数的场景，正是 9.1 讲的"高频 + 密集计算"，用 Rust 又快又稳。（换成 Python 在极高频下会更吃力。）
+:::
+
+## 第二步：Python 可视化节点
+
+Python 端就是你在第五章写过的字符条形图，原样能用。
+
+### `plot.py`
+
+```python
+# plot.py —— 把收到的信号值画成字符条形图
+from dora import Node
+
+
+def main():
+    node = Node()
+
+    for event in node:
+        if event["type"] == "INPUT":
+            if event["id"] == "value":
+                value = event["value"][0].as_py()   # 读 Rust 发来的 Arrow 数据
+
+                # 把 -10~10 映射成 0~20 的条长
+                bar_len = int(value + 10)
+                bar_len = max(0, min(20, bar_len))
+                bar = "█" * bar_len
+                print(f"{value:7.2f} | {bar}", flush=True)
+
+        elif event["type"] == "STOP":
+            break
+
+
+if __name__ == "__main__":
+    main()
+```
+
+注意：Python 读 Rust 发来的数据，用的还是熟悉的 `event["value"][0].as_py()`——**完全不用关心这数据是 Rust 写的**，因为大家都是 Arrow。这就是 9.3 讲的跨语言互通。
+
+## 第三步：混编数据流 `dataflow.yml`
+
+```yaml
+nodes:
+  # Rust 高频处理节点
+  - id: processor
+    build: cargo build --manifest-path processor/Cargo.toml   # 编译 Rust
+    path: processor/target/debug/processor                     # 编译产物
+    inputs:
+      tick: dora/timer/millis/1        # 每毫秒一次 = 每秒 1000 次！
+    outputs:
+      - value
+    output_types:
+      value: std/core/v1/Float32       # 声明输出类型
+
+  # Python 可视化节点
+  - id: plot
+    path: plot.py
+    inputs:
+      value: processor/value           # 订阅 Rust 的输出
+    input_types:
+      value: std/core/v1/Float32       # 声明输入类型
+```
+
+要点：
+
+- `build` 用 `--manifest-path processor/Cargo.toml` 指定 Rust 项目位置；
+- Rust 处理节点跑在 **1000Hz**，Python 只管把它发来的值画出来；
+- 两端都声明了 `Float32` 类型，确保跨语言不出错。
+
+:::warning plot 打印跟不上怎么办？
+Rust 每秒发 1000 条，但终端每秒打印 1000 行你根本看不清——这**恰恰说明 Rust 有多快**！如果刷屏太猛，可以把 processor 的定时器临时调慢些（如 `millis/50`）来看清波形，或让 plot 每收到 N 条才打印一次。这正好体现了"Rust 生产得比 Python 消费得快"。
+:::
+
+## 第四步：跑起来
+
+```bash
+dora build dataflow.yml      # 首次会编译 Rust，稍慢，请耐心等
+dora run dataflow.yml
+```
+
+编译完成后，你会看到一条飞速滚动的正弦波：
+
+```
+   0.00 | ██████████
+   1.00 | ███████████
+   1.99 | ███████████
+   2.96 | ████████████
+   ...
+  -9.98 | 
+  -9.55 | 
+   ...
+```
+
+**这条波浪是 Rust 每秒上千次算出来、Python 实时画出来的——快与美的完美协作！** 按 `Ctrl+C` 停止。
+
+:::info 小多说
+感受到了吗？我的 Rust 肌肉在后台疯狂输出，Python 大脑气定神闲地把成果展示出来。高频归 Rust、展示归 Python，各司其职——我真的变强壮了！💪✨
+:::
+
+## 玩一玩
+
+- 把 processor 定时器在 `millis/1`（1000Hz）和 `millis/100`（10Hz）之间切换，感受高频与低频；
+- 改 `main.rs` 里的 `* 10.0` 放大倍数、`* 0.1` 频率系数，看波形变化（记得改完要重新 `dora build`）；
+- 想想：如果把 processor 也用 Python 写、同样跑 1000Hz，会有什么不同？
+
+## 动手挑战
+
+:::tip 挑战：在中间加一个 Python 统计节点
+在 processor 和 plot 之间插入一个 **Python** 节点，它每收到 100 个值就算一次平均值，把平均值发给 plot。这样就变成了"Rust 高频算 → Python 降频统计 → Python 画图"的三段混编流水线。
+:::
+
+:::details 参考答案思路
+新增 `stats.py`：用一个列表攒够 100 个值就求平均、发出去、清空：
+
+```python
+import pyarrow as pa
+from dora import Node
+
+def main():
+    node = Node()
+    buffer = []
+    for event in node:
+        if event["type"] == "INPUT" and event["id"] == "value":
+            buffer.append(event["value"][0].as_py())
+            if len(buffer) >= 100:
+                avg = sum(buffer) / len(buffer)
+                node.send_output("avg", pa.array([avg], type=pa.float32()))
+                buffer = []
+        elif event["type"] == "STOP":
+            break
+
+if __name__ == "__main__":
+    main()
+```
+
+`dataflow.yml` 连成 `processor → stats → plot` 三段，plot 的输入改成订阅 `stats/avg`。这就是 9.3 讲的典型分工：**高频用 Rust，处理/展示用 Python。**
+:::
+
+## 常见报错 FAQ
+
+:::warning `dora build` 编译 Rust 卡很久
+首次编译要下载并构建依赖，几分钟属正常。朵拉魔盒已配国内镜像会快一些。之后有缓存就快了。
+:::
+
+:::warning `path` 找不到编译产物
+检查 `path: processor/target/debug/processor` 里的 `processor`（最后一段）是否和 `Cargo.toml` 的 `name` 一致。用了 `--manifest-path` 时，`target/` 会生成在该 Cargo 项目目录下。
+:::
+
+:::warning Python 端读到的值不对 / downcast 报错
+类型不一致。确认 Rust 发的是 `f32`（`into_arrow` 一个 `f32`）、YAML 两端都是 `Float32`、Python 用 `[0].as_py()` 读。跨语言坚持"类型三处对齐"。
+:::
+
+## 小结
+
+你完成了**小项目⑥：高频处理节点**！在这个项目里，你：
+
+- 用 **Rust** 写了一个每秒上千次的高频信号处理节点；
+- 用 **Python** 做了实时可视化；
+- 让两种语言在**一条数据流里高速协作**，靠 Arrow 无缝互通；
+- 亲身体会了"**高频用 Rust、展示用 Python**"的实战分工。
+
+## 本章回顾：小多解锁 💪 变强壮
+
+第九章到此圆满。回顾这一章的收获：
+
+- **9.1**：懂了 Python 与 Rust 各自的所长，学会判断何时用 Rust（高频+密集+瓶颈）；
+- **9.2**：会看、会照着改一个 Rust 节点，掌握它和 Python 的三段式对照；
+- **9.3**：理解 Python-Rust 靠 Arrow 无缝互通，会写混编数据流；
+- **小项目⑥**：亲手搭出高频 Rust + 可视化 Python 的混编流水线。
+
+最重要的一句话：**语言只是"衣服"，DORA 节点的骨架和 Arrow 的黑板是统一的——所以多语言才能自由混搭。**
+
+:::info 小多说
+我现在既聪明（Python）又强壮（Rust）啦！接下来，是时候让我真正"动起来"了——下一章，我要学着控制机械臂，在仿真世界里挥动手臂！🦾
+:::
+
+下一章 [第十章 · 让小多动起来](../control/)，我们进入控制与仿真，让小多在 PyBullet 里操纵机械臂。
