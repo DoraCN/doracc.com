@@ -1,5 +1,5 @@
 ---
-description: 3.3 读懂 dataflow.yml — 《跟朵拉学机器人：从零到具身智能》
+description: 3.3 读懂 dataflow.yml — 《从零开始学 DORA》
 ---
 
 # 3.3 读懂 dataflow.yml

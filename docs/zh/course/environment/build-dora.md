@@ -1,5 +1,5 @@
 ---
-description: 2.4 从源码编译 dora 1.0 RC — 《跟朵拉学机器人：从零到具身智能》
+description: 2.4 从源码编译 dora 1.0 RC — 《从零开始学 DORA》
 ---
 
 # 2.4 从源码编译 dora 1.0 RC

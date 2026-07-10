@@ -8,7 +8,7 @@ description: 9.3 Python 与 Rust 混合——在同一条数据流里让 Python 
 
 Python 节点写的数据，Rust 节点直接读；Rust 节点算完的结果，Python 节点接着用。中间**不需要任何翻译、转换、胶水代码**。这一节，我们就来见证这个魔法。
 
-:::info 小多说
+:::info 小莫说
 我的"文科生"零件（Python）和"理科生"零件（Rust）可以在同一块黑板上无缝配合！Python 负责思考和调 AI，Rust 负责疯狂算数，各展所长——我就是这么又聪明又强壮的！
 :::
 
@@ -134,7 +134,7 @@ let value = arr.value(0);
 - `.downcast_ref::<Int64Array>()` 意思是"把它当作 Int64 数组来看"——对应 Python 里的 `.to_pylist()` 或 `[0].as_py()`，都是"把 Arrow 数据还原成能用的形式"；
 - `arr.value(0)` 取第 0 个值，对应 Python 的 `event["value"][0].as_py()`。
 
-:::info 小多说
+:::info 小莫说
 看，Rust 读数据的 `downcast` + `value(0)`，其实就是 Python 的 `[0].as_py()` 换了身衣服！核心动作一模一样：把黑板上的字读回来变成能算的数。
 :::
 
@@ -209,7 +209,7 @@ rust-receiver: 收到 20
 
 **Python 发的数字，Rust 一个不差地收到了——跨语言协作成功！** 🎉 而这中间，你没写任何"翻译代码"。
 
-:::info 小多说
+:::info 小莫说
 太神奇了！Python 零件和 Rust 零件像老搭档一样配合，我完全看不出它们是"两种语言"。这就是同一块黑板的力量——大家说的是同一种"话"（Arrow）！
 :::
 

@@ -12,7 +12,7 @@
   {
     "type": "dir",
     "name": "environment",
-    "label": "第二章 · 朵拉魔盒与环境搭建"
+    "label": "第二章 · 搭建 DORA 开发环境"
   },
   {
     "type": "dir",
@@ -37,27 +37,27 @@
   {
     "type": "dir",
     "name": "vision",
-    "label": "第七章 · 让小多看见：视觉与感知"
+    "label": "第七章 · 视觉与感知"
   },
   {
     "type": "dir",
     "name": "voice",
-    "label": "第八章 · 让小多听见与说话：语音与流式"
+    "label": "第八章 · 语音与流式"
   },
   {
     "type": "dir",
     "name": "rust",
-    "label": "第九章 · 加速小多：Rust 节点"
+    "label": "第九章 · Rust 节点加速"
   },
   {
     "type": "dir",
     "name": "control",
-    "label": "第十章 · 让小多动起来：控制与仿真"
+    "label": "第十章 · 控制与仿真"
   },
   {
     "type": "dir",
     "name": "embodied",
-    "label": "第十一章 · 让小多思考并行动：VLM"
+    "label": "第十一章 · 具身智能：VLM 毕业项目"
   },
   {
     "type": "dir",

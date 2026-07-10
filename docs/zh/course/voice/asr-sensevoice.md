@@ -1,5 +1,5 @@
 ---
-description: 8.2 语音识别：SenseVoiceSmall — 《跟朵拉学机器人：从零到具身智能》
+description: 8.2 语音识别：SenseVoiceSmall — 《从零开始学 DORA》
 ---
 
 # 8.2 语音识别：SenseVoiceSmall

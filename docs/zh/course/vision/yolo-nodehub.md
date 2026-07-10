@@ -1,5 +1,5 @@
 ---
-description: 7.3 Node Hub 接入 YOLO — 《跟朵拉学机器人：从零到具身智能》
+description: 7.3 Node Hub 接入 YOLO — 《从零开始学 DORA》
 ---
 
 # 7.3 Node Hub 接入 YOLO

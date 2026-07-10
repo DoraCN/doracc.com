@@ -1,5 +1,5 @@
 ---
-description: 10.2 PyBullet 仿真 SO-101 — 《跟朵拉学机器人：从零到具身智能》
+description: 10.2 PyBullet 仿真 SO-101 — 《从零开始学 DORA》
 ---
 
 # 10.2 PyBullet 仿真 SO-101

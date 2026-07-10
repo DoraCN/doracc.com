@@ -1,5 +1,5 @@
 ---
-description: 3.2 dora run 跑起来 — 《跟朵拉学机器人：从零到具身智能》
+description: 3.2 dora run 跑起来 — 《从零开始学 DORA》
 ---
 
 # 3.2 dora run 跑起来

@@ -8,7 +8,7 @@ description: 9.2 写一个 Rust 节点——照着模板写出第一个 DORA Rus
 
 **好消息**：DORA 节点不管什么语言，骨架都一样。你在第四章烂熟的"**连线 → 事件循环 → 收发**"三段式，在 Rust 里原样成立。你只是在学"同一件事的 Rust 说法"。
 
-:::info 小多说
+:::info 小莫说
 别被 Rust 吓到！我偷偷告诉你：它和 Python 节点长得像双胞胎，只是"穿的衣服"不一样。你已经会 Python 版了，这节就是认一下它的 Rust 打扮～
 :::
 
@@ -195,7 +195,7 @@ node.send_output(output.clone(), metadata.parameters, random.into_arrow())?;
 - `random.into_arrow()` = Python 的 `pa.array([random])`——把普通数字**转成 Arrow 格式**（还记得第五章吗，黑板上只认 Arrow）；
 - `output.clone()` 的 `.clone()` 是 Rust 特有的"复制一份"，因为循环里要反复用这个名字。暂时当固定写法。
 
-:::info 小多说
+:::info 小莫说
 看到 `into_arrow()` 了吗？和 Python 的 `pa.array` 是一回事——都是"把数据翻译成黑板认的字"。Rust 同学和 Python 同学，写的是同一块黑板！
 :::
 
@@ -223,7 +223,7 @@ fastrand = "2"
 - **`dora-node-api`** 就是 Rust 版的"dora 库"，对应 Python 的 `from dora import Node`。
 
 :::tip 版本锁定
-本课锁定 dora **1.0 RC**。朵拉魔盒已经把 Rust 工具链和 crates 国内镜像都配好了，你在内置终端里编译会自动走镜像、又快又稳。
+本课锁定 dora **1.0 RC**。你可以使用国内镜像加速 Rust 编译（见第二章）。
 :::
 
 ## 编译并运行
@@ -293,7 +293,7 @@ Event::Input { id, metadata, data } => {
 ## 常见报错 FAQ
 
 :::warning `error: linker not found` 或编译工具缺失
-Rust 编译需要系统的 C 链接器等工具。用朵拉魔盒的话，这些已经隔离配好了。若在别处编译报此错，通常是缺少构建工具链——这也是本课推荐**始终在朵拉魔盒内置终端**里操作的原因。
+Rust 编译需要系统的 C 链接器等工具。若报此错，请安装所在平台的构建工具链（macOS: xcode-select --install, Linux: build-essential）。
 :::
 
 :::warning `cannot find function ... in crate`

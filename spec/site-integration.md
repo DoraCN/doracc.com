@@ -7,14 +7,14 @@
 
 - 站点身份：**DORA 中文社区官网**；标题/Logo/favicon 采用社区版（`logo.svg`/`logo-dark.svg`/`favicon.ico`）。
 - 首页 `/`：**社区门户**（可基于旧官网 hero 调整），列出两门课程入口。
-- 顶栏：**并列导航项**——社区介绍、示例、DORA 基础、跟朵拉学机器人、外链（DORA 官网/AtomGit）。
+- 顶栏：**并列导航项**——社区介绍、示例、DORA 基础、从零开始学 DORA、外链（DORA 官网/GitHub）。
 
 ## 二、两门课程并存
 
 | 课程 | 路径 | 版本/风格 | 比喻 |
 |------|------|----------|------|
 | **DORA 基础**（来自社区官网） | `/guide/*`（原样保留） | dora 0.x，参考/讲解式 | 工厂/工蜂 |
-| **跟朵拉学机器人**（本课程） | `/course/*`（语义化 slug：concepts/first-dataflow/… ，独立文件夹 `docs/zh/course/`） | dora 1.0 RC，零基础项目驱动 | 黑板/课堂 |
+| **从零开始学 DORA**（本课程） | `/course/*`（语义化 slug：concepts/first-dataflow/… ，独立文件夹 `docs/zh/course/`） | dora 1.0 RC，项目驱动 | 黑板/课堂 |
 
 - 两门课**各自独立**，保留各自版本、风格与比喻，**不强行统一**。
 - Rspress 按当前路径自动切换侧边栏，互不干扰。

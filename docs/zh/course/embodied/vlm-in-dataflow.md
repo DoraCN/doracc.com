@@ -1,5 +1,5 @@
 ---
-description: 11.1 VLM 融入数据流 — 《跟朵拉学机器人：从零到具身智能》
+description: 11.1 VLM 融入数据流 — 《从零开始学 DORA》
 ---
 
 # 11.1 VLM 融入数据流

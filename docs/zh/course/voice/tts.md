@@ -1,5 +1,5 @@
 ---
-description: 8.3 语音合成 TTS — 《跟朵拉学机器人：从零到具身智能》
+description: 8.3 语音合成 TTS — 《从零开始学 DORA》
 ---
 
 # 8.3 语音合成 TTS

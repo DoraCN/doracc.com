@@ -1,5 +1,5 @@
 ---
-description: 3.4 看懂流动的数据：cmd 与 pose — 《跟朵拉学机器人：从零到具身智能》
+description: 3.4 看懂流动的数据：cmd 与 pose — 《从零开始学 DORA》
 ---
 
 # 3.4 看懂流动的数据：cmd 与 pose
