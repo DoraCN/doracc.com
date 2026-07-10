@@ -11,8 +11,8 @@
   },
   {
     "type": "file",
-    "name": "yolo-nodehub",
-    "label": "7.3 Node Hub 接入 YOLO"
+    "name": "yolo-detection",
+    "label": "7.3 Python 节点接入 YOLO"
   },
   {
     "type": "file",

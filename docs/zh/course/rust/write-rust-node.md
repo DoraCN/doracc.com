@@ -220,10 +220,10 @@ fastrand = "2"
 
 - `[package]` 段：项目的基本信息；
 - `[dependencies]` 段：要用的外部库，相当于 Python 的 `pip install` 列表；
-- **`dora-node-api`** 就是 Rust 版的"dora 库"，对应 Python 的 `from dora import Node`。
+- **`dora-node-api`** 就是 Rust 版的"DORA 库"，对应 Python 的 `from dora import Node`。
 
 :::tip 版本锁定
-本课锁定 dora **1.0 RC**。你可以使用国内镜像加速 Rust 编译（见第二章）。
+本课锁定 DORA **1.0 RC**。你可以使用国内镜像加速 Rust 编译（见第二章）。
 :::
 
 ## 编译并运行

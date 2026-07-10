@@ -120,7 +120,7 @@ print(result)
 import numpy as np          # 起个简称 np
 arr = np.array([1, 2, 3])   # 用 numpy 造一个数组
 
-from dora import Node       # 从 dora 库里，只拿 Node 这一个东西
+from dora import Node       # 从 DORA 库里，只拿 Node 这一个东西
 node = Node()
 ```
 

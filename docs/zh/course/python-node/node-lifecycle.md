@@ -53,7 +53,7 @@ flowchart LR
 一个 Python 节点的代码，几乎总是这样开头：
 
 ```python
-from dora import Node   # 从 dora 库里，把 Node 这个"零件模板"拿进来
+from dora import Node   # 从 DORA 库里，把 Node 这个"零件模板"拿进来
 
 node = Node()           # 造出这个节点，并连上 DORA 运行时
 ```
@@ -260,7 +260,7 @@ if __name__ == "__main__":
 ## 常见报错 FAQ
 
 :::warning `ModuleNotFoundError: No module named 'dora'`
-说明当前环境里没有 dora 的 Python 库。请确认你已正确安装了 DORA（参考第二章）。
+说明当前环境里没有 DORA 的 Python 库。请确认你已正确安装了 DORA（参考第二章）。
 :::
 
 :::warning 节点一启动就立刻退出、什么也没干

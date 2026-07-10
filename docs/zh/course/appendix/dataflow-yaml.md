@@ -85,5 +85,5 @@ nodes:
 数据流向：`camera → object-detection → plot`。
 
 :::warning 版本提示
-基于 dora 1.0 RC。字段可能随版本微调，以课程使用的版本为准。
+基于 DORA 1.0 RC。字段可能随版本微调，以课程使用的版本为准。
 :::

@@ -1,27 +1,27 @@
 [
   {
     "type": "file",
-    "name": "what-is-dorabox",
-    "label": "2.1 认识朵拉魔盒"
+    "name": "install-rust",
+    "label": "2.1 Rust 工具链"
   },
   {
     "type": "file",
-    "name": "install-dorabox",
-    "label": "2.2 安装魔盒并选择工作目录"
-  },
-  {
-    "type": "file",
-    "name": "prepare-env",
-    "label": "2.3 一键准备隔离环境"
+    "name": "install-python",
+    "label": "2.2 Python 与 uv"
   },
   {
     "type": "file",
     "name": "build-dora",
-    "label": "2.4 从源码编译 dora 1.0 RC"
+    "label": "2.3 获取并编译 DORA"
   },
   {
     "type": "file",
-    "name": "terminal-and-check",
-    "label": "2.5 内置终端与环境自检"
+    "name": "verify",
+    "label": "2.4 验证环境"
+  },
+  {
+    "type": "file",
+    "name": "optional-mirrors",
+    "label": "2.5（可选）国内镜像加速"
   }
 ]

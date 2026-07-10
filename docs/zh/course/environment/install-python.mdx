@@ -1,0 +1,80 @@
+---
+description: 2.2 Python 与 uv——安装 Python 运行时与 uv 包管理器，为运行 Python 节点做准备。
+---
+
+import { Tab, Tabs } from '@rspress/core/theme';
+
+# 2.2 Python 与 uv
+
+DORA 的 Python 节点需要一个 Python 运行时和一个包管理器来安装依赖。本课程推荐使用 **uv**——一个用 Rust 编写的极速 Python 包管理器（比 pip 快 10-100 倍），它同时内置 Python 版本管理功能。
+
+## 安装 uv
+
+<Tabs groupId="os">
+<Tab label="macOS / Linux">
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+安装后重新打开终端（或执行 `source ~/.cargo/env`），确认可用：
+
+```bash
+uv --version
+```
+
+</Tab>
+<Tab label="Windows">
+
+```powershell
+# 使用 PowerShell 安装
+powershell -ExecutionPolicy ByPass -c "curl -sSf https://astral.sh/uv/install.ps1 | iex"
+```
+
+安装后重启终端，确认可用：
+
+```powershell
+uv --version
+```
+
+</Tab>
+</Tabs>
+
+:::tip uv 的功能
+uv 同时扮演了 `pip`（包安装）和 `pyenv`（Python 版本管理）的角色。安装后可直接用 `uv python install` 安装指定版本 Python，用 `uv pip install` 装包。
+:::
+
+## 安装 Python
+
+uv 安装完成后，用它安装本课程使用的 Python 版本：
+
+```bash
+uv python install 3.12
+```
+
+安装完成后，可用以下命令验证：
+
+```bash
+uv run python --version
+# 应输出 Python 3.12.x
+```
+
+:::tip 关于系统 Python
+macOS 和 Linux 通常自带 Python，但不建议直接使用系统 Python（版本可能过旧，且安装包可能污染系统环境）。使用 uv 管理的 Python 是隔离的，不会影响系统自带的版本。
+:::
+
+## 安装 pyarrow
+
+DORA 的 Python 节点需要 `pyarrow` 库来处理数据。后续编译并安装 DORA Python 绑定时会自动处理这个依赖，如果你需要提前确认 Python 环境可用，也可以手动安装：
+
+```bash
+uv pip install pyarrow
+```
+
+## 小结
+
+- 使用 **uv** 安装和管理 Python 环境。
+- macOS/Linux: `curl -LsSf https://astral.sh/uv/install.sh | sh`
+- Windows: PowerShell 运行安装脚本。
+- `uv python install 3.12` 安装课程使用的 Python 版本。
+- uv 隔离管理 Python，不冲突系统自带版本。

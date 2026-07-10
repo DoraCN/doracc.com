@@ -1,0 +1,88 @@
+---
+description: 2.1 Rust 工具链——在 macOS、Linux、Windows 上安装 rustup 与 Rust 编译环境。
+---
+
+import { Tab, Tabs } from '@rspress/core/theme';
+
+# 2.1 Rust 工具链
+
+DORA 是用 Rust 编写的，编译它需要 Rust 工具链。安装推荐使用 **rustup**——Rust 官方的工具链管理器。
+
+## 安装 rustup
+
+<Tabs groupId="os">
+<Tab label="macOS">
+
+```bash
+# 安装 Xcode Command Line Tools（如尚未安装）
+xcode-select --install
+
+# 安装 rustup
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# 将 Rust 加入当前 shell 的 PATH
+source "$HOME/.cargo/env"
+
+# 验证安装
+rustc --version    # 应输出 rustc 1.8x.x
+cargo --version    # 应输出 cargo 1.8x.x
+```
+
+</Tab>
+<Tab label="Linux">
+
+```bash
+# 安装构建必需的系统包
+# Ubuntu / Debian:
+sudo apt update && sudo apt install -y build-essential git curl
+# Fedora / RHEL:
+# sudo dnf groupinstall "Development Tools"
+
+# 安装 rustup
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# 将 Rust 加入当前 shell 的 PATH
+source "$HOME/.cargo/env"
+
+# 验证安装
+rustc --version    # 应输出 rustc 1.8x.x
+cargo --version    # 应输出 cargo 1.8x.x
+```
+
+</Tab>
+<Tab label="Windows">
+
+```powershell
+# 1. 下载 rustup-init.exe
+# 访问 https://rustup.rs 下载，或运行：
+# curl.exe -o rustup-init.exe https://win.rustup.rs/x86_64
+# .\rustup-init.exe
+
+# 2. 安装过程中选择默认选项（Default）
+# 3. 安装完成后重启终端（或运行下方命令更新 PATH）：
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","User") + ";$env:USERPROFILE\.cargo\bin"
+
+# 4. 安装 Visual Studio Build Tools
+# 访问 https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022
+# 安装时勾选"使用 C++ 的桌面开发"工作负载
+
+# 5. 验证安装（重启终端后执行）
+rustc --version    # 应输出 rustc 1.8x.x
+cargo --version    # 应输出 cargo 1.8x.x
+```
+
+</Tab>
+</Tabs>
+
+## 关于编译速度
+
+首次 `cargo build` 需要下载并编译依赖，可能耗时几分钟到十几分钟，这是正常的。编译产物会被缓存，后续编译会快很多。
+
+国内网络可参考 [2.5 节](./optional-mirrors) 配置 crates 镜像加速。
+
+## 小结
+
+- **rustup** 是 Rust 官方的工具链管理器，推荐用此方式安装。
+- macOS 和 Linux 使用 `curl | sh` 一键安装；Windows 使用 `rustup-init.exe`。
+- Windows 还需安装 **Visual Studio Build Tools**（含 C++ 工具集）。
+- 安装后验证 `rustc --version` 和 `cargo --version`。
