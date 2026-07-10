@@ -38,13 +38,18 @@ cd aviation
 ```
 aviation/
 ├── Cargo.toml          # Rust 项目配置与依赖声明
+├── Cargo.lock          # 依赖版本锁定
 ├── dataflow.yml        # DORA 数据流配置文件（本章核心）
-├── src/
-│   ├── main.rs         # 独立键盘版入口
-│   ├── dora_main.rs    # DORA 节点版入口
-│   └── lib.rs          # 共享逻辑（组件、运动系统）
+├── .gitignore
+├── README.md
+├── README.zh.md
 ├── assets/             # 图片和字体资源
-└── README.md
+└── src/
+    ├── main.rs                    # 独立键盘版入口
+    ├── lib.rs                     # 共享逻辑（组件、运动系统）
+    └── bin/
+        ├── aviation-dora.rs       # DORA 小飞机节点入口
+        └── aviation-controller.rs # DORA 控制器节点入口
 ```
 
 ## 第二步：编译
@@ -120,11 +125,26 @@ flowchart LR
 
 ## 独立键盘版试玩（可选）
 
-编译完成后，你可以在进入 DORA 之前先试试独立键盘版：
+前面编译时已经生成了独立键盘版的 release 二进制，直接运行即可：
+
+import { Tab, Tabs } from '@rspress/core/theme';
+
+<Tabs groupId="os">
+<Tab label="macOS / Linux">
 
 ```bash
-cargo run
+./target/release/aviation
 ```
+
+</Tab>
+<Tab label="Windows">
+
+```powershell
+.\target\release\aviation.exe
+```
+
+</Tab>
+</Tabs>
 
 会弹出一个标题为"航空模拟器"的窗口。使用 `W/A/S/D` 或方向键控制小飞机飞行。这是验证你的机器能正常显示 Bevy 窗口的好方法。
 

@@ -8,7 +8,7 @@
 
 | 项 | 现状/候选 | 建议 | 何时须定 |
 |----|-----------|------|---------|
-| 🔴 语音合成 TTS 型号 | 候选：sherpa-onnx 中文 VITS / piper 中文 | 与 ASR 同用 sherpa-onnx 运行时，CPU、三平台 | 第八章前 |
+| 🟢 语音合成 TTS 型号 | 已锁定：Matcha-TTS（`matcha-icefall-zh-baker`） | | 已锁定 |
 | 🔴 毕业项目 CPU 版 VLM | 未定；多数 VLM 依赖 GPU | 需实测一个真正 CPU 可跑的轻量 VLM（如 Moondream / SmolVLM / Qwen2-VL-2B 之类） | 第十一章前 |
 | 🟡 抓取毕业项目难度裁剪 | 说话→看到→抓取，闭环较复杂 | 为零基础做步骤化、可分段验证的裁剪 | 第十一章前 |
 | 🟡 SO-101 仿真细节 | URDF 加载、关节/夹爪控制 | 确认 LeRobot 提供的 URDF 在 PyBullet 正常加载 | 第十章前 |

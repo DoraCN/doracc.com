@@ -22,7 +22,7 @@
 - **仿真引擎**：PyBullet（易装、CPU 友好、资料多）。
 - **AI 模型**：轻量 CPU 模型；**不强依赖 GPU，CPU 必须能跑通**。已定：
   - 语音识别 ASR：**SenseVoiceSmall**（ModelScope `iic/SenseVoiceSmall`，经 sherpa-onnx 跑 ONNX，纯 CPU、三平台、免 PyTorch）。
-  - 语音合成 TTS：待锁定（候选：sherpa-onnx 中文 VITS / piper 中文），到第八章前实测确定。
+  - 语音合成 TTS：**Matcha-TTS**（`matcha-icefall-zh-baker`，经 sherpa-onnx 跑 ONNX，纯 CPU、三平台）。
   - 视觉检测：YOLOv8n 等轻量模型。
   - 毕业项目 VLM：待锁定 CPU 可跑方案，到第十一章前实测确定。
 - **仿真机械臂**：**SO-101（Standard Open Arm 101，LeRobot 生态）**，PyBullet 加载其 URDF；亦为可选真实硬件。

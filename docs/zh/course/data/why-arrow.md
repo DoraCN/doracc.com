@@ -155,7 +155,7 @@ flowchart LR
 
 ## 动手观察：Arrow 数组长什么样
 
-在终端里打开 Python，敲几行感受一下（这里不涉及数据流，纯粹玩 pyarrow）。下面每一行 `>>>` 是你输入的命令，紧跟的没有 `>>>` 的行是 Python 打印出的结果：
+在终端里打开 Python，敲几行感受一下（确保已激活虚拟环境 `source .venv/bin/activate`）。下面每一行 `>>>` 是你输入的命令，紧跟的没有 `>>>` 的行是 Python 打印出的结果：
 
 ```python
 python                            # 在终端里启动 Python 交互环境（出现 >>> 提示符）

@@ -63,12 +63,57 @@ uv run python --version
 macOS 和 Linux 通常自带 Python，但不建议直接使用系统 Python（版本可能过旧，且安装包可能污染系统环境）。使用 uv 管理的 Python 是隔离的，不会影响系统自带的版本。
 :::
 
-## 安装 pyarrow
+## 创建虚拟环境
 
-DORA 的 Python 节点需要 `pyarrow` 库来处理数据。后续编译并安装 DORA Python 绑定时会自动处理这个依赖，如果你需要提前确认 Python 环境可用，也可以手动安装：
+后续所有 Python 节点都在 **uv 虚拟环境**中运行，保证依赖隔离、版本一致。在课程工作目录下创建虚拟环境：
 
 ```bash
+# 在课程工作目录下执行
+uv venv
+```
+
+此命令会创建 `.venv/` 目录，包含一个独立的 Python 环境。
+
+每次开始课程操作前，需要激活虚拟环境：
+
+<Tabs groupId="os">
+<Tab label="macOS / Linux">
+
+```bash
+source .venv/bin/activate
+```
+
+</Tab>
+<Tab label="Windows">
+
+```powershell
+.venv\Scripts\activate
+```
+
+</Tab>
+</Tabs>
+
+激活后终端提示符前会显示 `(.venv)`，表示当前在虚拟环境中：
+
+```
+(.venv) $ python --version
+Python 3.12.x
+```
+
+:::tip 后续操作默认在虚拟环境中
+从本章之后的课程中，`python xxx.py`、`pip install xxx` 等命令都默认在虚拟环境中执行。每次新开终端都要先执行 `source .venv/bin/activate`（Windows 为 `.venv\Scripts\activate`）。
+:::
+
+## 安装依赖
+
+虚拟环境激活后，安装课程所需的 Python 包：
+
+```bash
+# 安装 pyarrow（DORA Python 节点必需）
 uv pip install pyarrow
+
+# 后续各章用到的包，如 opencv-python、ultralytics、sherpa-onnx 等，
+# 在对应章节会单独说明，使用时按需安装即可。
 ```
 
 ## 小结
@@ -77,4 +122,5 @@ uv pip install pyarrow
 - macOS/Linux: `curl -LsSf https://astral.sh/uv/install.sh | sh`
 - Windows: PowerShell 运行安装脚本。
 - `uv python install 3.12` 安装课程使用的 Python 版本。
+- `uv venv` 创建虚拟环境，**每次新开终端先激活**（`source .venv/bin/activate` 或 Windows 的 `.venv\Scripts\activate`）。
 - uv 隔离管理 Python，不冲突系统自带版本。
