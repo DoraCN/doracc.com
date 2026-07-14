@@ -70,21 +70,9 @@ export PATH="$PATH:/path/to/dora/target/release"
 （Windows 用户通过系统环境变量设置，将 `dora\target\release` 加入 `PATH`。）
 :::
 
-## 编译小飞机工程（可选）
-
-第三章会用到 dora 小飞机示例。你可以提前编译：
-
-```bash
-# 回到 dora/ 目录
-cargo build --release --features dora --bin aviation-dora --bin aviation-controller
-```
-
-也可在第三章需要时再编译。
-
 ## 小结
 
 - `git clone` 获取 DORA 源码，锁定 commit `25bac6b3`。
-- `cargo build --release` 编译 DORA CLI。
+- `cargo build --release` 编译 dora CLI。
 - `uv pip install -e apis/python/node` 安装 Python 绑定。
 - 将 `target/release` 加入 `PATH` 方便全局调用。
-- 小飞机工程可提前编译或留到第三章。
