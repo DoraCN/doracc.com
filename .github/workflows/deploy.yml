@@ -40,12 +40,16 @@ jobs:
           OSS_ENDPOINT: ${{ secrets.OSS_ENDPOINT }}
           OSS_BUCKET: ${{ secrets.OSS_BUCKET }}
         run: |
+          # 从 endpoint 中提取 region（如 oss-cn-hangzhou.aliyuncs.com → cn-hangzhou）
+          OSS_REGION="${OSS_ENDPOINT#oss-}"
+          OSS_REGION="${OSS_REGION%.aliyuncs.com}"
           ossutil sync doc_build/ oss://"$OSS_BUCKET"/ \
             --delete \
             --force \
             --access-key-id "$OSS_ACCESS_KEY_ID" \
             --access-key-secret "$OSS_ACCESS_KEY_SECRET" \
-            --endpoint "$OSS_ENDPOINT"
+            --endpoint "$OSS_ENDPOINT" \
+            --region "$OSS_REGION"
 
       - name: Setup Aliyun CLI
         run: |
