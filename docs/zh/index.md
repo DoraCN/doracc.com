@@ -9,7 +9,7 @@ hero:
   actions:
     - theme: brand
       text: 零基础开始学 →
-      link: /course/intro/
+      link: /course/intro/index.html
     - theme: alt
       text: DORA 基础
       link: /guide/start/introduction
