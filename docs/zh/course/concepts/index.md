@@ -16,7 +16,7 @@ description: 第一章导览——认识 DORA 与具身智能，建立数据流�
 - 理解 DORA 为什么比 ROS2 更快、更简单、更适合 AI；
 - 认识 DORA 的几个核心概念：节点、数据流、共享内存、Arrow；
 - 知道 DORA 的四种通信方式各自大概是什么；
-- 理清"朵拉"和"小莫"分别指什么。
+- 理清"DORA"和"小莫"分别指什么。
 
 ## 前置要求
 
@@ -24,10 +24,10 @@ description: 第一章导览——认识 DORA 与具身智能，建立数据流�
 
 ## 本章小节
 
-1. [什么是数据流中间件？](./what-is-middleware)
-2. [为什么是 DORA：和 ROS2 比一比](./why-dora-vs-ros2)
-3. [核心概念图解](./core-concepts)
-4. [四种通信模式（先认个脸）](./comm-patterns-intro)
-5. [认识小莫](./meet-duo-dora)
+1. [认识小莫](./meet-duo-dora)
+2. [什么是数据流中间件？](./what-is-middleware)
+3. [为什么是 DORA：和 ROS2 比一比](./why-dora-vs-ros2)
+4. [核心概念图解](./core-concepts)
+5. [四种通信模式（先认个脸）](./comm-patterns-intro)
 
 > 本章目标：**建立心智模型**（先不写代码）。

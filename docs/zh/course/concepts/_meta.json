@@ -1,27 +1,27 @@
 [
   {
     "type": "file",
+    "name": "meet-duo-dora",
+    "label": "1.1 认识小莫"
+  },
+  {
+    "type": "file",
     "name": "what-is-middleware",
-    "label": "1.1 什么是数据流中间件"
+    "label": "1.2 什么是数据流中间件"
   },
   {
     "type": "file",
     "name": "why-dora-vs-ros2",
-    "label": "1.2 为什么是 DORA：和 ROS2 比一比"
+    "label": "1.3 为什么是 DORA：和 ROS2 比一比"
   },
   {
     "type": "file",
     "name": "core-concepts",
-    "label": "1.3 核心概念图解"
+    "label": "1.4 核心概念图解"
   },
   {
     "type": "file",
     "name": "comm-patterns-intro",
-    "label": "1.4 四种通信模式（点名）"
-  },
-  {
-    "type": "file",
-    "name": "meet-duo-dora",
-    "label": "1.5 认识小莫"
+    "label": "1.5 四种通信模式（点名）"
   }
 ]
