@@ -17,7 +17,7 @@ flowchart TB
     S([DORA 环境]) --> N["⚡ 收发消息<br/>三章·①"] --> W["✍️ 写节点<br/>四章"] --> D["🧮 处理数据<br/>五章·②"]
   end
   subgraph R2[第二段：感知世界]
-    direction RL
+    direction LR
     C["💬 四种通信<br/>六章·③"] --> Eye["👁 视觉<br/>七章·④"] --> Ear["👂🗣 语音<br/>八章·⑤"]
   end
   subgraph R3[第三段：行动与思考]
