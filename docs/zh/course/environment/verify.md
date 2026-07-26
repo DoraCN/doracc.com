@@ -46,7 +46,7 @@ rustc --version
 cargo --version
 ```
 
-应各自输出版本号。
+应各自输出版本号，且 `rustc` 版本需 **≥ 1.88.0**。如果版本不足，返回 [2.1 Rust 工具链](./install-rust) 升级。
 
 ## 完整自检
 

@@ -1,0 +1,424 @@
+---
+description: 2.5（可选）国内镜像加速——配置 rustup 安装源、crates 包索引、pip 镜像以加速下载与编译。
+---
+
+import { Tab, Tabs } from '@rspress/core/theme';
+
+# 2.5（可选）国内镜像加速
+
+## 先搞懂：为什么要用镜像？
+
+Rust 和 Python 的官方服务器都在国外。你每次下载东西——比如安装 Rust、编译项目时下载依赖库、安装 Python 包——数据都得漂洋过海跑上万公里，速度自然慢，甚至可能断线。
+
+打个比方：
+
+> 官方服务器 = 开在纽约的一家商店。你从中国连过去，好比隔着太平洋喊话，又慢又容易断。
+>
+> **镜像** = 这家商店在国内开的"分店"。有人把纽约店里的东西完整复制到了北京、上海。你只需要从家门口的分店拿货，网速自然快好几倍。
+
+下面要做的，就是把你电脑上这四个"买东西"的地方，全部指向国内分店。
+
+---
+
+## 四件事，一张表
+
+配置之前，先看清楚哪一步需要什么镜像、配完之后对哪个命令生效：
+
+| 步骤 | 干什么用的 | 配置文件 / 操作 | 配完后加速什么 |
+|------|-----------|----------------|---------------|
+| Rustup 镜像 | 安装或升级 **Rust 工具链本身** | 终端环境变量 | `curl ... rustup`、`rustup update` |
+| crates 镜像 | 编译 Rust 项目时**下载依赖库** | `~/.cargo/config` | `cargo build` |
+| pip 镜像 | 安装 **Python 包** | 环境变量 或 uv 配置文件 | `pip install`、`uv pip install` |
+| git 镜像 | **克隆代码仓库** | 直接用镜像地址 | `git clone` |
+
+别被名字吓到——下面每个步骤都一句一句陪你走完。
+
+---
+
+## 1. Rustup 镜像
+
+> 加快 `rustup` 安装和升级 Rust 自身时的下载速度。
+
+配这个东西不是在文件里写的，而是在终端里**设两个"环境变量"**。"环境变量"听上去唬人，其实就等于你告诉终端："以后下载 Rust 别去美国，去这个中国地址。"
+
+<Tabs groupId="os">
+
+<Tab label="macOS">
+
+在"终端"（`Terminal.app`）里执行：
+
+```bash
+# 告诉 rustup：下载文件时去这个中国地址
+export RUSTUP_DIST_SERVER="https://rsproxy.cn"
+# 告诉 rustup：更新自身时去这个中国地址
+export RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"
+```
+
+:::tip 以后不想每次手打？
+把这两行加到 `~/.zshrc` 文件末尾。这样每次打开终端，它会自动帮你设好。操作：
+
+1. 打开终端，执行：`echo '\nexport RUSTUP_DIST_SERVER="https://rsproxy.cn"' >> ~/.zshrc`
+2. 再执行：`echo 'export RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"' >> ~/.zshrc`
+
+之后开新终端窗口，变量就自动生效了。
+:::
+
+</Tab>
+
+<Tab label="Linux">
+
+在终端里执行：
+
+```bash
+# 告诉 rustup：下载文件时去这个中国地址
+export RUSTUP_DIST_SERVER="https://rsproxy.cn"
+# 告诉 rustup：更新自身时去这个中国地址
+export RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"
+```
+
+:::tip 以后不想每次手打？
+把这两行加到 `~/.bashrc` 文件末尾。这样每次打开终端，它会自动帮你设好。操作：
+
+1. 打开终端，执行：`echo '\nexport RUSTUP_DIST_SERVER="https://rsproxy.cn"' >> ~/.bashrc`
+2. 再执行：`echo 'export RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"' >> ~/.bashrc`
+
+之后开新终端窗口，变量就自动生效了。
+:::
+
+</Tab>
+
+<Tab label="Windows">
+
+打开 **PowerShell**（右键开始菜单 → "Windows PowerShell"），执行：
+
+```powershell
+# 告诉 rustup：下载文件时去这个中国地址
+$env:RUSTUP_DIST_SERVER = "https://rsproxy.cn"
+# 告诉 rustup：更新自身时去这个中国地址
+$env:RUSTUP_UPDATE_ROOT = "https://rsproxy.cn/rustup"
+```
+
+:::tip 以后不想每次手打？
+PowerShell 有个"启动就自动执行的脚本"——叫 `$PROFILE`。把上面两行写进去就行：
+
+```powershell
+# 先确认这个文件存在（没有就创建一个）：
+if (!(Test-Path -Path $PROFILE)) { New-Item -Type File -Path $PROFILE -Force }
+# 把变量写进去：
+Add-Content -Path $PROFILE -Value '$env:RUSTUP_DIST_SERVER = "https://rsproxy.cn"'
+Add-Content -Path $PROFILE -Value '$env:RUSTUP_UPDATE_ROOT = "https://rsproxy.cn/rustup"'
+```
+
+之后重新打开 PowerShell，变量就自动生效了。
+:::
+
+</Tab>
+
+</Tabs>
+
+设置好环境变量之后，再用正常的安装命令就不一样了——记得用 rsproxy 的安装脚本（而不是 `sh.rustup.rs`）：
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh
+```
+
+或者升级：
+
+```bash
+rustup update
+```
+
+---
+
+## 2. crates 镜像
+
+> 加快 `cargo build` 编译 Rust 项目时下载依赖库的速度。
+
+当你执行 `cargo build` 的时候，Cargo 会去一个叫 **crates.io** 的网站上拉取所有依赖库。crates.io 也在国外，所以我们需要告诉 Cargo："别去官方，去这个国内拷贝。"
+
+这件事通过一个叫 `~/.cargo/config` 的文件来设置（Windows 是另一个路径，下面会讲）。
+
+<Tabs groupId="os">
+
+<Tab label="macOS">
+
+找到（或创建）`~/.cargo/config` 文件。`~` 在 macOS 里代表你的**用户主目录**——就是打开访达，左边点你名字的那个文件夹。完整路径是 `/Users/你的用户名/.cargo/config`。
+
+**第一步：确认目录存在**
+
+```bash
+# 在终端里执行。如果目录已存在什么都不会发生，不存在则创建。
+mkdir -p ~/.cargo
+```
+
+**第二步：写入配置**
+
+用终端的一行命令把配置写进去（不用担心，这不会覆盖你已有的内容）：
+
+```bash
+cat >> ~/.cargo/config << 'EOF'
+[source.crates-io]
+replace-with = "rsproxy-sparse"
+
+[source.rsproxy-sparse]
+registry = "sparse+https://rsproxy.cn/index/"
+
+[registries.rsproxy]
+index = "https://rsproxy.cn/crates.io-index"
+
+[net]
+git-fetch-with-cli = true
+EOF
+```
+
+**每行在干什么？**
+- `replace-with = "rsproxy-sparse"`：告诉 Cargo，"别查官方了，查下面我给你的这个地址"。
+- `registry = "sparse+..."`：“下面我给你的这个地址”就是它——rsproxy 的 sparse 端口。sparse 是一种更快的下载方式，你用的 Rust 版本肯定支持。
+- `git-fetch-with-cli = true`：遇到 git 依赖时，用系统的 git 下载（国内对 git 协议支持好一些）。
+
+</Tab>
+
+<Tab label="Linux">
+
+和 macOS 几乎一样，用户主目录也是 `~`。完整路径是 `/home/你的用户名/.cargo/config`。
+
+**第一步：确认目录存在**
+
+```bash
+mkdir -p ~/.cargo
+```
+
+**第二步：写入配置**
+
+```bash
+cat >> ~/.cargo/config << 'EOF'
+[source.crates-io]
+replace-with = "rsproxy-sparse"
+
+[source.rsproxy-sparse]
+registry = "sparse+https://rsproxy.cn/index/"
+
+[registries.rsproxy]
+index = "https://rsproxy.cn/crates.io-index"
+
+[net]
+git-fetch-with-cli = true
+EOF
+```
+
+**每行在干什么？**
+- `replace-with = "rsproxy-sparse"`：告诉 Cargo，"别查官方了，查下面我给的地址"。
+- `registry = "sparse+..."`：rsproxy 的 sparse 端口，更快。
+- `git-fetch-with-cli = true`：git 依赖走系统 git 下载。
+
+</Tab>
+
+<Tab label="Windows">
+
+Windows 的配置文件位置是 `%USERPROFILE%\.cargo\config`。别被 `%USERPROFILE%` 吓到——它就是你的用户目录，通常是 `C:\Users\你的用户名`。
+
+**第一步：确认目录存在**
+
+打开 **PowerShell**，执行：
+
+```powershell
+# 如果目录不存在就创建
+if (!(Test-Path -Path "$env:USERPROFILE\.cargo")) {
+    New-Item -Type Directory -Path "$env:USERPROFILE\.cargo"
+}
+```
+
+**第二步：写入配置**
+
+```powershell
+@"
+[source.crates-io]
+replace-with = "rsproxy-sparse"
+
+[source.rsproxy-sparse]
+registry = "sparse+https://rsproxy.cn/index/"
+
+[registries.rsproxy]
+index = "https://rsproxy.cn/crates.io-index"
+
+[net]
+git-fetch-with-cli = true
+"@ | Out-File -FilePath "$env:USERPROFILE\.cargo\config" -Encoding utf8 -Append
+```
+
+**每行在干什么？**
+- `replace-with = "rsproxy-sparse"`：告诉 Cargo，"别查官方了，查下面我给你的这个地址"。
+- `registry = "sparse+..."`：rsproxy 的 sparse 端口，更快。
+- `git-fetch-with-cli = true`：git 依赖走系统 git 下载。
+
+</Tab>
+
+</Tabs>
+
+:::details 备选镜像源（通常用不到，但万一 rsproxy 挂了可以用）
+
+如果 rsproxy 连不上，换下面任意一个替代 `rsproxy-sparse` 那一段即可：
+
+**清华大学：**
+```toml
+[source.crates-io]
+replace-with = "tuna"
+
+[source.tuna]
+registry = "sparse+https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"
+```
+
+**中国科学技术大学：**
+```toml
+[source.crates-io]
+replace-with = "ustc"
+
+[source.ustc]
+registry = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
+```
+
+**上海交通大学：**
+```toml
+[source.crates-io]
+replace-with = "sjtug"
+
+[source.sjtug]
+registry = "sparse+https://mirrors.sjtug.sjtu.edu.cn/crates.io-index/"
+```
+
+:::
+
+---
+
+## 3. pip 镜像
+
+> 加快 `uv pip install` 安装 Python 包时的下载速度。
+
+Python 包都放在一个叫 **PyPI** 的网站上，也在国外。我们要做的就是告诉 uv（你用的那个 Python 包管理器）："别去国外 PyPI，去清华的 PyPI 拷贝。"
+
+最简单的办法——在终端里设一个环境变量，和前面 Rustup 那步一模一样：
+
+<Tabs groupId="os">
+
+<Tab label="macOS">
+
+```bash
+export UV_INDEX_URL="https://pypi.tuna.tsinghua.edu.cn/simple"
+```
+
+这行一执行，当前终端窗口里的 `uv pip install` 就会走清华镜像。
+
+:::tip 想一劳永逸？
+把配置写进 uv 的配置文件，以后每次都自动生效。macOS 下配置文件路径是 `~/Library/Application Support/uv/uv.toml`：
+
+```bash
+# 先确认目录存在
+mkdir -p ~/Library/Application\ Support/uv
+# 写入配置
+cat >> ~/Library/Application\ Support/uv/uv.toml << 'EOF'
+[[index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+EOF
+```
+:::
+
+</Tab>
+
+<Tab label="Linux">
+
+```bash
+export UV_INDEX_URL="https://pypi.tuna.tsinghua.edu.cn/simple"
+```
+
+这行一执行，当前终端窗口里的 `uv pip install` 就会走清华镜像。
+
+:::tip 想一劳永逸？
+把配置写进 uv 的配置文件，以后每次都自动生效。Linux 下配置文件路径是 `~/.config/uv/uv.toml`：
+
+```bash
+# 先确认目录存在
+mkdir -p ~/.config/uv
+# 写入配置
+cat >> ~/.config/uv/uv.toml << 'EOF'
+[[index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+EOF
+```
+:::
+
+</Tab>
+
+<Tab label="Windows">
+
+在 **PowerShell** 里：
+
+```powershell
+$env:UV_INDEX_URL = "https://pypi.tuna.tsinghua.edu.cn/simple"
+```
+
+这行一执行，当前窗口里的 `uv pip install` 就会走清华镜像。
+
+:::tip 想一劳永逸？
+把配置写进 uv 的配置文件。Windows 下路径是 `%APPDATA%\uv\uv.toml`（通常是 `C:\Users\你的用户名\AppData\Roaming\uv\uv.toml`）：
+
+```powershell
+# 先确认目录存在
+if (!(Test-Path -Path "$env:APPDATA\uv")) {
+    New-Item -Type Directory -Path "$env:APPDATA\uv"
+}
+# 写入配置
+@"
+[[index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+"@ | Out-File -FilePath "$env:APPDATA\uv\uv.toml" -Encoding utf8 -Append
+```
+:::
+
+</Tab>
+
+</Tabs>
+
+---
+
+## 4. git 克隆加速
+
+> 加快 `git clone` 从 GitHub 拉代码的速度。
+
+这个最简单——**把 GitHub 地址换成国内镜像地址就行了**。两大类方案：
+
+### 方案一：国内 Git 平台镜像（推荐）
+
+有人把 DORA 的仓库同步到了国内平台 AtomGit，内容和 GitHub 完全一样，下载速度飞快：
+
+```bash
+git clone https://atomgit.com/dora-rs/dora.git
+```
+
+### 方案二：GitHub 代理
+
+如果上面用不了，也可以通过代理中转 GitHub 的流量：
+
+```bash
+git clone https://ghproxy.com/https://github.com/dora-rs/dora.git
+```
+
+---
+
+:::warning 镜像可能有时延
+镜像源同步官方仓库可能有数小时延迟。如果你在配了镜像后遇到奇怪的编译错误（比如依赖版本对不上），**临时去掉镜像试一下**——也许是镜像还没同步到最新版本。
+
+日常开发建议以官方源为准，编译受阻时再切镜像。配了不怕，关键要**知道怎么退回来**：把上面写入的配置行删掉，或者把写入的环境变量取消就行了。
+:::
+
+---
+
+## 小结
+
+| 你配了什么 | 怎么验证生效了 |
+|-----------|--------------|
+| **Rustup 镜像** | 执行 `rustup update`，看到下载进度跑很快就是成功了 |
+| **crates 镜像** | 执行 `cargo build`，依赖下载速度明显快了 |
+| **pip 镜像** | 执行 `uv pip install`，看到包从清华源下载 |
+| **git 镜像** | `git clone` 直接用镜像地址，速度快 |
+
+如果某一步不确定配没配好，没关系——这些镜像配错了最多是下载变慢，不会搞坏你的电脑。大胆试，大不了删掉配置恢复原样。

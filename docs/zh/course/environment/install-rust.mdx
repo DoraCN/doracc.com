@@ -8,7 +8,66 @@ import { Tab, Tabs } from '@rspress/core/theme';
 
 DORA 是用 Rust 编写的，编译它需要 Rust 工具链。安装推荐使用 **rustup**——Rust 官方的工具链管理器。
 
-## 安装 rustup
+## 1. 先检查一下
+
+在动手安装之前，不妨先看看你的电脑上是否已经有了 Rust。打开终端，输入：
+
+```bash
+rustc --version
+cargo --version
+```
+
+输出版本号（如 `rustc 1.90.0`），说明已安装；提示 `command not found`，说明还没装。
+
+DORA 1.0 RC 要求 Rust **≥ 1.88.0**。根据你的情况，选下面一条往下走：
+
+| 你的情况 | 怎么做 |
+|---------|--------|
+| `command not found` | → 看「**3. 安装 rustup**」 |
+| 版本号 ≥ 1.88.0 | → 已经满足要求，直接去 [2.2 Python 与 uv](./install-python) |
+| 版本号 < 1.88.0 | → 版本不够，先看下面「**2. 升级已有的 Rust**」 |
+
+---
+
+## 2. 升级已有的 Rust
+
+如果你之前装过 Rust 但版本低于 1.88.0，把工具链升上来就行。
+
+### 用 rustup 升级
+
+```bash
+rustup update
+rustc --version    # 确认版本号 ≥ 1.88.0
+```
+
+### 如果你是用系统包管理器装的
+
+有些同学可能当初用 `apt install cargo` 或 `brew install rust` 装的——这些源的版本通常偏旧。建议先卸载，再按下方「3. 安装 rustup」的方式重装：
+
+<Tabs groupId="os">
+<Tab label="Ubuntu/Debian">
+
+```bash
+sudo apt remove cargo rustc
+```
+
+</Tab>
+<Tab label="macOS (Homebrew)">
+
+```bash
+brew uninstall rust
+```
+
+</Tab>
+</Tabs>
+
+:::tip 升级时网络慢？
+`rustup update` 默认从国外 CDN 下载，国内可能很慢或超时。可以先设置镜像环境变量再升级，做法和安装 rustup 一样——详见 [2.5（可选）国内镜像加速](./optional-mirrors)。
+:::
+
+---
+
+## 3. 安装 rustup
 
 <Tabs groupId="os">
 <Tab label="macOS">
@@ -24,9 +83,13 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
 
 # 验证安装
-rustc --version    # 应输出 rustc 1.8x.x
-cargo --version    # 应输出 cargo 1.8x.x
+rustc --version    # 应输出版本号（需 ≥ 1.88.0）
+cargo --version    # 同上
 ```
+
+:::tip 国内网络？
+如果下载很慢或超时，可以先设置镜像再执行安装命令，参考 [2.5 节](./optional-mirrors)。
+:::
 
 </Tab>
 <Tab label="Linux">
@@ -45,9 +108,13 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
 
 # 验证安装
-rustc --version    # 应输出 rustc 1.8x.x
-cargo --version    # 应输出 cargo 1.8x.x
+rustc --version    # 应输出版本号（需 ≥ 1.88.0）
+cargo --version    # 同上
 ```
+
+:::tip 国内网络？
+如果下载很慢或超时，可以先设置镜像再执行安装命令，参考 [2.5 节](./optional-mirrors)。
+:::
 
 </Tab>
 <Tab label="Windows">
@@ -67,14 +134,14 @@ $env:Path = [System.Environment]::GetEnvironmentVariable("Path","User") + ";$env
 # 安装时勾选"使用 C++ 的桌面开发"工作负载
 
 # 5. 验证安装（重启终端后执行）
-rustc --version    # 应输出 rustc 1.8x.x
-cargo --version    # 应输出 cargo 1.8x.x
+rustc --version    # 应输出版本号（需 ≥ 1.88.0）
+cargo --version    # 同上
 ```
 
 </Tab>
 </Tabs>
 
-## 关于编译速度
+## 4. 关于编译速度
 
 首次 `cargo build` 需要下载并编译依赖，可能耗时几分钟到十几分钟，这是正常的。编译产物会被缓存，后续编译会快很多。
 
@@ -82,7 +149,8 @@ cargo --version    # 应输出 cargo 1.8x.x
 
 ## 小结
 
-- **rustup** 是 Rust 官方的工具链管理器，推荐用此方式安装。
-- macOS 和 Linux 使用 `curl | sh` 一键安装；Windows 使用 `rustup-init.exe`。
-- Windows 还需安装 **Visual Studio Build Tools**（含 C++ 工具集）。
-- 安装后验证 `rustc --version` 和 `cargo --version`。
+- **先检查**：`rustc --version` 看看是否已安装、版本是否 ≥ 1.88.0。
+- **版本不够就升级**：`rustup update` 一条命令搞定。
+- **还没装就用 rustup**：macOS / Linux 一条 `curl | sh`，Windows 用 `rustup-init.exe`。
+- Windows 额外需要 **Visual Studio Build Tools**（含 C++ 工具集）。
+- 国内网络下载慢？看 [2.5（可选）国内镜像加速](./optional-mirrors)。
