@@ -107,6 +107,21 @@ uv venv
 
 此命令会创建 `.venv/` 目录，包含一个独立的 Python 环境。
 
+:::tip `.venv` 是隐藏目录
+在 macOS/Linux 中，以 `.` 开头的文件或目录默认为**隐藏文件**，`ls` 命令不会显示。如需查看，请使用：
+
+```bash
+ls -a        # 列出所有文件（含隐藏文件）
+ls -la       # 详细格式列出所有文件
+```
+
+文件管理器中也可显示隐藏文件：
+- **Linux（Nautilus 等）**：按 `Ctrl + H`
+- **macOS Finder**：按 `Cmd + Shift + .`
+
+Windows 系统没有此隐藏约定，`.venv` 目录默认可见。
+:::
+
 每次开始课程操作前，需要激活虚拟环境：
 
 <Tabs groupId="os">

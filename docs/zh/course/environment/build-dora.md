@@ -1,5 +1,5 @@
 ---
-description: 2.3 获取并编译 DORA——从 GitHub 克隆 DORA 源码，使用 cargo build 编译，并安装 Python 绑定。
+description: 2.3 获取并编译 DORA——从 GitHub 克隆 DORA 源码，使用 cargo build --release -p dora-cli 编译，并安装 Python 绑定。
 ---
 
 # 2.3 获取并编译 DORA
@@ -29,15 +29,26 @@ git checkout 25bac6b3e5ed7435f49bd494e0ff4ef81ee0a674
 ```
 :::
 
-## 编译 DORA CLI
-
-在 `dora/` 目录下，执行：
+:::warning 编译前请激活虚拟环境
+接下来的编译和 Python 绑定安装需要在 [2.2 节](./install-python) 创建的 uv 虚拟环境中进行。
+请确认终端前缀显示 `(.venv)`，如未激活，先执行：
 
 ```bash
-cargo build --release
+source .venv/bin/activate
 ```
 
-这会编译 DORA 的 CLI 工具、守护进程及核心库。首次编译需要下载并构建大量依赖，**可能需要 10-30 分钟**，取决于网络和机器性能。后续再次编译会快很多。
+（如果你在 `dora/` 子目录下且 `.venv` 在上级目录，请执行 `source ../.venv/bin/activate`。）
+:::
+
+## 编译 DORA CLI
+
+确保虚拟环境已激活后，在 `dora/` 目录下执行：
+
+```bash
+cargo build --release -p dora-cli
+```
+
+这会编译 DORA 的 CLI 工具。首次编译需要下载并构建大量依赖，**可能需要 10-30 分钟**，取决于网络和机器性能。后续再次编译会快很多。
 
 :::tip 编译时间长的原因
 Rust 编译时会在 `~/.cargo` 下缓存依赖，`target/` 下缓存中间产物。首次编译后，后续修改只需要重编变动的部分，会快得多。网络慢可参考 [2.5 节](./optional-mirrors) 配置国内 crates 镜像。
@@ -51,10 +62,10 @@ Rust 编译时会在 `~/.cargo` 下缓存依赖，`target/` 下缓存中间产�
 
 ## 安装 Python 绑定
 
-编译完成后，需要将 Python 绑定安装到 Python 环境中：
+编译完成后，需要将 Python 绑定安装到当前激活的 uv 虚拟环境中：
 
 ```bash
-# 在 dora/ 项目根目录下
+# 在 dora/ 项目根目录下（确保 .venv 已激活）
 uv pip install -e apis/python/node
 ```
 
@@ -73,6 +84,7 @@ export PATH="$PATH:/path/to/dora/target/release"
 ## 小结
 
 - `git clone` 获取 DORA 源码，锁定 commit `25bac6b3`。
-- `cargo build --release` 编译 dora CLI。
+- 编译前先激活 `.venv`（`source .venv/bin/activate`）。
+- `cargo build --release -p dora-cli` 编译 dora CLI。
 - `uv pip install -e apis/python/node` 安装 Python 绑定。
 - 将 `target/release` 加入 `PATH` 方便全局调用。

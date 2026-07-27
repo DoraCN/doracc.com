@@ -71,3 +71,13 @@ Python 绑定未安装或安装到了错误的 Python 环境。确认在 `dora/`
 :::warning `linker not found` 编译报错
 macOS: 运行 `xcode-select --install`；Linux: 安装 `build-essential`（Ubuntu）或 `Development Tools`（Fedora）；Windows: 安装 Visual Studio Build Tools。
 :::
+
+:::warning `pkg-config` 或 `wayland-client` 编译报错
+Linux 上编译依赖图形/音频的 Rust 项目时需要额外的系统库。Ubuntu/Debian：
+
+```bash
+sudo apt install pkg-config libwayland-dev libxkbcommon-dev libasound2-dev libudev-dev
+```
+
+Fedora/RHEL 对应包名请自行查找。
+:::

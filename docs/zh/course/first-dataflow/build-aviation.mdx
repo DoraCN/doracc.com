@@ -1,10 +1,12 @@
 ---
-description: 3.1 获取并编译小飞机工程——从 GitHub 克隆 dora 小飞机源码，编译三个二进制文件，为运行数据流做好准备。
+description: 3.1 获取并编译小飞机工程——从 GitHub 克隆 dora 小飞机源码，编译五个二进制文件，为运行数据流做好准备。
 ---
+
+import { Tab, Tabs } from "@rspress/core/theme";
 
 # 3.1 获取并编译小飞机工程
 
-本章使用的 dora 小飞机是一个现成的 Rust 工程，托管在 GitHub 上。它包含三个可执行程序，分别对应独立键盘版、DORA 控制器节点和 DORA 小飞机节点。
+本章使用的 dora 小飞机是一个现成的 Rust 工程，托管在 GitHub 上。它包含五个可执行程序：两个独立键盘版小游戏和三个 DORA 节点。
 
 ## 学习目标
 
@@ -12,7 +14,7 @@ description: 3.1 获取并编译小飞机工程——从 GitHub 克隆 dora 小�
 
 - 从 GitHub 克隆一个 Rust 工程
 - 使用 Rust 特性标记（`--features dora`）编译指定功能的二进制文件
-- 理解三个二进制各自的作用
+- 理解五个二进制各自的作用
 
 ## 第一步：克隆仓库
 
@@ -45,24 +47,83 @@ aviation/
 ├── README.zh.md
 ├── assets/             # 图片和字体资源
 └── src/
-    ├── main.rs                    # 独立键盘版入口
-    ├── lib.rs                     # 共享逻辑（组件、运动系统）
+    ├── main.rs                    # → aviation（独立键盘版小飞机）
+    ├── lib.rs                     # 共享逻辑
+    ├── plane_war/                 # 飞机大战模块
+    │   ├── mod.rs
+    │   ├── assets.rs
+    │   ├── components.rs
+    │   ├── resources.rs
+    │   └── systems.rs
     └── bin/
-        ├── aviation-dora.rs       # DORA 小飞机节点入口
-        └── aviation-controller.rs # DORA 控制器节点入口
+        ├── dora.rs                # → aviation-dora
+        ├── controller.rs          # → aviation-controller
+        ├── plane_war.rs           # → plane-war
+        └── plane_war_dora.rs      # → plane-war-dora
 ```
+
+:::warning Linux 用户：编译常见问题
+
+aviation 使用 Bevy 游戏引擎，在 Linux 上首次编译时常因缺少系统库而失败。以下是两个典型错误：
+
+**错误 1：`wayland-sys` 编译失败**
+
+报错结尾可见：
+
+```
+The pkg-config command could not be found.
+```
+
+或：
+
+```
+Package `wayland-client` was not found in the pkg-config search path.
+```
+
+**原因**：Bevy 的窗口系统依赖 Wayland（或 X11），编译 `wayland-sys` 时需要 `pkg-config` 工具和 Wayland 开发头文件。裸系统通常未安装这些包。
+
+---
+
+**错误 2：`libudev-sys` 编译失败**
+
+报错结尾可见：
+
+```
+Package libudev was not found in the pkg-config search path.
+```
+
+**原因**：Bevy 通过 `gilrs` 支持游戏手柄输入，依赖 `libudev-sys` crate 与 Linux 的 udev 设备管理器通信。需要 `libudev-dev` 系统包。
+
+---
+
+**解决方案**：Ubuntu/Debian 执行以下命令安装所有必需的开发库：
+
+```bash
+sudo apt install -y pkg-config libwayland-dev libxkbcommon-dev libasound2-dev libudev-dev
+```
+
+如果当前使用 X11 桌面而非 Wayland，还需安装 X11 支持：
+
+```bash
+sudo apt install -y libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libudev-dev
+```
+
+安装后重新执行编译命令即可。这些包一次安装永久有效，后续编译不会再因此报错。
+:::
 
 ## 第二步：编译
 
-小飞机工程提供三个二进制（bin）：
+小飞机工程提供五个二进制（bin）：
 
-| 二进制 | 编译命令 | 用途 |
-|--------|---------|------|
-| `aviation` | `cargo run`（默认） | 独立键盘版，不依赖 DORA，可单独运行 |
-| `aviation-controller` | 需 `--features dora` | DORA 控制器节点，GUI 按钮 + 键盘 |
-| `aviation-dora` | 需 `--features dora` | DORA 小飞机节点，接收控制指令飞行 |
+| 二进制                | 编译条件          | 用途                        |
+| --------------------- | ----------------- | --------------------------- |
+| `aviation`            | 默认              | 独立键盘版小飞机模拟        |
+| `plane-war`           | 默认              | 独立键盘版飞机大战          |
+| `aviation-controller` | `--features dora` | DORA 控制器节点，GUI + 键盘 |
+| `aviation-dora`       | `--features dora` | DORA 小飞机模拟节点         |
+| `plane-war-dora`      | `--features dora` | DORA 飞机大战节点           |
 
-本章需要编译的是带 `dora` 特性的两个节点，执行：
+执行编译：
 
 ```bash
 cargo build --release --features dora --bins
@@ -70,9 +131,9 @@ cargo build --release --features dora --bins
 
 这条命令的含义：
 
-- `cargo build --release`：以 release（发布）模式编译，产物更小、运行更快
-- `--features dora`：启用 `dora` 特性，编译 `aviation-dora` 和 `aviation-controller`
-- `--bins`：编译项目中所有的二进制（bin），产出三个可执行文件
+- `cargo build --release`：以 release（发布）模式编译
+- `--features dora`：启用 `dora` 特性，编译三个 DORA 节点
+- `--bins`：编译项目中所有二进制，产出五个可执行文件
 
 :::tip 首次编译会较慢
 Rust 首次编译需要下载并构建依赖（Bevy 等库），耗时 5-20 分钟，这是**正常的**。后续编译使用缓存，会快很多。耐心等待即可。
@@ -86,48 +147,73 @@ Rust 首次编译需要下载并构建依赖（Bevy 等库），耗时 5-20 分�
 
 编译完成后，产物在 `target/release/` 目录下：
 
+<Tabs groupId="os">
+<Tab label="macOS / Linux">
+
 ```bash
-ls -lh target/release/aviation*
+ls target/release/
 ```
 
-应看到三个可执行文件：
+应看到五个可执行文件：
 
 ```
--rwxr-xr-x  target/release/aviation
--rwxr-xr-x  target/release/aviation-controller
--rwxr-xr-x  target/release/aviation-dora
+target/release/
+├── aviation*
+├── aviation-controller*
+├── aviation-dora*
+├── plane-war*
+└── plane-war-dora*
 ```
 
-如果 `aviation-controller` 和 `aviation-dora` 存在，说明编译成功。
+</Tab>
+<Tab label="Windows">
 
-## 三个二进制的关系
+```powershell
+dir target\release\*.exe
+```
+
+应看到五个可执行文件：
+
+```
+target\release\aviation.exe
+target\release\aviation-controller.exe
+target\release\aviation-dora.exe
+target\release\plane-war.exe
+target\release\plane-war-dora.exe
+```
+
+</Tab>
+</Tabs>
+
+如果 `aviation-controller` 和 `plane-war-dora` 存在，说明 DORA 节点编译成功。
+
+## 五个二进制的关系
 
 ```mermaid
 flowchart LR
   subgraph Left[独立运行]
     direction TB
-    K["aviation<br/>独立键盘版"] -->|直接控制| P["小飞机窗口"]
+    A["aviation<br/>小飞机键盘版"] -->|直接控制| W1["小飞机窗口"]
+    PW["plane-war<br/>飞机大战键盘版"] -->|直接控制| W2["飞机大战窗口"]
   end
   subgraph Right[DORA 数据流]
     direction TB
-    C["aviation-controller<br/>DORA 控制器节点"] -->|cmd 指令| D["aviation-dora<br/>DORA 小飞机节点"]
-    D -->|pose 位姿| P2["小飞机窗口"]
+    C["aviation-controller"] -->|cmd 指令| PWD["plane-war-dora"]
+    PWD -->|游戏画面| W3["飞机大战窗口"]
   end
   Left ~~~ Right
 ```
 
-- **aviation**（独立键盘版）：直接键盘控制，不依赖 DORA——适合快速体验和调试。
-- **aviation-controller + aviation-dora**（DORA 数据流版）：通过 DORA 数据流通信，分别启动，靠 `dataflow.yml` 连接——这是真正的 DORA 使用方式。
+- **aviation / plane-war**（独立键盘版）：直接键盘控制，不依赖 DORA——适合快速体验和调试。
+- **aviation-controller + plane-war-dora**（DORA 数据流版）：通过 DORA 数据流通信，分别启动，靠 `dataflow.yml` 连接——这是真正的 DORA 使用方式。当前 `dataflow.yml` 配置的是飞机大战节点，也可切换为 `aviation-dora`。
 
 :::info 小莫
-本章我们主要体验的是 DORA 版本（两个节点通过数据流通信）。独立键盘版可以玩一玩感受下，但真正体现 DORA 价值的是数据流方式。
+本章我们主要体验的是 DORA 版本（三个节点通过数据流通信）。独立键盘版可以玩一玩感受下，但真正体现 DORA 价值的是数据流方式。
 :::
 
 ## 独立键盘版试玩（可选）
 
 前面编译时已经生成了独立键盘版的 release 二进制，直接运行即可：
-
-import { Tab, Tabs } from '@rspress/core/theme';
 
 <Tabs groupId="os">
 <Tab label="macOS / Linux">
@@ -146,15 +232,15 @@ import { Tab, Tabs } from '@rspress/core/theme';
 </Tab>
 </Tabs>
 
-会弹出一个标题为"航空模拟器"的窗口。使用 `W/A/S/D` 或方向键控制小飞机飞行。这是验证你的机器能正常显示 Bevy 窗口的好方法。
+会弹出一个标题为"航空模拟器"（aviation）或"飞机大战"（plane-war）的窗口。使用 `W/A/S/D` 或方向键控制。这是验证你的机器能正常显示 Bevy 窗口的好方法。
 
 按 `Ctrl+C` 停止（或在终端按 `Ctrl+C` 结束进程）。
 
 ## 小结
 
 - 从 GitHub 或 AtomGit 克隆了 aviation 工程。
-- `cargo build --release --features dora --bins` 编译了三个二进制。
-- `aviation-controller` 和 `aviation-dora` 是接下来要通过 DORA 运行的节点。
-- 独立键盘版 `aviation` 可用于验证图形环境正常。
+- `cargo build --release --features dora --bins` 编译了五个二进制。
+- `aviation-controller` 和 `plane-war-dora` 是接下来要通过 DORA 运行的节点（`dataflow.yml` 已配置好）。
+- 独立键盘版 `aviation` 和 `plane-war` 可用于验证图形环境正常。
 
 编译完成，下一步就是：[3.2 dora run 跑起来](./run-dataflow)。
