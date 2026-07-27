@@ -384,23 +384,21 @@ url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 
 > 加快 `git clone` 从 GitHub 拉代码的速度。
 
-这个最简单——**把 GitHub 地址换成国内镜像地址就行了**。两大类方案：
-
-### 方案一：国内 Git 平台镜像（推荐）
-
-有人把 DORA 的仓库同步到了国内平台 AtomGit，内容和 GitHub 完全一样，下载速度飞快：
+DORA 中文社区在 **AtomGit** 上维护了官方镜像，内容和 GitHub 完全同步，国内直接用它：
 
 ```bash
 git clone https://atomgit.com/dora-rs/dora.git
 ```
 
-### 方案二：GitHub 代理
-
-如果上面用不了，也可以通过代理中转 GitHub 的流量：
+:::details 备选：GitHub 代理
+如果你想直接从 GitHub 拉取，也可以通过代理中转：
 
 ```bash
 git clone https://ghproxy.com/https://github.com/dora-rs/dora.git
 ```
+
+注意：ghproxy 是第三方公共服务，稳定性不保证。建议优先用上面的 AtomGit 镜像。
+:::
 
 ---
 
