@@ -2,7 +2,7 @@
 description: 2.2 Python 与 uv——安装 Python 运行时与 uv 包管理器，为运行 Python 节点做准备。
 ---
 
-import { Tab, Tabs } from '@rspress/core/theme';
+import { Tab, Tabs } from "@rspress/core/theme";
 
 # 2.2 Python 与 uv
 
@@ -17,10 +17,27 @@ DORA 的 Python 节点需要一个 Python 运行时和一个包管理器来安�
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-安装后重新打开终端（或执行 `source ~/.cargo/env`），确认可用：
+:::warning 重要！装完了，但还没生效
+uv 已经装到电脑上了，但你**当前的终端窗口还不知道**——它还在用安装前的环境，不知道 PATH 里多了 uv。
+:::
+
+选下面任一种让 uv 生效：
+
+- **方式一（推荐）：** 关掉当前终端，重新打开一个新终端。
+- **方式二（立即生效）：** 在当前终端执行：
+
+  ```bash
+  source ~/.cargo/env
+  ```
+
+  > 为什么是 cargo 的路径？因为 uv 也是 Rust 生态的一部分，它把自己装在 `~/.cargo/bin/` 下，和 Rust 工具链共用同一个目录。
+  > :::
+
+确认一切就绪：
 
 ```bash
 uv --version
+# 应输出版本号，如 uv 0.5.x
 ```
 
 </Tab>
@@ -31,10 +48,26 @@ uv --version
 powershell -ExecutionPolicy ByPass -c "curl -sSf https://astral.sh/uv/install.ps1 | iex"
 ```
 
-安装后重启终端，确认可用：
+:::warning 重要！装完了，但还没生效
+uv 已经装到电脑上了，但你**当前的 PowerShell 窗口还不知道**——它还在用安装前的环境，PATH 里还没 uv 的位置。
+:::
+
+选下面任一种让 uv 生效：
+
+- **方式一（推荐）：** 关掉当前 PowerShell，重新打开一个。
+- **方式二（立即生效）：** 在当前 PowerShell 执行：
+
+  ```powershell
+  $env:Path = [System.Environment]::GetEnvironmentVariable("Path","User") + ";" + "$env:USERPROFILE\.cargo\bin"
+  ```
+
+  :::
+
+确认一切就绪：
 
 ```powershell
 uv --version
+# 应输出版本号，如 uv 0.5.x
 ```
 
 </Tab>
