@@ -2,7 +2,7 @@
 description: 2.1 Rust 工具链——在 macOS、Linux、Windows 上安装 rustup 与 Rust 编译环境。
 ---
 
-import { Tab, Tabs } from '@rspress/core/theme';
+import { Tab, Tabs } from "@rspress/core/theme";
 
 # 2.1 Rust 工具链
 
@@ -21,11 +21,11 @@ cargo --version
 
 DORA 1.0 RC 要求 Rust **≥ 1.88.0**。根据你的情况，选下面一条往下走：
 
-| 你的情况 | 怎么做 |
-|---------|--------|
-| `command not found` | → 看「**3. 安装 rustup**」 |
-| 版本号 ≥ 1.88.0 | → 已经满足要求，直接去 [2.2 Python 与 uv](./install-python) |
-| 版本号 < 1.88.0 | → 版本不够，先看下面「**2. 升级已有的 Rust**」 |
+| 你的情况            | 怎么做                                                      |
+| ------------------- | ----------------------------------------------------------- |
+| `command not found` | → 看「**3. 安装 rustup**」                                  |
+| 版本号 ≥ 1.88.0     | → 已经满足要求，直接去 [2.2 Python 与 uv](./install-python) |
+| 版本号 < 1.88.0     | → 版本不够，先看下面「**2. 升级已有的 Rust**」              |
 
 ---
 
@@ -119,24 +119,117 @@ cargo --version    # 同上
 </Tab>
 <Tab label="Windows">
 
+Windows 安装 Rust 分四步走：先确定电脑架构 → 下载对应的安装程序 → 运行安装 → 装 C++ 编译工具。下面一步一步来。
+
+如果你还不确定 Rust 是否装过，先在 PowerShell 里敲一下 `rustc`。看到这个画面就说明还没装：
+
+![rustc 未安装时的提示](/rust01.jpg)
+
+好，开始安装。
+
+#### 第一步：判断你的 Windows 是哪种架构
+
+打开 **PowerShell** 或 **命令提示符**（CMD），输入：
+
 ```powershell
-# 1. 下载 rustup-init.exe
-# 访问 https://rustup.rs 下载，或运行：
-# curl.exe -o rustup-init.exe https://win.rustup.rs/x86_64
-# .\rustup-init.exe
+echo %PROCESSOR_ARCHITECTURE%
+```
 
-# 2. 安装过程中选择默认选项（Default）
-# 3. 安装完成后重启终端（或运行下方命令更新 PATH）：
-$env:Path = [System.Environment]::GetEnvironmentVariable("Path","User") + ";$env:USERPROFILE\.cargo\bin"
+根据输出的值，找到你对应的情况：
 
-# 4. 安装 Visual Studio Build Tools
-# 访问 https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022
-# 安装时勾选"使用 C++ 的桌面开发"工作负载
+| 输出值  | 含义                                             | 你该下载哪个 |
+| ------- | ------------------------------------------------ | ------------ |
+| `AMD64` | 64 位 Intel / AMD 处理器（绝大多数 PC）          | x86_64 版本  |
+| `ARM64` | 64 位 ARM 处理器（如 Surface Pro X、骁龙笔记本） | aarch64 版本 |
 
-# 5. 验证安装（重启终端后执行）
+:::details 还有个不常见的情况：64 位系统跑 32 位 CMD
+在 64 位系统上用 32 位的命令提示符，可能输出 `x86` 而不是 `AMD64`。确认一下系统到底是不是 64 位：打开 **设置 → 系统 → 关于**，看"系统类型"一栏——如果写"基于 x64"，那还是下载 x86_64 版本。
+:::
+
+#### 第二步：下载安装程序
+
+根据上一步的结果，在 **PowerShell** 里执行对应的命令：
+
+<Tabs groupId="win-arch">
+<Tab label="x86_64（Intel / AMD）">
+
+```powershell
+# 下载 rustup 安装程序到当前目录
+curl.exe -o rustup-init.exe https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe
+```
+
+</Tab>
+<Tab label="ARM64">
+
+```powershell
+# 下载 rustup 安装程序到当前目录
+curl.exe -o rustup-init.exe https://static.rust-lang.org/rustup/dist/aarch64-pc-windows-msvc/rustup-init.exe
+```
+
+</Tab>
+</Tabs>
+
+:::tip 下载很慢？
+如果下载速度不理想，可以设置国内镜像后再下载（见 [2.5 节](./optional-mirrors)），或者直接用浏览器打开上面那个链接下载，效果一样。
+:::
+
+#### 第三步：运行安装程序
+
+下载完成后，在同一个 PowerShell 窗口中执行：
+
+```powershell
+.\rustup-init.exe
+```
+
+此时会出现一个**文字界面的安装向导**，内容如下：
+
+![rustup 安装向导界面](/rust02.jpg)
+
+**直接敲回车**（或输入 `1` 再回车）——选择默认安装。默认会做三件事：
+
+- 把 Rust 装到 `C:\Users\你的用户名\.cargo\bin\`
+- 自动把 Rust 加入系统 PATH
+- 安装最新的 stable 版本工具链
+
+之后你会看到进度条在跑（下载 + 安装 Rust 工具链），最后出现 `Rust is installed now. Great!` 就说明装好了。
+
+#### 第四步：让新装的工具生效
+
+装完之后，你当前的 PowerShell 窗口还不认识 `rustc`，需要刷新一下 PATH：
+
+```powershell
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","User") + ";" + "$env:USERPROFILE\.cargo\bin"
+```
+
+或者简单一点——**关掉当前 PowerShell，重新打开一个**。
+
+#### 第五步：安装 Visual Studio Build Tools
+
+Rust 编译需要系统的 C++ 链接器，Windows 上通过 **Visual Studio Build Tools** 提供。
+
+下载并运行安装程序：
+
+```powershell
+curl.exe -o vs_BuildTools.exe https://aka.ms/vs/17/release/vs_BuildTools.exe
+.\vs_BuildTools.exe
+```
+
+在"工作负载"页面**勾选「使用 C++ 的桌面开发」**，点击"安装"，等待完成（需要下载几个 GB，耐心等一下）。
+
+:::tip 已经装过 Visual Studio？
+如果你电脑上已经有 Visual Studio 2019 或 2022（完整版），且安装时勾了 C++ 工作负载，那 Build Tools 就不用再装一遍了。
+:::
+
+#### 第六步：验证安装
+
+一切就绪后，在 PowerShell 里验证：
+
+```powershell
 rustc --version    # 应输出版本号（需 ≥ 1.88.0）
 cargo --version    # 同上
 ```
+
+两个命令都输出版本号，恭喜，Rust 工具链装好了！
 
 </Tab>
 </Tabs>
