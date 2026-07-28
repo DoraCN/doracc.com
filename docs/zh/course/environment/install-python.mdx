@@ -19,7 +19,6 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 :::warning 重要！装完了，但还没生效
 uv 已经装到电脑上了，但你**当前的终端窗口还不知道**——它还在用安装前的环境，不知道 PATH 里多了 uv。
-:::
 
 选下面任一种让 uv 生效：
 
@@ -31,7 +30,8 @@ uv 已经装到电脑上了，但你**当前的终端窗口还不知道**——�
   ```
 
   > 为什么是 cargo 的路径？因为 uv 也是 Rust 生态的一部分，它把自己装在 `~/.cargo/bin/` 下，和 Rust 工具链共用同一个目录。
-  > :::
+
+:::
 
 确认一切就绪：
 
@@ -50,7 +50,6 @@ powershell -ExecutionPolicy ByPass -c "curl -sSf https://astral.sh/uv/install.ps
 
 :::warning 重要！装完了，但还没生效
 uv 已经装到电脑上了，但你**当前的 PowerShell 窗口还不知道**——它还在用安装前的环境，PATH 里还没 uv 的位置。
-:::
 
 选下面任一种让 uv 生效：
 
@@ -61,7 +60,7 @@ uv 已经装到电脑上了，但你**当前的 PowerShell 窗口还不知道**�
   $env:Path = [System.Environment]::GetEnvironmentVariable("Path","User") + ";" + "$env:USERPROFILE\.cargo\bin"
   ```
 
-  :::
+:::
 
 确认一切就绪：
 
