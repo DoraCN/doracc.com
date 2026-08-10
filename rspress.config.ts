@@ -51,7 +51,7 @@ export default defineConfig({
     ],
     footer: {
       message:
-        '<img src="/logo.svg" style="width:30px;display:inline;"><br>DORA 中文社区 · LoopFun 开源社区 © 2025 <a href="/">doracc.com</a> · 基于 MIT 协议开源<br><a href="https://beian.miit.gov.cn/" rel="noreferrer"> 苏ICP备14007268号-19 </a> | <img src="/beian.png" style="width:12px;display:inline;"><a href="https://beian.mps.gov.cn/#/query/webSearch?code=32050602013520" rel="noreferrer"> 苏公网安备32050602013520号 </a>',
+        '<img src="/logo.svg" style="width:30px;display:inline;"><br>DORA 中文社区 © 2025 <a href="/">doracc.com</a> · 基于 MIT 协议开源<br><a href="https://beian.miit.gov.cn/" rel="noreferrer"> 苏ICP备14007268号-19 </a> | <img src="/beian.png" style="width:12px;display:inline;"><a href="https://beian.mps.gov.cn/#/query/webSearch?code=32050602013520" rel="noreferrer"> 苏公网安备32050602013520号 </a>',
     },
   },
   markdown: {

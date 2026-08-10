@@ -4,7 +4,7 @@ description: 《从零开始学 DORA》——面向开发者的 DORA 机器人�
 
 # 从零开始学 DORA
 
-> 作者：**李扬** / DORA 中文社区 · LoopFun 开源社区
+> 作者：**李扬** / DORA 中文社区
 
 欢迎来到《从零开始学 DORA》。
 
@@ -45,6 +45,6 @@ DORA 的全称是 **Dataflow-Oriented Robotic Architecture**（面向数据流�
 
 ## 出品与致谢
 
-本课程由 **DORA 中文社区** 与 **LoopFun 开源社区** 共同出品与维护，基于 [MIT 协议](https://github.com/DoraCN) 开源。
+本课程由 **DORA 中文社区** 出品与维护，基于 [MIT 协议](https://github.com/DoraCN) 开源。
 
 它是一份**社区共建**的教材——感谢每一位贡献内容、示例、勘误与建议的伙伴。欢迎你也加入：在 [DORA 中文社区](https://github.com/DoraCN) 提交问题或改进。

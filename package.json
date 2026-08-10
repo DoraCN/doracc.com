@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "author": "DORA 中文社区、LoopFun 开源社区",
+  "author": "DORA 中文社区",
   "license": "MIT",
   "scripts": {
     "build": "rspress build",
