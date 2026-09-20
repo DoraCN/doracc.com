@@ -17,27 +17,31 @@ rustc --version
 cargo --version
 ```
 
-输出版本号（如 `rustc 1.90.0`），说明已安装；提示 `command not found`，说明还没装。
+输出版本号（如 `rustc 1.98.1`），说明已安装；提示 `command not found`，说明还没装。
 
-DORA 1.0 RC 要求 Rust **≥ 1.88.0**。根据你的情况，选下面一条往下走：
+DORA 1.0.1 要求 Rust **≥ 1.95.0**。根据你的情况，选下面一条往下走：
 
 | 你的情况            | 怎么做                                                      |
 | ------------------- | ----------------------------------------------------------- |
 | `command not found` | → 看「**3. 安装 rustup**」                                  |
-| 版本号 ≥ 1.88.0     | → 已经满足要求，直接去 [2.2 Python 与 uv](./install-python) |
-| 版本号 < 1.88.0     | → 版本不够，先看下面「**2. 升级已有的 Rust**」              |
+| 版本号 ≥ 1.95.0     | → 已经满足要求，直接去 [2.2 Python 与 uv](./install-python) |
+| 版本号 < 1.95.0     | → 版本不够，先看下面「**2. 升级已有的 Rust**」              |
 
 ---
 
 ## 2. 升级已有的 Rust
 
-如果你之前装过 Rust 但版本低于 1.88.0，把工具链升上来就行。
+如果你之前装过 Rust 但版本低于 1.95.0，把工具链升上来就行。
+
+:::warning 别跳过这一步
+**1.95.0 是比较新的版本**，如果你的 Rust 是较早之前装的，大概率达不到要求。请务必先确认版本号，再往下走——否则编译 DORA 时会直接报错。
+:::
 
 ### 用 rustup 升级
 
 ```bash
 rustup update
-rustc --version    # 确认版本号 ≥ 1.88.0
+rustc --version    # 确认版本号 ≥ 1.95.0
 ```
 
 ### 如果你是用系统包管理器装的
@@ -83,7 +87,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
 
 # 验证安装
-rustc --version    # 应输出版本号（需 ≥ 1.88.0）
+rustc --version    # 应输出版本号（需 ≥ 1.95.0）
 cargo --version    # 同上
 ```
 
@@ -108,7 +112,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
 
 # 验证安装
-rustc --version    # 应输出版本号（需 ≥ 1.88.0）
+rustc --version    # 应输出版本号（需 ≥ 1.95.0）
 cargo --version    # 同上
 ```
 
@@ -225,7 +229,7 @@ curl.exe -o vs_BuildTools.exe https://aka.ms/vs/17/release/vs_BuildTools.exe
 一切就绪后，在 PowerShell 里验证：
 
 ```powershell
-rustc --version    # 应输出版本号（需 ≥ 1.88.0）
+rustc --version    # 应输出版本号（需 ≥ 1.95.0）
 cargo --version    # 同上
 ```
 
@@ -242,7 +246,7 @@ cargo --version    # 同上
 
 ## 小结
 
-- **先检查**：`rustc --version` 看看是否已安装、版本是否 ≥ 1.88.0。
+- **先检查**：`rustc --version` 看看是否已安装、版本是否 ≥ 1.95.0。
 - **版本不够就升级**：`rustup update` 一条命令搞定。
 - **还没装就用 rustup**：macOS / Linux 一条 `curl | sh`，Windows 用 `rustup-init.exe`。
 - Windows 额外需要 **Visual Studio Build Tools**（含 C++ 工具集）。

@@ -6,7 +6,7 @@ description: 2.3 获取并编译 DORA——从 GitHub 克隆 DORA 源码，使�
 
 Rust 工具链和 Python 环境就绪后，下一步是获取 DORA 源码并编译。
 
-本课程锁定 **DORA 1.0 RC**（commit `25bac6b3`），确保所有人结果可复现。
+本课程锁定 **DORA 1.0.1**（tag `v1.0.1`，2026-09-03 发布），确保所有人结果可复现。
 
 ## 克隆源码
 
@@ -16,7 +16,7 @@ git clone https://github.com/dora-rs/dora.git
 cd dora
 
 # 检出课程锁定的版本
-git checkout 25bac6b3e5ed7435f49bd494e0ff4ef81ee0a674
+git checkout v1.0.1
 ```
 
 :::tip
@@ -25,7 +25,7 @@ git checkout 25bac6b3e5ed7435f49bd494e0ff4ef81ee0a674
 ```bash
 git clone https://atomgit.com/dora-rs/dora.git
 cd dora
-git checkout 25bac6b3e5ed7435f49bd494e0ff4ef81ee0a674
+git checkout v1.0.1
 ```
 :::
 
@@ -83,7 +83,7 @@ export PATH="$PATH:/path/to/dora/target/release"
 
 ## 小结
 
-- `git clone` 获取 DORA 源码，锁定 commit `25bac6b3`。
+- `git clone` 获取 DORA 源码，锁定 tag `v1.0.1`。
 - 编译前先激活 `.venv`（`source .venv/bin/activate`）。
 - `cargo build --release -p dora-cli` 编译 dora CLI。
 - `uv pip install -e apis/python/node` 安装 Python 绑定。

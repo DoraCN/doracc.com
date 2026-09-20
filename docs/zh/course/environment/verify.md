@@ -10,7 +10,7 @@ description: 2.4 验证环境——确认 DORA CLI、Python 绑定均正常工�
 
 ```bash
 dora --version
-# 应输出版本号，如 dora 1.0.0-rc1
+# 应输出版本号，如 dora-cli 1.0.1
 ```
 
 如果提示 `dora: command not found`，说明未将编译产物加入 `PATH`。可以用完整路径测试：
@@ -46,7 +46,7 @@ rustc --version
 cargo --version
 ```
 
-应各自输出版本号，且 `rustc` 版本需 **≥ 1.88.0**。如果版本不足，返回 [2.1 Rust 工具链](./install-rust) 升级。
+应各自输出版本号，且 `rustc` 版本需 **≥ 1.95.0**。如果版本不足，返回 [2.1 Rust 工具链](./install-rust) 升级。
 
 ## 完整自检
 
@@ -57,6 +57,16 @@ echo "--- Rust ---" && rustc --version && cargo --version && echo "--- dora ---"
 ```
 
 如果以上均正常输出，恭喜，开发环境已就绪！可前往[第三章](../first-dataflow/)开始第一个数据流。
+
+:::tip 更省事的自检：`dora doctor`
+DORA 1.0 内置了环境体检命令，可以一条命令逐项检查 CLI 版本、共享内存、uv 等：
+
+```bash
+dora doctor
+```
+
+每项会显示 `PASS` 或 `FAIL`。**如果最后一项 Coordinator 显示 `FAIL`，这是正常的**——它检查的是"有没有正在运行的 coordinator"，而启动 coordinator 是后面章节才会做的事。前面几项都是 `PASS` 就说明环境没问题。
+:::
 
 ## 常见问题
 
