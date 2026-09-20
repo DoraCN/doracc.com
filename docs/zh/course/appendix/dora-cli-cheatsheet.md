@@ -1,10 +1,10 @@
 ---
-description: DORA 命令速查表——DORA 1.0 RC 常用 CLI 命令快速参考。
+description: DORA 命令速查表——DORA 1.0.1 常用 CLI 命令快速参考。
 ---
 
 # DORA 命令速查表
 
-> 基于 **DORA 1.0 RC**。命令在终端里执行。
+> 基于 **DORA 1.0.1**。命令在终端里执行。
 
 ## 最常用（记住这两条就能起步）
 
@@ -32,7 +32,7 @@ dora graph dataflow.yml   # 把数据流画成图，直观看节点连线
 | `dora logs <数据流> <节点>` | 查看某个节点的日志 |
 | `dora list` | 列出正在运行的数据流 |
 | `dora stop` | 停止一个正在运行的数据流 |
-| `dora top` | 实时资源监视器（CPU/内存/队列等） |
+| `dora restart` | 重启一个正在运行的数据流 |
 
 ## 协调器模式（多数据流 / 分布式，进阶）
 
@@ -52,12 +52,13 @@ dora graph dataflow.yml   # 把数据流画成图，直观看节点连线
 | `dora status` | 检查系统健康状态 |
 | `dora record` | 把数据流消息录制到文件（`.drec`），供离线回放 |
 | `dora replay <文件.drec>` | 回放录制的数据流，可离线调试 |
-| `dora inspect` | 实时查看运行中的数据流 |
+| `dora inspect top` | 实时资源监视器，查看节点 CPU / 内存 / 队列占用（类似 Linux `top`） |
+| `dora trace` | 查看数据流的分布式追踪信息 |
 
 :::tip 记不住？
 零基础阶段你只需牢记 **`dora build` + `dora run`** 这两条。其它命令用到哪一条，对应章节会专门讲。
 :::
 
 :::warning 版本提示
-DORA 处于 1.0 RC 阶段，个别命令与参数可能随版本微调，以课程使用的版本为准。
+本表基于 **DORA 1.0.1**（2026-09-03 发布）。个别命令与参数可能随版本微调，以课程使用的版本为准。
 :::

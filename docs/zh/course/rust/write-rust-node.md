@@ -210,8 +210,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-# DORA 的 Rust 节点库，锁定 1.0 RC 版本
-dora-node-api = "1.0.0-rc1"
+# DORA 的 Rust 节点库，锁定 1.0.1 版本
+dora-node-api = "1.0.1"
 # 错误处理工具
 eyre = "0.3"
 # 生成随机数的小库
@@ -223,7 +223,7 @@ fastrand = "2"
 - **`dora-node-api`** 就是 Rust 版的"DORA 库"，对应 Python 的 `from dora import Node`。
 
 :::tip 版本锁定
-本课锁定 DORA **1.0 RC**。你可以使用国内镜像加速 Rust 编译（见第二章）。
+本课锁定 DORA **1.0.1**。你可以使用国内镜像加速 Rust 编译（见第二章）。
 :::
 
 ## 编译并运行
@@ -297,7 +297,7 @@ Rust 编译需要系统的 C 链接器等工具。若报此错，请安装所在
 :::
 
 :::warning `cannot find function ... in crate`
-多半是 `Cargo.toml` 里的依赖版本对不上，或 `use` 语句写错。确认 `dora-node-api = "1.0.0-rc1"`，并对照示例的 `use` 行。
+多半是 `Cargo.toml` 里的依赖版本对不上，或 `use` 语句写错。确认 `dora-node-api = "1.0.1"`，并对照示例的 `use` 行。
 :::
 
 :::warning 改了 `main.rs` 但运行的还是旧行为
