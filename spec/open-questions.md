@@ -9,6 +9,7 @@
 | 项 | 现状/候选 | 建议 | 何时须定 |
 |----|-----------|------|---------|
 | 🟢 语音合成 TTS 型号 | 已锁定：Matcha-TTS（`matcha-icefall-zh-baker`） | | 已锁定 |
+| 🔴 第三章 aviation 未适配 1.0 | `aviation/Cargo.toml` 硬锁 `rev = 25bac6b3`（= 1.0.0-rc1，bincode 协议）。1.0.0 起线协议改 postcard，**rc1 节点与 1.0.1 CLI 无法通信**，学生第二章装好 1.0.1 后到第三章会卡在 `dora run` register 超时 | 把 aviation 的 `dora-node-api` 依赖升到 tag `v1.0.1` 并重测。注意 1.0 对 Rust API 亦有破坏性变更（Arrow 不再从 `dora-node-api` 重导出、`dora_core` 重导出收窄），aviation 的 Rust 代码可能需同步修改 | 第三章 |
 | 🔴 毕业项目 CPU 版 VLM | 未定；多数 VLM 依赖 GPU | 需实测一个真正 CPU 可跑的轻量 VLM（如 Moondream / SmolVLM / Qwen2-VL-2B 之类） | 第十一章前 |
 | 🟡 抓取毕业项目难度裁剪 | 说话→看到→抓取，闭环较复杂 | 为零基础做步骤化、可分段验证的裁剪 | 第十一章前 |
 | 🟡 SO-101 仿真细节 | URDF 加载、关节/夹爪控制 | 确认 LeRobot 提供的 URDF 在 PyBullet 正常加载 | 第十章前 |

@@ -7,7 +7,9 @@
 
 - 仓库：`https://atomgit.com/DoraCN/aviation`
 - 技术栈：**Rust + Bevy 0.19**（游戏引擎），edition 2024，Rust ≥ 1.88。
-- 依赖的 dora 版本：`dora-node-api` 锁定 `rev = 25bac6b3e5ed7435f49bd494e0ff4ef81ee0a674`——**与本课程锁定 commit 完全一致**。
+- 依赖的 dora 版本：`dora-node-api` 锁定 `rev = 25bac6b3e5ed7435f49bd494e0ff4ef81ee0a674`（= `1.0.0-rc1`）。
+  - ⚠️ **本课程第二章已于 2026-09 迁移到 tag `v1.0.1`，两者不再一致。** 1.0.0 起二进制线协议由 bincode 改为 postcard，rc1 节点与 1.0.1 的 CLI **无法通信**——`dora run` 会在 register 阶段超时（不是报版本错）。
+  - 迁移前本章对学生不可用，方案见 `spec/open-questions.md` 的「第三章 aviation 未适配 1.0」。
 - 资源用 `include_bytes!` 编进二进制，任意工作目录 `dora run` 都能显示。
 
 ### 三个二进制
