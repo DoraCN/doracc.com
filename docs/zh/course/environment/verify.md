@@ -59,7 +59,7 @@ echo "--- Rust ---" && rustc --version && cargo --version && echo "--- dora ---"
 如果以上均正常输出，恭喜，开发环境已就绪！可前往[第三章](../first-dataflow/)开始第一个数据流。
 
 :::tip 更省事的自检：`dora doctor`
-DORA 1.0 内置了环境体检命令，可以一条命令逐项检查 CLI 版本、共享内存、uv 等：
+DORA 1.0.1 内置了环境体检命令，可以一条命令逐项检查 CLI 版本、共享内存、uv 等：
 
 ```bash
 dora doctor
